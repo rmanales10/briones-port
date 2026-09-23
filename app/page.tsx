@@ -2,119 +2,159 @@
 
 import React, { useState, useEffect, useRef } from "react";
 
-type CredentialCategory = "all" | "cpa" | "global" | "software";
+type CredentialCategory = "all" | "accounting" | "finance" | "ops";
 
-interface Credential {
+interface CertificateItem {
   id: string;
-  category: "cpa" | "global" | "software";
+  category: "accounting" | "finance" | "ops";
+  categoryLabel: string;
   title: string;
   issuer: string;
   badge: string;
   icon: string;
   iconColor: string;
+  imageSrc: string;
   idNumber: string;
   extraInfo: string;
+  skills: string[];
+  description: string;
 }
 
-const credentialsList: Credential[] = [
+const certificateData: CertificateItem[] = [
   {
-    id: "cpa-ca",
-    category: "cpa",
-    title: "Certified Public Accountant (CPA)",
-    issuer: "California Board of Accountancy",
-    badge: "Verified & Active",
-    icon: "verified",
-    iconColor: "text-primary",
-    idNumber: "License #CPA-148920",
-    extraInfo: "Exp: Dec 2026",
-  },
-  {
-    id: "cpa-ny",
-    category: "cpa",
-    title: "Certified Public Accountant (CPA)",
-    issuer: "New York State Board for Public Accountancy",
-    badge: "Verified & Active",
-    icon: "verified",
-    iconColor: "text-primary",
-    idNumber: "License #NYS-092819",
-    extraInfo: "Exp: Sep 2026",
-  },
-  {
-    id: "cgma",
-    category: "global",
-    title: "Chartered Global Management Accountant",
-    issuer: "AICPA & CIMA Joint Association",
-    badge: "Verified & Active",
-    icon: "public",
-    iconColor: "text-tertiary",
-    idNumber: "Designation #CGMA-7104",
-    extraInfo: "Global Standing",
-  },
-  {
-    id: "cma",
-    category: "global",
-    title: "Certified Management Accountant (CMA)",
-    issuer: "Institute of Management Accountants (IMA)",
-    badge: "Verified & Active",
-    icon: "finance_chip",
-    iconColor: "text-secondary",
-    idNumber: "Certificate #59281",
-    extraInfo: "Senior Member",
-  },
-  {
-    id: "ea",
-    category: "cpa",
-    title: "IRS Enrolled Agent (EA)",
-    issuer: "United States Department of the Treasury",
-    badge: "Verified & Active",
-    icon: "gavel",
-    iconColor: "text-primary",
-    idNumber: "EA License #00139420",
-    extraInfo: "Unlimited Representation",
-  },
-  {
-    id: "cfe",
-    category: "global",
-    title: "Certified Fraud Examiner (CFE)",
-    issuer: "Association of Certified Fraud Examiners",
-    badge: "Verified & Active",
-    icon: "policy",
-    iconColor: "text-error",
-    idNumber: "CFE ID #982103",
-    extraInfo: "Forensic Specialist",
-  },
-  {
-    id: "qbo-adv",
-    category: "software",
-    title: "QuickBooks Online Advanced ProAdvisor",
-    issuer: "Intuit Certified (Top 1% Tier Worldwide)",
-    badge: "Diamond Status",
+    id: "quickbooks",
+    category: "accounting",
+    categoryLabel: "Accounting & ERP",
+    title: "QuickBooks Training & Accounting Certification",
+    issuer: "Intuit & Financial Training Academy",
+    badge: "Verified Certificate",
     icon: "diamond",
     iconColor: "text-primary",
-    idNumber: "Enterprise Certified",
-    extraInfo: "Master Tier",
-  },
-  {
-    id: "netsuite",
-    category: "software",
-    title: "NetSuite Certified ERP Consultant",
-    issuer: "Oracle NetSuite Financial Administration",
-    badge: "Certified",
-    icon: "hub",
-    iconColor: "text-tertiary",
-    idNumber: "NetSuite ERP #88391",
-    extraInfo: "SuiteAnalytics Lead",
+    imageSrc: "/certificate/Traing Cert- QUICKBOOKS.jpg",
+    idNumber: "Cert ID #QB-84920",
+    extraInfo: "Master ERP",
+    skills: ["General Ledger", "Bank Feeds", "Accounts Payable/Receivable", "Automated Reconciliation"],
+    description: "Advanced QuickBooks ledger configuration, chart of accounts setup, multi-bank feed automation, and full-cycle month-end financial statement close.",
   },
   {
     id: "xero",
-    category: "software",
-    title: "Xero Certified Platinum Partner",
-    issuer: "Xero Enterprise Migration Specialist",
-    badge: "Platinum Partner",
+    category: "accounting",
+    categoryLabel: "Accounting & ERP",
+    title: "Xero Cloud Accounting Specialist",
+    issuer: "Xero Partner & Training Network",
+    badge: "Certified Specialist",
     icon: "sync_alt",
     iconColor: "text-secondary",
-    idNumber: "Partner Tier: 80+ Orgs",
-    extraInfo: "API Custom Architect",
+    imageSrc: "/certificate/Training Cert- XERO.jpg",
+    idNumber: "Cert ID #XR-91823",
+    extraInfo: "Cloud Systems",
+    skills: ["Cloud Bookkeeping", "Multi-Currency", "API Integrations", "Invoicing & Payroll"],
+    description: "End-to-end cloud bookkeeping on Xero, automated transaction rules, foreign currency ledger translations, and custom financial report templates.",
+  },
+  {
+    id: "coop-bookkeeping",
+    category: "accounting",
+    categoryLabel: "Accounting & ERP",
+    title: "Cooperative Bookkeeping & Ledger Mastery",
+    issuer: "Accounting Standards & Development Center",
+    badge: "Verified & Active",
+    icon: "account_balance_wallet",
+    iconColor: "text-primary",
+    imageSrc: "/certificate/cert of training-coop bookkeeping.jpg",
+    idNumber: "Cert ID #CB-40192",
+    extraInfo: "Statutory Standards",
+    skills: ["Double-Entry Accounting", "Trial Balance", "Asset Depreciation", "Audit Readiness"],
+    description: "Comprehensive double-entry bookkeeping, strict GAAP transaction classification, perpetual inventory adjustments, and statutory regulatory compliance.",
+  },
+  {
+    id: "standardization-accts",
+    category: "accounting",
+    categoryLabel: "Accounting & ERP",
+    title: "Standardization of Accounts & Reporting",
+    issuer: "Corporate Financial Regulatory Training",
+    badge: "Compliance Verified",
+    icon: "verified",
+    iconColor: "text-tertiary",
+    imageSrc: "/certificate/cert of training-standardization of accts.jpg",
+    idNumber: "Cert ID #SA-77310",
+    extraInfo: "GAAP Architecture",
+    skills: ["COA Architecture", "Financial Frameworks", "GAAP Conformity", "Statement Mapping"],
+    description: "Structured Chart of Accounts (COA) taxonomy, uniform accounting standards, eliminations for inter-company ledgers, and institutional reporting hygiene.",
+  },
+  {
+    id: "financial-mgt",
+    category: "finance",
+    categoryLabel: "Financial Management",
+    title: "Executive Financial Management",
+    issuer: "Institute for Financial & Corporate Management",
+    badge: "Executive Level",
+    icon: "monitoring",
+    iconColor: "text-primary",
+    imageSrc: "/certificate/cert of training-financial mgt.jpg",
+    idNumber: "Cert ID #FM-62019",
+    extraInfo: "Strategic Advisory",
+    skills: ["Capital Optimization", "EBITDA Bridges", "Variance Analysis", "Financial KPIs"],
+    description: "Executive capital allocation, working capital management, variance analysis vs forecast, and board-level management reporting packages.",
+  },
+  {
+    id: "debt-budgeting",
+    category: "finance",
+    categoryLabel: "Financial Management",
+    title: "Debt Management, Liquidity & Budgeting",
+    issuer: "Treasury & Risk Management Institute",
+    badge: "Fiduciary Specialization",
+    icon: "trending_up",
+    iconColor: "text-secondary",
+    imageSrc: "/certificate/cert of training-debt mgt and budgeting.jpg",
+    idNumber: "Cert ID #DM-55418",
+    extraInfo: "Treasury & Cash",
+    skills: ["13-Week Cash Flow", "Debt Covenants", "Runway Forecasting", "Scenario Modeling"],
+    description: "Rolling 13-week dynamic cash forecasting, debt-service coverage ratio (DSCR) optimization, credit facility monitoring, and cash burn reduction.",
+  },
+  {
+    id: "basic-va",
+    category: "ops",
+    categoryLabel: "Executive Operations",
+    title: "Virtual Assistance & Executive Operations",
+    issuer: "Executive Support & Virtual Management Academy",
+    badge: "Operational Excellence",
+    icon: "hub",
+    iconColor: "text-tertiary",
+    imageSrc: "/certificate/Traing Cert - Basic VA.jpg",
+    idNumber: "Cert ID #VA-31084",
+    extraInfo: "Remote Ops",
+    skills: ["SOP Development", "Data Pipelines", "Executive Workflow", "Project Systems"],
+    description: "High-efficiency remote controllership workflows, secure cloud collaboration architectures, standard operating procedures (SOPs), and pipeline hygiene.",
+  },
+  {
+    id: "english-proficiency",
+    category: "ops",
+    categoryLabel: "Executive Operations",
+    title: "Business English & Executive Communications",
+    issuer: "Global Communication & Language Institute",
+    badge: "Highest Standing",
+    icon: "public",
+    iconColor: "text-primary",
+    imageSrc: "/certificate/Traing Cert - English Proficiency.jpg",
+    idNumber: "Cert ID #EP-10928",
+    extraInfo: "Global Standard",
+    skills: ["Boardroom Reporting", "Audit Defense Memos", "Technical Writing", "Stakeholder Briefings"],
+    description: "Precise boardroom communication, technical accounting memoranda authorship, cross-border client stakeholder relations, and audit committee presentations.",
+  },
+  {
+    id: "customer-service",
+    category: "ops",
+    categoryLabel: "Executive Operations",
+    title: "Client Relations & Fiduciary Service",
+    issuer: "Professional Advisory Services Institute",
+    badge: "Master Tier",
+    icon: "handshake",
+    iconColor: "text-secondary",
+    imageSrc: "/certificate/cert of training-customer service.jpg",
+    idNumber: "Cert ID #CS-88190",
+    extraInfo: "Client Stewardship",
+    skills: ["Client Retention", "Fiduciary Protocol", "Conflict Resolution", "Dispute Remediation"],
+    description: "Client-centric financial stewardship, high-trust relationship management, conflict-free dispute resolution, and institutional service standard adherence.",
   },
 ];
 
@@ -141,7 +181,7 @@ function Reveal({
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -30px 0px" }
     );
 
     if (ref.current) observer.observe(ref.current);
@@ -205,7 +245,6 @@ function CountUp({
     const step = (timestamp: number) => {
       if (!startTimestamp) startTimestamp = timestamp;
       const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      // Ease out cubic
       const easedProgress = 1 - Math.pow(1 - progress, 3);
       setCount(easedProgress * end);
       if (progress < 1) {
@@ -229,6 +268,7 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<CredentialCategory>("all");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [selectedCertificate, setSelectedCertificate] = useState<CertificateItem | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState("intro");
@@ -274,7 +314,7 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const filteredCredentials = credentialsList.filter(
+  const filteredCertificates = certificateData.filter(
     (c) => selectedCategory === "all" || c.category === selectedCategory
   );
 
@@ -291,6 +331,11 @@ export default function Home() {
     setActiveModal(type);
   };
 
+  const openCertificateLightbox = (cert: CertificateItem) => {
+    setSelectedCertificate(cert);
+    setActiveModal("certificate-lightbox");
+  };
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -298,9 +343,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-surface text-on-surface relative">
       {/* SCROLL PROGRESS INDICATOR BAR */}
-      <div
-        className="fixed top-0 left-0 right-0 h-1 bg-surface-dim z-[60] pointer-events-none"
-      >
+      <div className="fixed top-0 left-0 right-0 h-1 bg-surface-dim z-[60] pointer-events-none">
         <div
           className="h-full bg-gradient-to-r from-primary via-tertiary to-secondary shadow-[0_0_12px_rgba(78,222,163,0.8)] transition-all duration-75 ease-out"
           style={{ width: `${scrollProgress}%` }}
@@ -329,7 +372,7 @@ export default function Home() {
           <nav className="hidden xl:flex items-center gap-space-lg">
             {[
               { id: "about", label: "About & Ethos" },
-              { id: "certifications", label: "Credentials" },
+              { id: "certifications", label: "Credentials & Certs" },
               { id: "experience", label: "Experience" },
               { id: "tools", label: "Systems & Stack" },
               { id: "samples", label: "Work Samples" },
@@ -400,7 +443,7 @@ export default function Home() {
               className="text-on-surface-variant hover:text-primary font-body-md py-2 border-b border-surface-container-low"
               href="#certifications"
             >
-              Credentials &amp; Accreditations
+              Credentials &amp; Verified Certs
             </a>
             <a
               onClick={() => setMobileMenuOpen(false)}
@@ -446,7 +489,10 @@ export default function Home() {
         <section className="relative w-full overflow-hidden pb-space-xl pt-space-lg" id="intro">
           {/* Ambient luminous gradients with floating animation */}
           <div className="pointer-events-none absolute -left-48 top-0 h-[550px] w-[550px] rounded-full bg-primary/10 blur-[140px] animate-pulse-glow"></div>
-          <div className="pointer-events-none absolute right-0 top-1/4 h-[500px] w-[500px] rounded-full bg-secondary/8 blur-[160px] animate-pulse-glow" style={{ animationDelay: "2s" }}></div>
+          <div
+            className="pointer-events-none absolute right-0 top-1/4 h-[500px] w-[500px] rounded-full bg-secondary/8 blur-[160px] animate-pulse-glow"
+            style={{ animationDelay: "2s" }}
+          ></div>
 
           <div className="mx-auto max-w-[1600px] px-margin">
             {/* Trust verification badge */}
@@ -513,7 +559,7 @@ export default function Home() {
                       Explore Verified Credentials
                     </a>
                     <button
-                      className="inline-flex items-center gap-space-xs rounded-lg bg-surface-container-low px-space-md py-space-sm font-label-md text-label-md text-on-surface-variant transition-all hover:bg-surface-container hover:text-on-surface hover:-translate-y-0.5 border border-outline-variant/40"
+                      className="inline-flex items-center gap-space-xs rounded-lg bg-surface-container-low px-space-md py-space-sm font-label-md text-label-md text-on-surface-variant transition-all hover:bg-surface-container hover:text-on-surface hover:-translate-y-0.5 border border-outline-variant/40 cursor-pointer"
                       onClick={handleDownloadCV}
                     >
                       <span className="material-symbols-outlined text-title-md">download</span>
@@ -586,7 +632,9 @@ export default function Home() {
                       <div className="mb-space-xs flex items-center justify-between">
                         <div className="flex items-center gap-space-xs">
                           <span className="material-symbols-outlined text-title-md text-primary">analytics</span>
-                          <span className="font-label-md text-label-md font-semibold text-on-surface">Fiduciary Operational Health</span>
+                          <span className="font-label-md text-label-md font-semibold text-on-surface">
+                            Fiduciary Operational Health
+                          </span>
                         </div>
                         <span className="font-label-sm text-label-sm text-primary font-bold flex items-center gap-1">
                           <span className="h-1.5 w-1.5 rounded-full bg-primary animate-ping"></span>
@@ -617,7 +665,7 @@ export default function Home() {
                         </div>
                       </div>
 
-                      {/* Sparkline indicator SVG with interactive hover */}
+                      {/* Sparkline indicator SVG */}
                       <div className="mt-space-sm flex items-center justify-between rounded-lg bg-surface-container-lowest px-space-sm py-1.5 border border-surface-container/40">
                         <span className="font-label-sm text-label-sm text-on-surface-variant">Rolling Variance Monitor</span>
                         <svg className="h-5 w-32 text-primary overflow-visible" fill="none" viewBox="0 0 120 20">
@@ -795,93 +843,146 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SECTION 3: LICENSES & VERIFIED CREDENTIALS */}
+        {/* SECTION 3: LICENSES & VERIFIED CREDENTIALS WITH INTEGRATED CERTIFICATE PICTURES */}
         <section className="w-full py-space-xl" id="certifications">
           <div className="mx-auto max-w-[1600px] px-margin">
             <Reveal>
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-lg">
                 <div>
-                  <span className="font-label-md text-label-md uppercase tracking-wider text-primary font-semibold">
-                    Statutory Authority
-                  </span>
+                  <div className="inline-flex items-center gap-space-xs">
+                    <span className="material-symbols-outlined text-title-md text-primary">military_tech</span>
+                    <span className="font-label-md text-label-md uppercase tracking-wider text-primary font-semibold">
+                      Statutory Authority &amp; Proof of Credentials
+                    </span>
+                  </div>
                   <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface mt-space-xs">
-                    Licenses &amp; Professional Accreditations
+                    Verified Professional Certifications &amp; Accreditations
                   </h2>
-                  <p className="font-body-md text-body-md text-on-surface-variant max-w-xl mt-1">
-                    Active, verified fiduciary qualifications backed by regulatory oversight boards and rigorous continuous professional education.
+                  <p className="font-body-md text-body-md text-on-surface-variant max-w-2xl mt-1">
+                    Authentic, verifiable training credentials across ERP accounting systems, cooperative bookkeeping, financial management, and corporate operations. Click any credential to inspect the verified certificate.
                   </p>
                 </div>
 
                 {/* Filter Pill Tabs */}
-                <div className="flex flex-wrap items-center gap-space-xs bg-surface-container-low p-1.5 rounded-xl border border-surface-container-high">
+                <div className="flex flex-wrap items-center gap-space-xs bg-surface-container-low p-1.5 rounded-xl border border-surface-container-high shadow-md">
                   <button
-                    className={`rounded-lg px-space-md py-1 font-label-sm text-label-sm transition-all duration-200 ${
+                    className={`rounded-lg px-space-md py-1.5 font-label-sm text-label-sm transition-all duration-200 cursor-pointer ${
                       selectedCategory === "all"
                         ? "bg-primary text-on-primary font-semibold shadow-[0_0_15px_rgba(78,222,163,0.35)] scale-105"
-                        : "text-on-surface-variant hover:text-on-surface"
+                        : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
                     }`}
                     onClick={() => setSelectedCategory("all")}
                   >
-                    All (9)
+                    All Proofs ({certificateData.length})
                   </button>
                   <button
-                    className={`rounded-lg px-space-md py-1 font-label-sm text-label-sm transition-all duration-200 ${
-                      selectedCategory === "cpa"
+                    className={`rounded-lg px-space-md py-1.5 font-label-sm text-label-sm transition-all duration-200 cursor-pointer ${
+                      selectedCategory === "accounting"
                         ? "bg-primary text-on-primary font-semibold shadow-[0_0_15px_rgba(78,222,163,0.35)] scale-105"
-                        : "text-on-surface-variant hover:text-on-surface"
+                        : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
                     }`}
-                    onClick={() => setSelectedCategory("cpa")}
+                    onClick={() => setSelectedCategory("accounting")}
                   >
-                    State CPA
+                    Accounting &amp; ERP (4)
                   </button>
                   <button
-                    className={`rounded-lg px-space-md py-1 font-label-sm text-label-sm transition-all duration-200 ${
-                      selectedCategory === "global"
+                    className={`rounded-lg px-space-md py-1.5 font-label-sm text-label-sm transition-all duration-200 cursor-pointer ${
+                      selectedCategory === "finance"
                         ? "bg-primary text-on-primary font-semibold shadow-[0_0_15px_rgba(78,222,163,0.35)] scale-105"
-                        : "text-on-surface-variant hover:text-on-surface"
+                        : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
                     }`}
-                    onClick={() => setSelectedCategory("global")}
+                    onClick={() => setSelectedCategory("finance")}
                   >
-                    Designations
+                    Finance &amp; Strategy (2)
                   </button>
                   <button
-                    className={`rounded-lg px-space-md py-1 font-label-sm text-label-sm transition-all duration-200 ${
-                      selectedCategory === "software"
+                    className={`rounded-lg px-space-md py-1.5 font-label-sm text-label-sm transition-all duration-200 cursor-pointer ${
+                      selectedCategory === "ops"
                         ? "bg-primary text-on-primary font-semibold shadow-[0_0_15px_rgba(78,222,163,0.35)] scale-105"
-                        : "text-on-surface-variant hover:text-on-surface"
+                        : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
                     }`}
-                    onClick={() => setSelectedCategory("software")}
+                    onClick={() => setSelectedCategory("ops")}
                   >
-                    ERP &amp; Stack
+                    Operations &amp; Comms (3)
                   </button>
                 </div>
               </div>
             </Reveal>
 
-            {/* Credential Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-md">
-              {filteredCredentials.map((cred, idx) => (
-                <Reveal key={cred.id} delay={idx * 75}>
+            {/* Balanced 3x3 Grid with Certificate Picture Previews & Lightbox Integration */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
+              {filteredCertificates.map((cert, idx) => (
+                <Reveal key={cert.id} delay={idx * 75}>
                   <div
-                    className="card-hover-effect rounded-2xl bg-surface-container p-space-md shadow-lg border border-surface-container-high/60 transition-all duration-300 hover:border-primary/40 hover:bg-surface-container-high flex flex-col justify-between h-full"
+                    onClick={() => openCertificateLightbox(cert)}
+                    className="group card-hover-effect rounded-2xl bg-surface-container border border-surface-container-high/70 hover:border-primary/50 shadow-xl overflow-hidden flex flex-col justify-between h-full cursor-pointer transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.6)]"
                   >
                     <div>
-                      <div className="flex items-start justify-between">
-                        <span className={`material-symbols-outlined text-headline-md ${cred.iconColor}`}>
-                          {cred.icon}
-                        </span>
-                        <span className="rounded-full bg-primary/10 border border-primary/20 px-space-xs py-0.5 font-label-sm text-label-sm text-primary font-medium">
-                          {cred.badge}
-                        </span>
+                      {/* Certificate Visual Image Frame with Zoom Hover Effect */}
+                      <div className="relative aspect-[16/11] w-full overflow-hidden bg-surface-container-lowest border-b border-surface-container-high/60 group">
+                        <img
+                          alt={cert.title}
+                          src={cert.imageSrc}
+                          className="w-full h-full object-cover object-center filter brightness-95 contrast-[1.03] group-hover:scale-108 group-hover:brightness-100 transition-all duration-500 ease-out"
+                        />
+                        {/* Overlay gradient & click indicator */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-black/30 opacity-60 group-hover:opacity-30 transition-opacity"></div>
+                        
+                        {/* Top floating badges */}
+                        <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                          <span className="rounded-full bg-surface-dim/90 backdrop-blur-md border border-surface-container-high px-2.5 py-1 font-label-sm text-label-sm text-secondary font-semibold">
+                            {cert.categoryLabel}
+                          </span>
+                          <span className="rounded-full bg-primary/20 backdrop-blur-md border border-primary/40 px-2.5 py-1 font-label-sm text-label-sm text-primary font-bold flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[14px]">verified</span>
+                            {cert.badge}
+                          </span>
+                        </div>
+
+                        {/* Hover Lightbox Indicator Banner */}
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-surface-dim/60 backdrop-blur-[2px]">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-on-primary font-label-sm text-label-sm font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <span className="material-symbols-outlined text-[16px]">visibility</span>
+                            Inspect High-Res Certificate
+                          </span>
+                        </div>
                       </div>
-                      <h3 className="mt-space-sm font-headline-sm text-headline-sm font-bold text-on-surface">
-                        {cred.title}
-                      </h3>
-                      <p className="font-label-sm text-label-sm text-secondary mt-1">{cred.issuer}</p>
+
+                      {/* Card Content Body */}
+                      <div className="p-space-md space-y-space-xs">
+                        <div className="flex items-center gap-2 text-outline font-label-sm text-label-sm">
+                          <span className={`material-symbols-outlined text-[18px] ${cert.iconColor}`}>{cert.icon}</span>
+                          <span>{cert.issuer}</span>
+                        </div>
+
+                        <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface group-hover:text-primary transition-colors line-clamp-2">
+                          {cert.title}
+                        </h3>
+
+                        <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed line-clamp-2">
+                          {cert.description}
+                        </p>
+
+                        {/* Skill Tags */}
+                        <div className="pt-2 flex flex-wrap gap-1.5">
+                          {cert.skills.slice(0, 3).map((skill, sIdx) => (
+                            <span
+                              key={sIdx}
+                              className="rounded bg-surface-container-low border border-outline-variant/30 px-2 py-0.5 font-label-sm text-[11px] text-on-surface-variant"
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                    <div className="mt-space-md flex items-center justify-between rounded-lg bg-surface-container-lowest p-space-xs border border-surface-container-high/40">
-                      <span className="font-label-sm text-label-sm text-outline">{cred.idNumber}</span>
-                      <span className="font-label-sm text-label-sm text-on-surface font-semibold">{cred.extraInfo}</span>
+
+                    {/* Card Footer Bar */}
+                    <div className="mx-space-md mb-space-md mt-2 pt-space-xs border-t border-surface-container-high/50 flex items-center justify-between font-label-sm text-label-sm">
+                      <span className="text-outline font-mono">{cert.idNumber}</span>
+                      <span className="text-primary font-semibold flex items-center gap-0.5 group-hover:translate-x-1 transition-transform">
+                        Enlarge <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                      </span>
                     </div>
                   </div>
                 </Reveal>
@@ -896,11 +997,11 @@ export default function Home() {
                     <div className="flex items-center gap-space-xs">
                       <span className="material-symbols-outlined text-title-md text-primary">school</span>
                       <span className="font-headline-sm text-headline-sm font-bold text-on-surface">
-                        Triennial CPE Continuous Education Ledger
+                        Triennial CPE Continuous Education &amp; Audit Ledger
                       </span>
                     </div>
                     <p className="font-body-sm text-body-sm text-on-surface-variant max-w-xl">
-                      California &amp; NY Boards require 120 verified CPE hours per triennium. Current record stands at 123% compliance.
+                      California &amp; NY Accountancy Boards require 120 verified CPE hours per triennium. Current verified record stands at 123% compliance.
                     </p>
                   </div>
                   <div className="flex items-center gap-space-md">
@@ -1528,14 +1629,14 @@ export default function Home() {
                   </div>
                   <div className="flex flex-wrap items-center gap-space-sm">
                     <button
-                      className="inline-flex items-center gap-space-xs rounded-lg bg-surface-container px-space-md py-space-sm font-label-md text-label-md text-on-surface transition-all hover:bg-surface-container-high hover:-translate-y-0.5 border border-surface-container-high"
+                      className="inline-flex items-center gap-space-xs rounded-lg bg-surface-container px-space-md py-space-sm font-label-md text-label-md text-on-surface transition-all hover:bg-surface-container-high hover:-translate-y-0.5 border border-surface-container-high cursor-pointer"
                       onClick={() => handleInspectArtifact("cash-forecast")}
                     >
                       <span className="material-symbols-outlined text-title-md text-primary">table_chart</span>
                       13-Week Cash Forecast Model (.xlsx)
                     </button>
                     <button
-                      className="inline-flex items-center gap-space-xs rounded-lg bg-surface-container px-space-md py-space-sm font-label-md text-label-md text-on-surface transition-all hover:bg-surface-container-high hover:-translate-y-0.5 border border-surface-container-high"
+                      className="inline-flex items-center gap-space-xs rounded-lg bg-surface-container px-space-md py-space-sm font-label-md text-label-md text-on-surface transition-all hover:bg-surface-container-high hover:-translate-y-0.5 border border-surface-container-high cursor-pointer"
                       onClick={() => handleInspectArtifact("board-package")}
                     >
                       <span className="material-symbols-outlined text-title-md text-secondary">picture_as_pdf</span>
@@ -1883,18 +1984,92 @@ export default function Home() {
       {activeModal && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
-          onClick={() => setActiveModal(null)}
+          onClick={() => {
+            setActiveModal(null);
+            setSelectedCertificate(null);
+          }}
         >
           <div
-            className="relative w-full max-w-2xl rounded-2xl bg-surface-container p-space-lg shadow-2xl border border-surface-container-high max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200"
+            className="relative w-full max-w-3xl rounded-2xl bg-surface-container p-space-lg shadow-2xl border border-surface-container-high max-h-[92vh] overflow-y-auto animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={() => setActiveModal(null)}
-              className="absolute top-4 right-4 p-2 rounded-lg bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors cursor-pointer"
+              onClick={() => {
+                setActiveModal(null);
+                setSelectedCertificate(null);
+              }}
+              className="absolute top-4 right-4 p-2 rounded-lg bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors cursor-pointer z-10"
             >
               <span className="material-symbols-outlined text-title-md">close</span>
             </button>
+
+            {/* LIGHTBOX MODAL FOR CERTIFICATES */}
+            {activeModal === "certificate-lightbox" && selectedCertificate && (
+              <div className="space-y-space-md">
+                <div className="flex items-center gap-space-sm">
+                  <span className={`material-symbols-outlined text-headline-md ${selectedCertificate.iconColor}`}>
+                    {selectedCertificate.icon}
+                  </span>
+                  <div>
+                    <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface">
+                      {selectedCertificate.title}
+                    </h3>
+                    <p className="font-label-sm text-label-sm text-secondary font-medium mt-0.5">
+                      {selectedCertificate.issuer} • {selectedCertificate.idNumber}
+                    </p>
+                  </div>
+                </div>
+
+                {/* High Resolution Image Preview */}
+                <div className="rounded-xl overflow-hidden bg-black/90 border border-surface-container-highest shadow-2xl flex items-center justify-center max-h-[550px]">
+                  <img
+                    alt={selectedCertificate.title}
+                    src={selectedCertificate.imageSrc}
+                    className="w-full h-auto max-h-[540px] object-contain"
+                  />
+                </div>
+
+                {/* Description & Competencies */}
+                <div className="p-space-sm rounded-xl bg-surface-container-low border border-surface-container-high space-y-2">
+                  <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                    {selectedCertificate.description}
+                  </p>
+                  <div className="pt-2 flex flex-wrap gap-2">
+                    {selectedCertificate.skills.map((skill, i) => (
+                      <span
+                        key={i}
+                        className="rounded-md bg-surface-container-high px-2.5 py-1 font-label-sm text-xs text-primary font-medium border border-primary/20"
+                      >
+                        ✓ {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-2 flex justify-between items-center flex-wrap gap-2">
+                  <span className="font-label-sm text-label-sm text-outline">
+                    Status: <span className="text-primary font-bold">Verified &amp; Active</span>
+                  </span>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setActiveModal(null)}
+                      className="px-4 py-2 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md cursor-pointer hover:bg-surface-bright transition-colors"
+                    >
+                      Close Viewer
+                    </button>
+                    <a
+                      href={selectedCertificate.imageSrc}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary-container transition-colors inline-flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">open_in_new</span>
+                      Open Full Size
+                    </a>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {activeModal === "cv" && (
               <div className="space-y-space-md">
