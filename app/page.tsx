@@ -599,11 +599,69 @@ export default function Home() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  // Mouse Movement Follower State
+  const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
+  const [trailingPos, setTrailingPos] = useState({ x: -100, y: -100 });
+  const [isHoveringInteractive, setIsHoveringInteractive] = useState(false);
+  const [cursorVisible, setCursorVisible] = useState(false);
+
   // Quick form state
   const [formName, setFormName] = useState("");
   const [formEmail, setFormEmail] = useState("");
   const [formService, setFormService] = useState("Haute Fiduciary & Full-Cycle General Ledger");
   const [formMessage, setFormMessage] = useState("");
+
+  useEffect(() => {
+    let animationFrameId: number;
+    let targetX = -100;
+    let targetY = -100;
+    let currentX = -100;
+    let currentY = -100;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+      setMousePos({ x: e.clientX, y: e.clientY });
+      if (!cursorVisible) setCursorVisible(true);
+
+      const target = e.target as HTMLElement;
+      if (
+        target.closest("button") ||
+        target.closest("a") ||
+        target.closest("input") ||
+        target.closest("select") ||
+        target.closest("textarea") ||
+        target.closest(".cursor-pointer")
+      ) {
+        setIsHoveringInteractive(true);
+      } else {
+        setIsHoveringInteractive(false);
+      }
+    };
+
+    const handleMouseLeave = () => {
+      setCursorVisible(false);
+    };
+
+    const animateFollower = () => {
+      // Smooth lerp (linear interpolation) for trailing halo
+      currentX += (targetX - currentX) * 0.18;
+      currentY += (targetY - currentY) * 0.18;
+      setTrailingPos({ x: currentX, y: currentY });
+
+      animationFrameId = requestAnimationFrame(animateFollower);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    document.addEventListener("mouseleave", handleMouseLeave);
+    animationFrameId = requestAnimationFrame(animateFollower);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [cursorVisible]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -742,7 +800,60 @@ export default function Home() {
         <div className="absolute top-[88%] right-[25%] h-1.5 w-1.5 rounded-full bg-[#E5C590] shadow-[0_0_10px_#E5C590] animate-particle" style={{ animationDelay: "4s" }}></div>
         <div className="absolute top-[30%] left-[60%] h-1 w-1 rounded-full bg-white shadow-[0_0_6px_white] animate-particle" style={{ animationDelay: "2.7s" }}></div>
         <div className="absolute top-[70%] left-[50%] h-1.5 w-1.5 rounded-full bg-[#C5A880] shadow-[0_0_10px_#C5A880] animate-particle" style={{ animationDelay: "1.2s" }}></div>
+
+        {/* Dynamic Interactive Mouse Torch Spotlight */}
+        {cursorVisible && (
+          <div
+            className="fixed pointer-events-none z-0 transition-opacity duration-500 will-change-transform"
+            style={{
+              left: `${mousePos.x}px`,
+              top: `${mousePos.y}px`,
+              transform: "translate(-50%, -50%)",
+              width: "650px",
+              height: "650px",
+              background: "radial-gradient(circle, rgba(229, 197, 144, 0.13) 0%, rgba(52, 73, 94, 0.08) 45%, transparent 70%)",
+              filter: "blur(40px)",
+            }}
+          />
+        )}
       </div>
+
+      {/* LUXURY INTERACTIVE MOUSE FOLLOWER HALO (Desktop Only) */}
+      {cursorVisible && (
+        <>
+          {/* Smooth Trailing Halo Ring */}
+          <div
+            className="fixed pointer-events-none z-[9999] hidden md:block will-change-transform"
+            style={{
+              left: `${trailingPos.x}px`,
+              top: `${trailingPos.y}px`,
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <div
+              className={`rounded-full border transition-all duration-200 ease-out flex items-center justify-center ${
+                isHoveringInteractive
+                  ? "w-12 h-12 border-[#E5C590] bg-[#E5C590]/15 shadow-[0_0_20px_rgba(229,197,144,0.6)] scale-110"
+                  : "w-8 h-8 border-[#C5A880]/60 bg-[#C5A880]/5 shadow-[0_0_10px_rgba(197,168,128,0.25)]"
+              }`}
+            >
+              {isHoveringInteractive && (
+                <span className="h-1 w-1 rounded-full bg-[#E5C590] animate-ping"></span>
+              )}
+            </div>
+          </div>
+
+          {/* Precision Core Spark Dot */}
+          <div
+            className="fixed pointer-events-none z-[9999] hidden md:block w-1.5 h-1.5 rounded-full bg-[#E5C590] shadow-[0_0_8px_#E5C590] will-change-transform"
+            style={{
+              left: `${mousePos.x}px`,
+              top: `${mousePos.y}px`,
+              transform: "translate(-50%, -50%)",
+            }}
+          />
+        </>
+      )}
 
       {/* Toast Notification Alert */}
       {toastMessage && (
