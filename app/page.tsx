@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect, useRef } from "react";
 
-type DocCategory = "all" | "pds" | "coe" | "wes" | "fs";
+type DocCategory = "all" | "work-sample" | "pds" | "coe" | "wes";
 type CredentialCategory = "all" | "accounting" | "finance" | "ops";
 type CareerCategory = "all" | "gov" | "private";
 type PipelineStage = "coa" | "vouchers" | "recon" | "close" | "compliance";
 
 interface OfficialDoc {
   id: string;
-  category: "pds" | "coe" | "wes" | "fs";
+  category: "work-sample" | "pds" | "coe" | "wes";
   categoryLabel: string;
   title: string;
   issuer: string;
@@ -25,21 +25,21 @@ interface OfficialDoc {
 const officialDocs: OfficialDoc[] = [
   {
     id: "fs-bir-2019",
-    category: "fs",
-    categoryLabel: "BIR Statutory Financials",
+    category: "work-sample",
+    categoryLabel: "Work Sample • Financial Model",
     title: "Annual Financial Statements & BIR Tax Schedules (FY 2019)",
     issuer: "Bureau of Internal Revenue (BIR) • Statutory Financial Workpapers",
     dateOrDuration: "Fiscal Year 2019 • Audited Statutory Workpapers",
     pdfPath: "/fs-bir/fs-2019 final.ods",
-    badge: "BIR Tax & FS Schedules",
+    badge: "Work Sample • FS Schedules",
     icon: "table_chart",
     summary:
-      "Statutory Financial Statement working papers, Balance Sheet, P&L schedules, and BIR tax compliance reconciliations prepared in full adherence to Philippine GAAP and BIR statutory reporting requirements.",
+      "Full statutory Financial Statement working papers, Balance Sheet, P&L schedules, and BIR tax compliance reconciliations prepared in full adherence to Philippine GAAP and BIR statutory reporting requirements.",
     keyPoints: [
       "Financial Reporting: Full Statement of Financial Position (Balance Sheet), P&L, and Trial Balance mathematical tie-out",
       "Statutory Tax Alignment: BIR Annual Income Tax Schedules, Withholding Tax summaries, and VAT/percentage reconciliations",
       "Ledger Discipline: Depreciation schedules, accruals, prepayments, and subsidiary ledger balance verification",
-      "Format: OpenDocument Spreadsheet (.ODS) compatible with Excel & LibreOffice for fiscal analysis",
+      "Format: OpenDocument Spreadsheet (.ODS) compatible with Microsoft Excel, LibreOffice & Google Sheets",
     ],
   },
   {
@@ -1642,7 +1642,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STATUTORY ARCHIVE, FINANCIAL SCHEDULES & SIGNED RECORDS */}
+      {/* STATUTORY ARCHIVE, WORK SAMPLES & SIGNED RECORDS (LUMINOUS KHAKI REFINEMENT) */}
       <section id="dossier" className="py-20 px-4 sm:px-6 bg-white/85 border-y border-[#DCD2C0]/60 relative">
         <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
@@ -1650,21 +1650,21 @@ export default function Home() {
               <div>
                 <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold mb-2">
                   <span className="material-symbols-outlined text-sm">folder_shared</span>
-                  <span>Primary Archival Dossier</span>
+                  <span>Primary Archival Dossier & Work Samples</span>
                 </div>
                 <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
-                  Official Statutory Archive & Financial Schedules
+                  Official Statutory Archive & Work Samples
                 </h2>
                 <p className="text-sm text-[#736B5E] mt-1">
-                  Inspect or download all 7 official verified records including BIR Financial Statements (.ODS), CS Form 212, COEs, and Work Experience Sheets.
+                  Inspect or download all 7 verified records including BIR Financial Statements (.ODS workpaper), CS Form 212, COEs, and Work Experience Sheets.
                 </p>
               </div>
 
               {/* Category Filter */}
               <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-full bg-white border border-[#DCD2C0] shadow-xs">
                 {[
-                  { id: "all" as DocCategory, label: "All Dossiers (7)" },
-                  { id: "fs" as DocCategory, label: "BIR Financials (FS)" },
+                  { id: "all" as DocCategory, label: "All Records (7)" },
+                  { id: "work-sample" as DocCategory, label: "Work Sample (FS)" },
                   { id: "pds" as DocCategory, label: "CSC Form 212" },
                   { id: "coe" as DocCategory, label: "COE Certs" },
                   { id: "wes" as DocCategory, label: "Work Experience" },
@@ -1725,15 +1725,16 @@ export default function Home() {
                       className="flex-1 py-2.5 px-3 rounded-full bg-[#EFE9DC] hover:bg-[#7D735C] text-[#7D735C] hover:text-white text-xs font-bold border border-[#BAA77E]/60 flex items-center justify-center gap-1.5 transition-all"
                     >
                       <span className="material-symbols-outlined text-sm">visibility</span>
-                      <span>Inspect Record</span>
+                      <span>Inspect {doc.category === "work-sample" ? "Work Sample" : "Record"}</span>
                     </button>
 
                     <a
                       href={doc.pdfPath}
-                      target="_blank"
+                      target={doc.pdfPath.endsWith(".ods") ? "_self" : "_blank"}
                       rel="noopener noreferrer"
+                      download={doc.pdfPath.endsWith(".ods")}
                       className="p-2.5 rounded-full bg-white hover:bg-[#EFE9DC] text-[#7D735C] border border-[#DCD2C0] flex items-center justify-center transition-colors"
-                      title={doc.pdfPath.endsWith(".ods") ? "Download / Open Spreadsheet (.ODS)" : "Open Signed PDF in New Tab"}
+                      title={doc.pdfPath.endsWith(".ods") ? "Download Financial Spreadsheet (.ODS)" : "Open Signed PDF in New Tab"}
                     >
                       <span className="material-symbols-outlined text-sm">
                         {doc.pdfPath.endsWith(".ods") ? "table_view" : "open_in_new"}
@@ -2433,15 +2434,16 @@ export default function Home() {
 
               <a
                 href={selectedDoc.pdfPath}
-                target="_blank"
+                target={selectedDoc.pdfPath.endsWith(".ods") ? "_self" : "_blank"}
                 rel="noopener noreferrer"
+                download={selectedDoc.pdfPath.endsWith(".ods")}
                 className="px-6 py-2.5 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-xs font-bold flex items-center gap-1.5 shadow-md border border-[#BAA77E]"
               >
                 <span className="material-symbols-outlined text-sm">
                   {selectedDoc.pdfPath.endsWith(".ods") ? "table_view" : "open_in_new"}
                 </span>
                 <span>
-                  {selectedDoc.pdfPath.endsWith(".ods") ? "Open / Download Spreadsheet (.ODS)" : "Open Official PDF Document"}
+                  {selectedDoc.pdfPath.endsWith(".ods") ? "Download Financial Model (.ODS)" : "Open Official PDF Document"}
                 </span>
               </a>
             </div>
