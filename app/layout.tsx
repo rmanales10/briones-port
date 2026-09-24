@@ -17,9 +17,9 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Rayyan Vance, CPA | Fiduciary Advisory & Master Bookkeeping",
+  title: "Ma. Faith B. Briones, BSA, CSE | Senior Bookkeeper & Administrative Specialist",
   description:
-    "Institutional-Grade Bookkeeping, GAAP Forensic Integrity & Fractional CFO Stewardship for Scaling Enterprises.",
+    "Bachelor of Science in Accountancy, Civil Service Professional Eligible with 20+ years of proven expertise in General Ledger Accounting, Microfinance Bookkeeping, Cooperative Systems, and SSS Public Administration.",
 };
 
 export default function RootLayout({

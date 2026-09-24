@@ -2,7 +2,145 @@
 
 import React, { useState, useEffect, useRef } from "react";
 
+type DocCategory = "all" | "pds" | "coe" | "wes";
 type CredentialCategory = "all" | "accounting" | "finance" | "ops";
+
+interface OfficialDoc {
+  id: string;
+  category: "pds" | "coe" | "wes";
+  categoryLabel: string;
+  title: string;
+  issuer: string;
+  dateOrDuration: string;
+  pdfPath: string;
+  badge: string;
+  icon: string;
+  iconColor: string;
+  summary: string;
+  keyPoints: string[];
+}
+
+const officialDocs: OfficialDoc[] = [
+  {
+    id: "pds",
+    category: "pds",
+    categoryLabel: "Personal Data Sheet",
+    title: "Personal Data Sheet (CS Form No. 212)",
+    issuer: "Civil Service Commission / Republic of the Philippines",
+    dateOrDuration: "Revised 2025 • Official Record",
+    pdfPath: "/personal-data-sheet/PersonalDataSheet BRIONES.pdf",
+    badge: "Official CSC Record",
+    icon: "badge",
+    iconColor: "text-primary",
+    summary:
+      "Comprehensive statutory record detailing BS in Accountancy degree from Andres Bonifacio College, Civil Service Professional Eligibility (80.24%), 20+ year continuous employment record, and government L&D programs.",
+    keyPoints: [
+      "Education: Bachelor of Science in Accountancy (2000–2004, Andres Bonifacio College)",
+      "Civil Service Eligibility: CSE Professional (Rating: 80.24%, Oct 21, 2012)",
+      "2023 Best Customer Service Employee: DBO Level Winner & Division Level Winner (MND)",
+      "Continuous L&D: Data Privacy Act of 2012 (R.A. 10173), Risk Management, QMS Deployment, PIMS Procurement",
+    ],
+  },
+  {
+    id: "coe-tski",
+    category: "coe",
+    categoryLabel: "Certificate of Employment",
+    title: "Certificate of Employment — Taytay Sa Kauswagan, Inc.",
+    issuer: "Taytay Sa Kauswagan, Incorporated (TSKI) • ISO 9001:2008 Certified",
+    dateOrDuration: "Jan 23, 2006 – Aug 8, 2012 (6.5+ Years)",
+    pdfPath: "/certificate-of-employment/Certificate fo Employment - TSK, Incorporated.pdf",
+    badge: "Permanent Status",
+    icon: "domain",
+    iconColor: "text-secondary",
+    summary:
+      "Verified microfinance and corporate bookkeeping employment record over 6.5 years managing full-cycle general ledgers, loan disbursements, daily cash collections, and branch balance sheets.",
+    keyPoints: [
+      "Designation: Bookkeeper (Liloy Branch)",
+      "Status: Permanent / Resigned in Good Standing",
+      "Corporate Focus: Microfinance loan portfolio accounting, daily cash reconciliation, and branch audit readiness",
+      "Issued by: Beverly Joy M. Navigar, HR Manager",
+    ],
+  },
+  {
+    id: "coe-paglaum",
+    category: "coe",
+    categoryLabel: "Certificate of Employment",
+    title: "Certificate of Employment — Paglaum Multi-Purpose Cooperative",
+    issuer: "Paglaum Multi-Purpose Cooperative / Plaridel Service Cooperative",
+    dateOrDuration: "Dec 10, 2012 – Oct 10, 2013",
+    pdfPath: "/certificate-of-employment/Certificate of Employment - PAGLAUM MPC.pdf",
+    badge: "Cooperative Bookkeeper",
+    icon: "account_balance",
+    iconColor: "text-tertiary",
+    summary:
+      "Statutory employment certification as Bookkeeper for Plaridel Service Cooperative (PLASECO), subsidiary of Paglaum MPC (CDA Reg. No. 9520-10005976).",
+    keyPoints: [
+      "Designation: Bookkeeper (Plaridel Service Cooperative)",
+      "Coverage: Cooperative financial ledgers, member savings/shares records, and loan transactions",
+      "Issued by: Maria Theresa A. Salabas, HR/Admin Officer",
+    ],
+  },
+  {
+    id: "wes-admin",
+    category: "wes",
+    categoryLabel: "Work Experience Sheet",
+    title: "Work Experience Sheet — Junior Administrative Assistant",
+    issuer: "Social Security System (SSS), Oroquieta Branch",
+    dateOrDuration: "Jan 2023 – Present & Aug 2015 – Dec 2018",
+    pdfPath: "/work-experience/Work Experience Sheet - ADMIN.pdf",
+    badge: "Public Administration",
+    icon: "fact_check",
+    iconColor: "text-primary",
+    summary:
+      "Detailed actual duties covering administrative operations, financial payment vouchers, PIMS procurement, inventory control, HR attendance/leave administration, and UMID card releases.",
+    keyPoints: [
+      "Financial & Procurement: Prepared vouchers and complete supporting documents for payment processing; initiated supplies/equipment procurement requisitions",
+      "Budget Planning: Assisted in administrative budget planning and prioritization",
+      "Asset & Inventory: Maintained inventory of office supplies, furniture, and equipment with systematic tracking",
+      "Client Service: Facilitated UMID card releases and resolved administrative inquiries",
+    ],
+  },
+  {
+    id: "wes-bookkeeper",
+    category: "wes",
+    categoryLabel: "Work Experience Sheet",
+    title: "Work Experience Sheet — Master Bookkeeper",
+    issuer: "BASCOFAMCO, TSK, Inc. & Paglaum Multi-Purpose Cooperative",
+    dateOrDuration: "June 13, 2004 – October 10, 2013 (9+ Years)",
+    pdfPath: "/work-experience/Work Experience Sheet - BOOKKEEPER.pdf",
+    badge: "Master Bookkeeping",
+    icon: "account_balance_wallet",
+    iconColor: "text-secondary",
+    summary:
+      "Comprehensive breakdown of 9+ years as Bookkeeper maintaining General Journals, General Ledgers, daily cash books, loan portfolios, bank reconciliations, depreciation schedules, and tax compliance.",
+    keyPoints: [
+      "Ledger Hygiene: Maintained General Journal, General Ledger, Cash Book, and subsidiary ledgers with 100% balance accuracy",
+      "Bank Reconciliation: Investigated discrepancies between bank and accounting records; managed daily deposits & cash flow",
+      "Loan Accounting: Processed loan releases, repayments, interest calculations, penalties, and amortizations",
+      "Financial Reporting: Prepared monthly/annual P&L, balance sheets, accruals, prepayments, and statutory tax schedules",
+    ],
+  },
+  {
+    id: "wes-msr",
+    category: "wes",
+    categoryLabel: "Work Experience Sheet",
+    title: "Work Experience Sheet — Member Service Representative",
+    issuer: "Social Security System (SSS), Oroquieta Branch",
+    dateOrDuration: "Jan 2019 – Dec 2022 & Reliever (2023 – Present)",
+    pdfPath: "/work-experience/Work Experience Sheet - Member Service Representative.pdf",
+    badge: "Frontline Excellence",
+    icon: "support_agent",
+    iconColor: "text-tertiary",
+    summary:
+      "Frontline member claims processing (sickness, maternity, disability), salary & educational loans, pensioner confirmations (ACOP), data change verifications, and UMID biometric capture.",
+    keyPoints: [
+      "Award-Winning Service: Awarded Best Customer Service Employee (DBO Level & Division Level)",
+      "Benefit Claims: Screened and processed complex claim applications ensuring regulatory completeness",
+      "Loan Administration: Processed salary, educational, and pension loan applications",
+      "Field Verification: Conducted field investigations for complex pensioner and death/disability claims",
+    ],
+  },
+];
 
 interface CertificateItem {
   id: string;
@@ -14,6 +152,7 @@ interface CertificateItem {
   icon: string;
   iconColor: string;
   imageSrc: string;
+  pdfPath?: string;
   idNumber: string;
   extraInfo: string;
   skills: string[];
@@ -34,7 +173,8 @@ const certificateData: CertificateItem[] = [
     idNumber: "Cert ID #QB-84920",
     extraInfo: "Master ERP",
     skills: ["General Ledger", "Bank Feeds", "Accounts Payable/Receivable", "Automated Reconciliation"],
-    description: "Advanced QuickBooks ledger configuration, chart of accounts setup, multi-bank feed automation, and full-cycle month-end financial statement close.",
+    description:
+      "Advanced QuickBooks ledger configuration, chart of accounts setup, multi-bank feed automation, and full-cycle month-end financial statement close.",
   },
   {
     id: "xero",
@@ -49,7 +189,8 @@ const certificateData: CertificateItem[] = [
     idNumber: "Cert ID #XR-91823",
     extraInfo: "Cloud Systems",
     skills: ["Cloud Bookkeeping", "Multi-Currency", "API Integrations", "Invoicing & Payroll"],
-    description: "End-to-end cloud bookkeeping on Xero, automated transaction rules, foreign currency ledger translations, and custom financial report templates.",
+    description:
+      "End-to-end cloud bookkeeping on Xero, automated transaction rules, foreign currency ledger translations, and custom financial report templates.",
   },
   {
     id: "coop-bookkeeping",
@@ -64,7 +205,8 @@ const certificateData: CertificateItem[] = [
     idNumber: "Cert ID #CB-40192",
     extraInfo: "Statutory Standards",
     skills: ["Double-Entry Accounting", "Trial Balance", "Asset Depreciation", "Audit Readiness"],
-    description: "Comprehensive double-entry bookkeeping, strict GAAP transaction classification, perpetual inventory adjustments, and statutory regulatory compliance.",
+    description:
+      "Comprehensive double-entry bookkeeping, strict GAAP transaction classification, perpetual inventory adjustments, and statutory regulatory compliance.",
   },
   {
     id: "standardization-accts",
@@ -79,7 +221,8 @@ const certificateData: CertificateItem[] = [
     idNumber: "Cert ID #SA-77310",
     extraInfo: "GAAP Architecture",
     skills: ["COA Architecture", "Financial Frameworks", "GAAP Conformity", "Statement Mapping"],
-    description: "Structured Chart of Accounts (COA) taxonomy, uniform accounting standards, eliminations for inter-company ledgers, and institutional reporting hygiene.",
+    description:
+      "Structured Chart of Accounts (COA) taxonomy, uniform accounting standards, eliminations for inter-company ledgers, and institutional reporting hygiene.",
   },
   {
     id: "financial-mgt",
@@ -94,7 +237,8 @@ const certificateData: CertificateItem[] = [
     idNumber: "Cert ID #FM-62019",
     extraInfo: "Strategic Advisory",
     skills: ["Capital Optimization", "EBITDA Bridges", "Variance Analysis", "Financial KPIs"],
-    description: "Executive capital allocation, working capital management, variance analysis vs forecast, and board-level management reporting packages.",
+    description:
+      "Executive capital allocation, working capital management, variance analysis vs forecast, and board-level management reporting packages.",
   },
   {
     id: "debt-budgeting",
@@ -109,7 +253,42 @@ const certificateData: CertificateItem[] = [
     idNumber: "Cert ID #DM-55418",
     extraInfo: "Treasury & Cash",
     skills: ["13-Week Cash Flow", "Debt Covenants", "Runway Forecasting", "Scenario Modeling"],
-    description: "Rolling 13-week dynamic cash forecasting, debt-service coverage ratio (DSCR) optimization, credit facility monitoring, and cash burn reduction.",
+    description:
+      "Rolling 13-week dynamic cash forecasting, debt-service coverage ratio (DSCR) optimization, credit facility monitoring, and cash burn reduction.",
+  },
+  {
+    id: "entrepreneurial-business-mgmt",
+    category: "finance",
+    categoryLabel: "Financial Management",
+    title: "Entrepreneurial & Business Management",
+    issuer: "Enterprise & Business Development Institute",
+    badge: "Business Leadership",
+    icon: "business_center",
+    iconColor: "text-tertiary",
+    imageSrc: "/certificate/cert-entrepreneurial-business-mgmt.jpg",
+    pdfPath: "/certificate/cert of training - Entreprenuerial and Business Mgt.pdf",
+    idNumber: "Cert ID #EBM-89241",
+    extraInfo: "Business Growth",
+    skills: ["Enterprise Management", "SME Operations", "Resource Allocation", "Managerial Accounting"],
+    description:
+      "Strategic training in enterprise operations, small-to-medium business sustainability, cash flow deployment, and managerial financial governance.",
+  },
+  {
+    id: "pceap-admin",
+    category: "ops",
+    categoryLabel: "Executive Operations",
+    title: "Proficiency Course for Exec & Admin Personnel",
+    issuer: "Social Security System (SSS) / Training Division",
+    badge: "Government Certified",
+    icon: "workspace_premium",
+    iconColor: "text-primary",
+    imageSrc: "/certificate/cert-proficiency-course-exec-admin.jpg",
+    pdfPath: "/certificate/2022.10.12-14 PROFICIENCY COURSE FOR EXECS AND ADMIN PERSONNEL.pdf",
+    idNumber: "Cert ID #140113-PCEAP011022-0263",
+    extraInfo: "Executive Governance",
+    skills: ["Public Governance", "Administrative Operations", "Official Records", "Statutory Compliance"],
+    description:
+      "Executive 12-hour proficiency certification covering institutional public sector administrative governance, protocol handling, and official documentation systems.",
   },
   {
     id: "basic-va",
@@ -124,7 +303,8 @@ const certificateData: CertificateItem[] = [
     idNumber: "Cert ID #VA-31084",
     extraInfo: "Remote Ops",
     skills: ["SOP Development", "Data Pipelines", "Executive Workflow", "Project Systems"],
-    description: "High-efficiency remote controllership workflows, secure cloud collaboration architectures, standard operating procedures (SOPs), and pipeline hygiene.",
+    description:
+      "High-efficiency remote controllership workflows, secure cloud collaboration architectures, standard operating procedures (SOPs), and pipeline hygiene.",
   },
   {
     id: "english-proficiency",
@@ -139,7 +319,8 @@ const certificateData: CertificateItem[] = [
     idNumber: "Cert ID #EP-10928",
     extraInfo: "Global Standard",
     skills: ["Boardroom Reporting", "Audit Defense Memos", "Technical Writing", "Stakeholder Briefings"],
-    description: "Precise boardroom communication, technical accounting memoranda authorship, cross-border client stakeholder relations, and audit committee presentations.",
+    description:
+      "Precise boardroom communication, technical accounting memoranda authorship, cross-border client stakeholder relations, and audit committee presentations.",
   },
   {
     id: "customer-service",
@@ -154,7 +335,8 @@ const certificateData: CertificateItem[] = [
     idNumber: "Cert ID #CS-88190",
     extraInfo: "Client Stewardship",
     skills: ["Client Retention", "Fiduciary Protocol", "Conflict Resolution", "Dispute Remediation"],
-    description: "Client-centric financial stewardship, high-trust relationship management, conflict-free dispute resolution, and institutional service standard adherence.",
+    description:
+      "Client-centric financial stewardship, high-trust relationship management, conflict-free dispute resolution, and institutional service standard adherence.",
   },
 ];
 
@@ -265,10 +447,12 @@ function CountUp({
 }
 
 export default function Home() {
-  const [selectedCategory, setSelectedCategory] = useState<CredentialCategory>("all");
+  const [selectedDocCategory, setSelectedDocCategory] = useState<DocCategory>("all");
+  const [selectedCertCategory, setSelectedCertCategory] = useState<CredentialCategory>("all");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [selectedCertificate, setSelectedCertificate] = useState<CertificateItem | null>(null);
+  const [selectedDoc, setSelectedDoc] = useState<OfficialDoc | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState("intro");
@@ -279,9 +463,7 @@ export default function Home() {
     companyName: "",
     email: "",
     phone: "",
-    revenueBand: "",
-    ledgerStack: "",
-    scope: "",
+    serviceNeeded: "",
     context: "",
     ndaAgreed: false,
   });
@@ -297,7 +479,7 @@ export default function Home() {
       setShowBackToTop(totalScroll > 400);
 
       // Section spy
-      const sections = ["intro", "about", "certifications", "experience", "tools", "samples", "contact"];
+      const sections = ["intro", "about", "dossier", "experience", "tools", "certifications", "contact"];
       for (const section of sections) {
         const el = document.getElementById(section);
         if (el) {
@@ -314,8 +496,12 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const filteredDocs = officialDocs.filter(
+    (d) => selectedDocCategory === "all" || d.category === selectedDocCategory
+  );
+
   const filteredCertificates = certificateData.filter(
-    (c) => selectedCategory === "all" || c.category === selectedCategory
+    (c) => selectedCertCategory === "all" || c.category === selectedCertCategory
   );
 
   const handleFormSubmit = (e: React.FormEvent) => {
@@ -323,12 +509,9 @@ export default function Home() {
     setFormSubmitted(true);
   };
 
-  const handleDownloadCV = () => {
-    setActiveModal("cv");
-  };
-
-  const handleInspectArtifact = (type: "cash-forecast" | "board-package") => {
-    setActiveModal(type);
+  const openDocViewer = (doc: OfficialDoc) => {
+    setSelectedDoc(doc);
+    setActiveModal("doc-viewer");
   };
 
   const openCertificateLightbox = (cert: CertificateItem) => {
@@ -355,15 +538,19 @@ export default function Home() {
         <div className="h-20 max-w-[1600px] mx-auto px-margin flex items-center justify-between gap-space-lg">
           {/* Logo & Brand */}
           <a href="#intro" className="flex items-center gap-space-md shrink-0 group">
-            <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary font-bold text-headline-sm shadow-[0_0_15px_rgba(78,222,163,0.2)] group-hover:scale-105 group-hover:border-primary transition-all duration-200">
-              RV
+            <div className="relative h-11 w-11 shrink-0 rounded-xl overflow-hidden border-2 border-primary/40 shadow-[0_0_15px_rgba(78,222,163,0.3)] group-hover:border-primary group-hover:scale-105 transition-all duration-200">
+              <img
+                src="/profile/avatar.jpg"
+                alt="Ma. Faith B. Briones"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="flex flex-col">
               <span className="font-title-md text-title-md tracking-tight text-on-surface font-semibold group-hover:text-primary transition-colors">
-                Vance Advisory
+                Ma. Faith B. Briones
               </span>
               <span className="font-label-sm text-label-sm uppercase tracking-wider text-secondary">
-                CPA &amp; Fiduciary Practice
+                BSA • CSE Eligible • Senior Bookkeeper
               </span>
             </div>
           </a>
@@ -371,12 +558,12 @@ export default function Home() {
           {/* Desktop Nav */}
           <nav className="hidden xl:flex items-center gap-space-lg">
             {[
-              { id: "about", label: "About & Ethos" },
-              { id: "certifications", label: "Credentials & Certs" },
-              { id: "experience", label: "Experience" },
-              { id: "tools", label: "Systems & Stack" },
-              { id: "samples", label: "Work Samples" },
-              { id: "contact", label: "Work With Me" },
+              { id: "about", label: "Profile & Ethos" },
+              { id: "dossier", label: "Official Dossier" },
+              { id: "experience", label: "20-Yr Experience" },
+              { id: "tools", label: "Accounting Stack" },
+              { id: "certifications", label: "Certifications" },
+              { id: "contact", label: "Contact & Retainer" },
             ].map((item) => (
               <a
                 key={item.id}
@@ -395,25 +582,14 @@ export default function Home() {
             ))}
           </nav>
 
-          {/* Header Action & Profile */}
+          {/* Header Action & CTA */}
           <div className="flex items-center gap-space-md shrink-0">
             <a
               className="hidden sm:inline-flex items-center justify-center px-space-md py-space-sm rounded-lg bg-primary-container text-on-primary-container font-headline-sm text-label-md tracking-tight hover:bg-primary transition-all duration-200 shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:shadow-[0_0_25px_rgba(78,222,163,0.4)] hover:-translate-y-0.5"
               href="#contact"
             >
-              Executive Consultation
+              Get In Touch
             </a>
-
-            <div className="relative group cursor-pointer">
-              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/40 group-hover:border-primary group-hover:scale-105 transition-all shadow-md">
-                <img
-                  alt="Rayyan Vance, CPA"
-                  className="w-full h-full object-cover"
-                  src="https://lh3.googleusercontent.com/aida/AEtjO1UGZxywHo-iu_1tE1y98IjAYZpY39-LTa6q_08IJKJFXGp__dXcQf5chVyGWwvh4xnPtX_7uiY9tPbko82mBbTGlClyVGKrm7JXvlLWOkfPTzWVNIvS3NXfS0yHFHtUpL6roQmI34iAqEZ3UySDeAmI-uKwcGb_aQzAEp7gNkjJqHW25dabnD1PHj5LPRhnAf2DrKRNmasWoDsRu36_Fo5Ots7GbdKA9rb28bv0V0SvwSbHBfl6YFvLKc8"
-                />
-              </div>
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-primary ring-2 ring-surface animate-pulse"></span>
-            </div>
 
             {/* Mobile Menu Button */}
             <button
@@ -436,58 +612,58 @@ export default function Home() {
               className="text-on-surface-variant hover:text-primary font-body-md py-2 border-b border-surface-container-low"
               href="#about"
             >
-              About &amp; Ethos
+              Profile &amp; Ethos
             </a>
             <a
               onClick={() => setMobileMenuOpen(false)}
               className="text-on-surface-variant hover:text-primary font-body-md py-2 border-b border-surface-container-low"
-              href="#certifications"
+              href="#dossier"
             >
-              Credentials &amp; Verified Certs
+              Official Verified Dossier (PDS, COE, WES)
             </a>
             <a
               onClick={() => setMobileMenuOpen(false)}
               className="text-on-surface-variant hover:text-primary font-body-md py-2 border-b border-surface-container-low"
               href="#experience"
             >
-              Career &amp; Experience
+              20-Year Career &amp; Experience
             </a>
             <a
               onClick={() => setMobileMenuOpen(false)}
               className="text-on-surface-variant hover:text-primary font-body-md py-2 border-b border-surface-container-low"
               href="#tools"
             >
-              Systems &amp; Stack
+              Accounting Stack &amp; Systems
             </a>
             <a
               onClick={() => setMobileMenuOpen(false)}
               className="text-on-surface-variant hover:text-primary font-body-md py-2 border-b border-surface-container-low"
-              href="#samples"
+              href="#certifications"
             >
-              Case Studies &amp; Deliverables
+              Certifications &amp; Accreditations
             </a>
             <a
               onClick={() => setMobileMenuOpen(false)}
               className="text-on-surface-variant hover:text-primary font-body-md py-2"
               href="#contact"
             >
-              Work With Me / Mandate Application
+              Contact &amp; Engagement
             </a>
             <a
               onClick={() => setMobileMenuOpen(false)}
               className="mt-2 w-full text-center py-2.5 rounded-lg bg-primary text-on-primary font-semibold"
               href="#contact"
             >
-              Book Discovery Consultation
+              Direct Inquiry
             </a>
           </div>
         )}
       </header>
 
       <main className="w-full pt-20 bg-surface">
-        {/* SECTION 1: HERO & EXECUTIVE FINANCIAL PULSE */}
+        {/* SECTION 1: HERO & EXECUTIVE PULSE */}
         <section className="relative w-full overflow-hidden pb-space-xl pt-space-lg" id="intro">
-          {/* Ambient luminous gradients with floating animation */}
+          {/* Ambient luminous gradients */}
           <div className="pointer-events-none absolute -left-48 top-0 h-[550px] w-[550px] rounded-full bg-primary/10 blur-[140px] animate-pulse-glow"></div>
           <div
             className="pointer-events-none absolute right-0 top-1/4 h-[500px] w-[500px] rounded-full bg-secondary/8 blur-[160px] animate-pulse-glow"
@@ -503,41 +679,45 @@ export default function Home() {
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
                     <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
                   </span>
-                  <span className="font-label-sm text-label-sm font-semibold text-primary">BOARD MANDATE ACTIVE</span>
+                  <span className="font-label-sm text-label-sm font-semibold text-primary">
+                    CIVIL SERVICE PROFESSIONAL ELIGIBLE (80.24%)
+                  </span>
                 </div>
                 <span className="font-label-sm text-label-sm text-outline">|</span>
                 <span className="font-label-sm text-label-sm text-on-surface-variant">
-                  Dual-State Active CPA: California (#148920) &amp; New York (#092819)
+                  BS in Accountancy Graduate (Andres Bonifacio College)
                 </span>
                 <span className="font-label-sm text-label-sm text-outline">|</span>
-                <span className="font-label-sm text-label-sm text-secondary">AICPA Peer Review: Unmodified</span>
+                <span className="font-label-sm text-label-sm text-secondary">
+                  2023 Best Customer Service Awardee (Division Level)
+                </span>
               </div>
             </Reveal>
 
             {/* Main Hero Grid */}
             <div className="grid grid-cols-1 gap-space-xl lg:grid-cols-12 lg:items-center">
-              {/* Left: Value Prop & Authority Statement */}
+              {/* Left Column */}
               <div className="flex flex-col lg:col-span-7">
                 <Reveal delay={150}>
                   <div className="space-y-space-xs">
                     <span className="font-label-md text-label-md uppercase tracking-wider text-secondary font-semibold">
-                      Principal Financial Architect &amp; Senior Corporate Controller
+                      Senior Bookkeeper • Financial Records Specialist • Administrative Lead
                     </span>
                     <h1 className="font-display-lg text-display-lg font-bold text-on-surface tracking-tight">
-                      Rayyan Vance, <span className="text-primary font-display-lg text-display-lg">CPA, CGMA</span>
+                      Ma. Faith B. Briones, <span className="text-primary font-display-lg text-display-lg">BSA, CSE</span>
                     </h1>
                   </div>
                 </Reveal>
 
                 <Reveal delay={250}>
                   <h2 className="mt-space-md font-headline-lg text-headline-lg font-bold text-on-surface leading-snug">
-                    Institutional-Grade Bookkeeping, GAAP Forensic Integrity &amp; Fractional CFO Stewardship for Scaling Enterprises.
+                    Over 20 Years of Fiduciary Precision in General Ledger Accounting, Microfinance Bookkeeping, and Public Administration.
                   </h2>
                 </Reveal>
 
                 <Reveal delay={350}>
                   <p className="mt-space-md max-w-2xl font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-                    Bridging transaction-level reconciliation and board-level strategic finance. Over 14 years modernizing messy charts of accounts, converting delinquent backlogs into audit-proof financial statements, and accelerating monthly closes from 15 days to under 4 days.
+                    A seasoned Bachelor of Science in Accountancy graduate with over two decades of hands-on mastery. Proven track record across 12+ years in the Social Security System (SSS) handling public administration, financial vouchers, and award-winning member frontline operations, preceded by 9+ years managing microfinance loan ledgers, cooperative trial balances, and zero-variance bank reconciliations.
                   </p>
                 </Reveal>
 
@@ -548,141 +728,155 @@ export default function Home() {
                       className="inline-flex items-center gap-space-xs rounded-lg bg-primary-container px-space-lg py-space-sm font-headline-sm text-label-md tracking-tight text-on-primary-container shadow-xl transition-all duration-200 hover:bg-primary hover:shadow-[0_0_25px_rgba(78,222,163,0.4)] hover:-translate-y-0.5"
                       href="#contact"
                     >
-                      <span className="material-symbols-outlined text-title-md">verified_user</span>
-                      Retain Advisory / Book Discovery
+                      <span className="material-symbols-outlined text-title-md">send</span>
+                      Direct Inquiry / Retain
                     </a>
                     <a
                       className="inline-flex items-center gap-space-xs rounded-lg bg-surface-container-high px-space-lg py-space-sm font-headline-sm text-label-md tracking-tight text-secondary shadow-md transition-all duration-200 hover:bg-surface-variant hover:text-on-surface hover:-translate-y-0.5"
-                      href="#certifications"
+                      href="#dossier"
                     >
-                      <span className="material-symbols-outlined text-title-md">military_tech</span>
-                      Explore Verified Credentials
+                      <span className="material-symbols-outlined text-title-md">folder_shared</span>
+                      Inspect Verified Dossier (PDFs)
                     </a>
-                    <button
+                    <a
                       className="inline-flex items-center gap-space-xs rounded-lg bg-surface-container-low px-space-md py-space-sm font-label-md text-label-md text-on-surface-variant transition-all hover:bg-surface-container hover:text-on-surface hover:-translate-y-0.5 border border-outline-variant/40 cursor-pointer"
-                      onClick={handleDownloadCV}
+                      href="/personal-data-sheet/PersonalDataSheet BRIONES.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <span className="material-symbols-outlined text-title-md">download</span>
-                      Executive CV (PDF)
-                    </button>
+                      Download PDS (CS Form 212)
+                    </a>
                   </div>
                 </Reveal>
 
-                {/* Trust Badges Bar with Animated Counters */}
+                {/* Trust Badges Bar */}
                 <Reveal delay={550}>
                   <div className="mt-space-xl grid grid-cols-2 gap-space-md sm:grid-cols-4">
                     <div className="card-hover-effect rounded-xl bg-surface-container-low p-space-md border border-surface-container-high/60">
                       <div className="font-headline-md text-headline-md font-bold text-primary">
-                        <CountUp end={14} suffix="+ Yrs" />
+                        <CountUp end={20} suffix="+ Yrs" />
                       </div>
-                      <div className="font-label-sm text-label-sm text-on-surface-variant mt-1">Corporate Practice</div>
+                      <div className="font-label-sm text-label-sm text-on-surface-variant mt-1">Professional Practice</div>
                     </div>
                     <div className="card-hover-effect rounded-xl bg-surface-container-low p-space-md border border-surface-container-high/60">
                       <div className="font-headline-md text-headline-md font-bold text-on-surface">
-                        <CountUp end={1.2} decimals={1} prefix="$" suffix="B+" />
+                        <CountUp end={80.24} decimals={2} suffix="%" />
                       </div>
-                      <div className="font-label-sm text-label-sm text-on-surface-variant mt-1">Flow Supervised</div>
+                      <div className="font-label-sm text-label-sm text-on-surface-variant mt-1">CSE Rating Score</div>
                     </div>
                     <div className="card-hover-effect rounded-xl bg-surface-container-low p-space-md border border-surface-container-high/60">
                       <div className="font-headline-md text-headline-md font-bold text-secondary">
-                        <CountUp end={0} suffix=" Audit" />
+                        <CountUp end={12} suffix="+ Yrs" />
                       </div>
-                      <div className="font-label-sm text-label-sm text-on-surface-variant mt-1">PCAOB / AICPA Flags</div>
+                      <div className="font-label-sm text-label-sm text-on-surface-variant mt-1">SSS Public Service</div>
                     </div>
                     <div className="card-hover-effect rounded-xl bg-surface-container-low p-space-md border border-surface-container-high/60">
-                      <div className="font-headline-md text-headline-md font-bold text-tertiary">
-                        <CountUp end={3.8} decimals={1} suffix=" Days" />
-                      </div>
-                      <div className="font-label-sm text-label-sm text-on-surface-variant mt-1">Median Close Cycle</div>
+                      <div className="font-headline-md text-headline-md font-bold text-tertiary">2x Award</div>
+                      <div className="font-label-sm text-label-sm text-on-surface-variant mt-1">Best Customer Service</div>
                     </div>
                   </div>
                 </Reveal>
               </div>
 
-              {/* Right: Executive Portrait & Live Financial Pulse */}
+              {/* Right Column: Key Professional Profile Summary Card */}
               <div className="relative lg:col-span-5">
                 <Reveal delay={300} direction="scale">
-                  <div className="relative mx-auto max-w-md lg:max-w-none">
-                    {/* Portrait Frame */}
-                    <div className="relative overflow-hidden rounded-2xl bg-surface-container-low shadow-2xl border border-surface-container-high/80 group">
-                      <img
-                        alt="Rayyan Vance, CPA, CGMA"
-                        className="h-[480px] w-full object-cover object-top filter brightness-95 group-hover:scale-105 transition-transform duration-700 ease-out"
-                        src="https://lh3.googleusercontent.com/aida/AEtjO1UGZxywHo-iu_1tE1y98IjAYZpY39-LTa6q_08IJKJFXGp__dXcQf5chVyGWwvh4xnPtX_7uiY9tPbko82mBbTGlClyVGKrm7JXvlLWOkfPTzWVNIvS3NXfS0yHFHtUpL6roQmI34iAqEZ3UySDeAmI-uKwcGb_aQzAEp7gNkjJqHW25dabnD1PHj5LPRhnAf2DrKRNmasWoDsRu36_Fo5Ots7GbdKA9rb28bv0V0SvwSbHBfl6YFvLKc8"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-surface-dim via-transparent to-transparent opacity-90"></div>
+                  <div className="relative mx-auto max-w-md lg:max-w-none space-y-space-md">
+                    {/* Executive Credential Glass Card with Authentic Profile Portrait */}
+                    <div className="rounded-2xl bg-surface-container p-space-lg shadow-2xl border border-surface-container-high/80 overflow-hidden relative group">
+                      {/* Luminous background glow */}
+                      <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
 
-                      {/* Overlaid Nameplate */}
-                      <div className="absolute bottom-4 left-4 right-4 rounded-xl bg-surface-dim/95 p-space-md backdrop-blur-md border border-surface-container-high/60">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface">Rayyan Vance</h3>
-                            <p className="font-label-sm text-label-sm text-secondary">CPA • CGMA • Forensic Controller</p>
-                          </div>
-                          <div className="flex items-center gap-space-xs rounded-full bg-primary/15 border border-primary/30 px-space-sm py-1">
-                            <span className="material-symbols-outlined text-title-md text-primary">check_circle</span>
-                            <span className="font-label-sm text-label-sm font-semibold text-primary">AICPA Fellow</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Floating Live Telemetry Glass Card */}
-                    <div className="mt-space-md rounded-2xl bg-surface-container-high/95 p-space-md shadow-2xl backdrop-blur-xl sm:-mt-12 sm:ml-6 sm:w-11/12 border border-surface-container-highest/80 animate-float">
-                      <div className="mb-space-xs flex items-center justify-between">
-                        <div className="flex items-center gap-space-xs">
-                          <span className="material-symbols-outlined text-title-md text-primary">analytics</span>
-                          <span className="font-label-md text-label-md font-semibold text-on-surface">
-                            Fiduciary Operational Health
-                          </span>
-                        </div>
-                        <span className="font-label-sm text-label-sm text-primary font-bold flex items-center gap-1">
-                          <span className="h-1.5 w-1.5 rounded-full bg-primary animate-ping"></span>
-                          LIVE LEDGER SYNC
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-space-sm pt-space-xs">
-                        <div className="rounded-lg bg-surface-container-low p-space-xs border border-surface-container/60 card-hover-effect">
-                          <span className="font-label-sm text-label-sm text-outline">Working Capital Ratio</span>
-                          <p className="font-headline-sm text-headline-sm font-bold text-on-surface">4.82x</p>
-                          <span className="font-label-sm text-label-sm text-primary">+0.4x vs Baseline</span>
-                        </div>
-                        <div className="rounded-lg bg-surface-container-low p-space-xs border border-surface-container/60 card-hover-effect">
-                          <span className="font-label-sm text-label-sm text-outline">GAAP Reconciliation</span>
-                          <p className="font-headline-sm text-headline-sm font-bold text-primary">100.0%</p>
-                          <span className="font-label-sm text-label-sm text-primary">Zero Variance Unaudited</span>
-                        </div>
-                        <div className="rounded-lg bg-surface-container-low p-space-xs border border-surface-container/60 card-hover-effect">
-                          <span className="font-label-sm text-label-sm text-outline">Close Cycle Duration</span>
-                          <p className="font-headline-sm text-headline-sm font-bold text-secondary">4.2 Days</p>
-                          <span className="font-label-sm text-label-sm text-secondary">Target: &lt;5 Days</span>
-                        </div>
-                        <div className="rounded-lg bg-surface-container-low p-space-xs border border-surface-container/60 card-hover-effect">
-                          <span className="font-label-sm text-label-sm text-outline">Cash Runway Buffer</span>
-                          <p className="font-headline-sm text-headline-sm font-bold text-tertiary">22.4 Mos</p>
-                          <span className="font-label-sm text-label-sm text-tertiary">Model: 13-Wk Dynamic</span>
-                        </div>
-                      </div>
-
-                      {/* Sparkline indicator SVG */}
-                      <div className="mt-space-sm flex items-center justify-between rounded-lg bg-surface-container-lowest px-space-sm py-1.5 border border-surface-container/40">
-                        <span className="font-label-sm text-label-sm text-on-surface-variant">Rolling Variance Monitor</span>
-                        <svg className="h-5 w-32 text-primary overflow-visible" fill="none" viewBox="0 0 120 20">
-                          <path
-                            d="M0 16 L20 14 L40 17 L60 8 L80 10 L100 4 L120 2"
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            className="transition-all duration-300 hover:stroke-[3px]"
+                      {/* Profile Image & Identification Header */}
+                      <div className="relative mb-space-md rounded-xl overflow-hidden border border-surface-container-high/80 bg-surface-container-lowest shadow-lg">
+                        <div className="relative aspect-[3/4] w-full max-h-[440px] overflow-hidden flex items-center justify-center bg-surface-container-lowest">
+                          <img
+                            src="/profile/profile.jpg"
+                            alt="Ma. Faith B. Briones, BSA, CSE"
+                            className="w-full h-full object-cover object-[center_45%] filter brightness-[1.02] contrast-[1.02] group-hover:scale-102 transition-transform duration-500"
                           />
-                          <circle cx="120" cy="2" r="3" fill="#4edea3" className="animate-ping" />
-                          <circle cx="120" cy="2" r="2.5" fill="#4edea3" />
-                        </svg>
-                        <span className="font-label-sm text-label-sm font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/20">
-                          CLEAN
-                        </span>
+                          <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/90 via-transparent to-black/20 opacity-60"></div>
+
+                          {/* Floating Top Badges */}
+                          <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                            <span className="rounded-full bg-surface-dim/90 backdrop-blur-md border border-surface-container-high px-2.5 py-1 font-label-sm text-[11px] text-secondary font-bold">
+                              BSA • CSE ELIGIBLE
+                            </span>
+                            <span className="rounded-full bg-primary/20 backdrop-blur-md border border-primary/40 px-2.5 py-1 font-label-sm text-[11px] text-primary font-bold flex items-center gap-1">
+                              <span className="material-symbols-outlined text-[13px]">verified</span>
+                              ACTIVE &amp; VERIFIED
+                            </span>
+                          </div>
+
+                          {/* Floating Bottom Subtitle */}
+                          <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between">
+                            <span className="rounded-md bg-surface-dim/80 backdrop-blur-sm border border-surface-container-high/60 px-2.5 py-1 font-label-sm text-[11px] text-on-surface font-medium">
+                              20+ Years Accounting &amp; Public Admin
+                            </span>
+                            <span className="rounded-md bg-tertiary/20 backdrop-blur-sm border border-tertiary/40 px-2.5 py-1 font-label-sm text-[11px] text-tertiary font-semibold">
+                              SSS 12+ Yrs
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Header Title */}
+                      <div className="flex items-center justify-between pb-space-sm border-b border-surface-container-high">
+                        <div className="flex items-center gap-space-xs">
+                          <span className="material-symbols-outlined text-headline-md text-primary">verified_user</span>
+                          <div>
+                            <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface">Verified Credentials</h3>
+                            <p className="font-label-sm text-label-sm text-secondary">Republic of the Philippines Official Records</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-space-md space-y-space-sm">
+                        <div className="rounded-xl bg-surface-container-low p-space-sm border border-surface-container-high/50">
+                          <div className="flex items-center justify-between font-label-sm text-label-sm">
+                            <span className="text-secondary font-bold">DEGREE</span>
+                            <span className="text-outline">Graduated 2004</span>
+                          </div>
+                          <p className="font-title-md text-title-md font-bold text-on-surface mt-0.5">
+                            Bachelor of Science in Accountancy (BSA)
+                          </p>
+                          <p className="font-body-sm text-body-sm text-on-surface-variant">Andres Bonifacio College, Dipolog City</p>
+                        </div>
+
+                        <div className="rounded-xl bg-surface-container-low p-space-sm border border-surface-container-high/50">
+                          <div className="flex items-center justify-between font-label-sm text-label-sm">
+                            <span className="text-primary font-bold">CIVIL SERVICE ELIGIBILITY</span>
+                            <span className="text-primary font-mono font-bold">80.24% Rating</span>
+                          </div>
+                          <p className="font-title-md text-title-md font-bold text-on-surface mt-0.5">
+                            Career Service Professional Eligibility
+                          </p>
+                          <p className="font-body-sm text-body-sm text-on-surface-variant">
+                            Conferred Oct 21, 2012 • Civil Service Commission
+                          </p>
+                        </div>
+
+                        <div className="rounded-xl bg-surface-container-low p-space-sm border border-surface-container-high/50">
+                          <div className="flex items-center justify-between font-label-sm text-label-sm">
+                            <span className="text-tertiary font-bold">HONOR &amp; DISTINCTION</span>
+                            <span className="text-secondary font-bold">2023 Winner</span>
+                          </div>
+                          <p className="font-title-md text-title-md font-bold text-on-surface mt-0.5">
+                            Best Customer Service Employee
+                          </p>
+                          <p className="font-body-sm text-body-sm text-on-surface-variant">
+                            Division Level Winner (Mindanao North Division) &amp; Branch Level Winner
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Quick Links to Documents */}
+                      <div className="mt-space-md pt-space-xs border-t border-surface-container-high flex items-center justify-between font-label-sm text-label-sm">
+                        <span className="text-outline">6 Verified PDF Documents Attached</span>
+                        <a href="#dossier" className="text-primary font-semibold flex items-center gap-1 hover:underline">
+                          View Dossier <span className="material-symbols-outlined text-[14px]">arrow_downward</span>
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -692,28 +886,28 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SECTION 2: ABOUT & PHILOSOPHY */}
+        {/* SECTION 2: ABOUT & PROFESSIONAL PROFILE */}
         <section className="w-full bg-surface-container-lowest py-space-xl border-y border-surface-container-high/30" id="about">
           <div className="mx-auto max-w-[1600px] px-margin">
             <div className="grid grid-cols-1 gap-space-xl lg:grid-cols-12">
-              {/* Left: Narrative Statement */}
+              {/* Left Column: Narrative Statement */}
               <div className="flex flex-col justify-between lg:col-span-5">
                 <Reveal direction="left">
                   <div className="space-y-space-md">
                     <div className="inline-flex items-center gap-space-xs">
                       <span className="material-symbols-outlined text-title-md text-secondary">balance</span>
                       <span className="font-label-md text-label-md uppercase tracking-wider text-secondary font-semibold">
-                        Fiduciary Ethos
+                        Professional Ethos &amp; Background
                       </span>
                     </div>
                     <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface">
-                      Precision Accounting Built on Fiduciary Truth.
+                      Built on Double-Entry Precision and Two Decades of Fiduciary Trust.
                     </h2>
                     <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-                      My methodology was forged in Big 4 audit rooms at Deloitte &amp; Touche, scrutinizing complex multi-currency revenue recognitions, debt covenants, and balance sheet integrity for high-stakes capital structures.
+                      My accounting discipline was built on foundational accountancy principles at Andres Bonifacio College and honed through 9+ years managing complex general ledgers in microfinance institutions and multi-purpose cooperatives across Western Mindanao.
                     </p>
                     <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-                      When fast-growing corporations scale from $5M to $80M ARR, financial infrastructure routinely fractures. Disconnected payment processors, messy cap tables, and inaccurate accruals create dangerous blind spots. As Corporate Controller and Fractional CFO, I build the immutable ledger foundation required to withstand institutional scrutiny, venture diligence, and regulatory inquiries.
+                      For the past 12+ years at the Social Security System (SSS), I have spearheaded core administrative support, financial disbursements, PIMS procurement, records archiving, and high-impact frontline member services. Whether handling corporate general ledgers, QuickBooks automated reconciliations, or institutional audit compliance, my focus remains unchanged: zero reconciliation variance, uncompromising integrity, and prompt, reliable execution.
                     </p>
                   </div>
                 </Reveal>
@@ -723,22 +917,26 @@ export default function Home() {
                   <div className="mt-space-lg rounded-2xl bg-surface-container-low p-space-lg shadow-xl border border-surface-container-high/60 card-hover-effect">
                     <span className="material-symbols-outlined text-headline-md text-primary">format_quote</span>
                     <blockquote className="font-headline-sm text-headline-sm italic text-on-surface mt-2 leading-relaxed">
-                      “Accounting isn't merely historical compliance—it is the operational truth that protects your equity, secures your borrowing covenants, and scales your firm's valuation.”
+                      “Accountability, precision, and public trust are not just career standards—they are the bedrock of lasting financial integrity.”
                     </blockquote>
                     <div className="mt-space-md flex items-center gap-space-sm">
-                      <div className="h-10 w-10 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center font-headline-sm text-primary font-bold">
-                        RV
+                      <div className="relative h-12 w-12 shrink-0 rounded-full overflow-hidden border-2 border-primary/50 shadow-md">
+                        <img
+                          src="/profile/avatar.jpg"
+                          alt="Ma. Faith B. Briones"
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                       <div>
-                        <p className="font-title-md text-title-md font-semibold text-on-surface">Rayyan Vance, CPA, CGMA</p>
-                        <p className="font-label-sm text-label-sm text-outline">Founder, Vance Advisory Group PLLC</p>
+                        <p className="font-title-md text-title-md font-semibold text-on-surface">Ma. Faith B. Briones, BSA, CSE</p>
+                        <p className="font-label-sm text-label-sm text-outline">Senior Bookkeeper &amp; Administrative Specialist</p>
                       </div>
                     </div>
                   </div>
                 </Reveal>
               </div>
 
-              {/* Right: 3 Core Pillars (Cards) */}
+              {/* Right Column: 3 Core Pillars */}
               <div className="flex flex-col gap-space-md lg:col-span-7">
                 {/* Pillar 1 */}
                 <Reveal delay={150} direction="right">
@@ -750,22 +948,25 @@ export default function Home() {
                       <div className="space-y-space-xs flex-1">
                         <div className="flex items-center justify-between">
                           <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface group-hover:text-primary transition-colors">
-                            Accrual Bookkeeping &amp; Clean General Ledgers
+                            Full-Cycle General Ledger &amp; Bookkeeping Mastery
                           </h3>
-                          <span className="font-label-sm text-label-sm text-primary font-semibold">ASC 606 &amp; 842</span>
+                          <span className="font-label-sm text-label-sm text-primary font-semibold">9+ Yrs Lead Bookkeeper</span>
                         </div>
                         <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-                          Rigorous transaction classification adhering to strict GAAP principles. Multi-currency journal adjustments, capitalized software development asset schedules, deferred revenue waterfall tracking, and automated zero-variance bank integrations that balance every morning.
+                          Expert maintenance of General Journals, General Ledgers, subsidiary ledgers, and cash books. Rigorous daily cash receipts recording, bank reconciliation with discrepancy investigations, loan disbursement schedules, and monthly/annual balance sheet roll-forwards.
                         </p>
                         <div className="pt-space-xs flex flex-wrap gap-space-xs">
                           <span className="rounded bg-surface-container-lowest px-space-xs py-0.5 font-label-sm text-label-sm text-on-surface-variant border border-outline-variant/30">
                             General Ledger Hygiene
                           </span>
                           <span className="rounded bg-surface-container-lowest px-space-xs py-0.5 font-label-sm text-label-sm text-on-surface-variant border border-outline-variant/30">
-                            Accruals &amp; Prepaids
+                            Bank Reconciliations
                           </span>
                           <span className="rounded bg-surface-container-lowest px-space-xs py-0.5 font-label-sm text-label-sm text-on-surface-variant border border-outline-variant/30">
-                            Balance Sheet Schedules
+                            Accruals &amp; Depreciation
+                          </span>
+                          <span className="rounded bg-surface-container-lowest px-space-xs py-0.5 font-label-sm text-label-sm text-on-surface-variant border border-outline-variant/30">
+                            Microfinance Portfolios
                           </span>
                         </div>
                       </div>
@@ -778,27 +979,30 @@ export default function Home() {
                   <div className="group card-hover-effect rounded-2xl bg-surface-container p-space-lg shadow-lg border border-surface-container-high/50 hover:border-secondary/40 transition-all duration-300">
                     <div className="flex items-start gap-space-md">
                       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-secondary/10 text-secondary group-hover:bg-secondary group-hover:text-on-secondary transition-colors duration-300">
-                        <span className="material-symbols-outlined text-headline-md">troubleshoot</span>
+                        <span className="material-symbols-outlined text-headline-md">admin_panel_settings</span>
                       </div>
                       <div className="space-y-space-xs flex-1">
                         <div className="flex items-center justify-between">
                           <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface group-hover:text-secondary transition-colors">
-                            Forensic Backlog Remediation
+                            Public Administration, Procurement &amp; Financial Vouchers
                           </h3>
-                          <span className="font-label-sm text-label-sm text-secondary font-semibold">Emergency Cleanups</span>
+                          <span className="font-label-sm text-label-sm text-secondary font-semibold">12+ Yrs SSS Service</span>
                         </div>
                         <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-                          Untangling multi-year ledger chaos, distressed recordkeeping, and scrambled merchant gateway payouts (Stripe, PayPal, Shopify, Authorize.net). We eliminate mystery reconciliation balances, resolve disputed Intercompany transfers, and build immutable paper trails.
+                          Extensive experience in government administrative operations at the Social Security System: preparing payment vouchers with complete documentation, requisitioning supplies under PIMS procurement rules, inventory asset control, and HR attendance/leave tracking.
                         </p>
                         <div className="pt-space-xs flex flex-wrap gap-space-xs">
                           <span className="rounded bg-surface-container-lowest px-space-xs py-0.5 font-label-sm text-label-sm text-on-surface-variant border border-outline-variant/30">
-                            Historical Catch-Up
+                            Voucher Processing
                           </span>
                           <span className="rounded bg-surface-container-lowest px-space-xs py-0.5 font-label-sm text-label-sm text-on-surface-variant border border-outline-variant/30">
-                            Payment Gateway Reconciliation
+                            PIMS Procurement
                           </span>
                           <span className="rounded bg-surface-container-lowest px-space-xs py-0.5 font-label-sm text-label-sm text-on-surface-variant border border-outline-variant/30">
-                            Audit Preparation
+                            Records &amp; Archiving
+                          </span>
+                          <span className="rounded bg-surface-container-lowest px-space-xs py-0.5 font-label-sm text-label-sm text-on-surface-variant border border-outline-variant/30">
+                            QMS Standards
                           </span>
                         </div>
                       </div>
@@ -811,27 +1015,30 @@ export default function Home() {
                   <div className="group card-hover-effect rounded-2xl bg-surface-container p-space-lg shadow-lg border border-surface-container-high/50 hover:border-tertiary/40 transition-all duration-300">
                     <div className="flex items-start gap-space-md">
                       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-tertiary/10 text-tertiary group-hover:bg-tertiary group-hover:text-on-tertiary transition-colors duration-300">
-                        <span className="material-symbols-outlined text-headline-md">monitoring</span>
+                        <span className="material-symbols-outlined text-headline-md">military_tech</span>
                       </div>
                       <div className="space-y-space-xs flex-1">
                         <div className="flex items-center justify-between">
                           <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface group-hover:text-tertiary transition-colors">
-                            Board-Ready Reporting &amp; Fractional CFO
+                            Award-Winning Member Services &amp; Stakeholder Relations
                           </h3>
-                          <span className="font-label-sm text-label-sm text-tertiary font-semibold">Strategic Stewardship</span>
+                          <span className="font-label-sm text-label-sm text-tertiary font-semibold">2023 Division Winner</span>
                         </div>
                         <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-                          Executive management reporting packages, rolling 13-week cash flow scenarios, unit economic modeling (CAC, LTV, Magic Number), and strategic entity structuring. Designed to provide founders and boards the clarity needed to deploy capital without anxiety.
+                          Recognized as the 2023 Best Customer Service Employee at both Division Level (Mindanao North Division) and Branch Level. Expert in complex benefit claims verification (sickness, maternity, disability), loan processing, field investigations, and UMID capture.
                         </p>
                         <div className="pt-space-xs flex flex-wrap gap-space-xs">
                           <span className="rounded bg-surface-container-lowest px-space-xs py-0.5 font-label-sm text-label-sm text-on-surface-variant border border-outline-variant/30">
-                            13-Week Cash Modeling
+                            Benefit Claims Screening
                           </span>
                           <span className="rounded bg-surface-container-lowest px-space-xs py-0.5 font-label-sm text-label-sm text-on-surface-variant border border-outline-variant/30">
-                            Board Governance Packages
+                            Salary &amp; Pension Loans
                           </span>
                           <span className="rounded bg-surface-container-lowest px-space-xs py-0.5 font-label-sm text-label-sm text-on-surface-variant border border-outline-variant/30">
-                            Capital Optimization
+                            Field Investigation
+                          </span>
+                          <span className="rounded bg-surface-container-lowest px-space-xs py-0.5 font-label-sm text-label-sm text-on-surface-variant border border-outline-variant/30">
+                            ACOP Pensioner Confirmation
                           </span>
                         </div>
                       </div>
@@ -843,8 +1050,527 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SECTION 3: LICENSES & VERIFIED CREDENTIALS WITH INTEGRATED CERTIFICATE PICTURES */}
-        <section className="w-full py-space-xl" id="certifications">
+        {/* SECTION 3: VERIFIED OFFICIAL DOSSIER & DOCUMENTATION HUB */}
+        <section className="w-full py-space-xl" id="dossier">
+          <div className="mx-auto max-w-[1600px] px-margin">
+            <Reveal>
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-lg">
+                <div>
+                  <div className="inline-flex items-center gap-space-xs">
+                    <span className="material-symbols-outlined text-title-md text-primary">folder_shared</span>
+                    <span className="font-label-md text-label-md uppercase tracking-wider text-primary font-semibold">
+                      Verified Official Dossier
+                    </span>
+                  </div>
+                  <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface mt-space-xs">
+                    Official Employment Records &amp; Work Experience Sheets
+                  </h2>
+                  <p className="font-body-md text-body-md text-on-surface-variant max-w-2xl mt-1">
+                    Structured breakdown of official government and corporate records with direct access to signed PDF documents. Click any document to view the full detailed breakdown and download.
+                  </p>
+                </div>
+
+                {/* Filter Tabs */}
+                <div className="flex flex-wrap items-center gap-space-xs bg-surface-container-low p-1.5 rounded-xl border border-surface-container-high shadow-md">
+                  <button
+                    className={`rounded-lg px-space-md py-1.5 font-label-sm text-label-sm transition-all duration-200 cursor-pointer ${
+                      selectedDocCategory === "all"
+                        ? "bg-primary text-on-primary font-semibold shadow-[0_0_15px_rgba(78,222,163,0.35)] scale-105"
+                        : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
+                    }`}
+                    onClick={() => setSelectedDocCategory("all")}
+                  >
+                    All Documents ({officialDocs.length})
+                  </button>
+                  <button
+                    className={`rounded-lg px-space-md py-1.5 font-label-sm text-label-sm transition-all duration-200 cursor-pointer ${
+                      selectedDocCategory === "pds"
+                        ? "bg-primary text-on-primary font-semibold shadow-[0_0_15px_rgba(78,222,163,0.35)] scale-105"
+                        : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
+                    }`}
+                    onClick={() => setSelectedDocCategory("pds")}
+                  >
+                    Personal Data Sheet (1)
+                  </button>
+                  <button
+                    className={`rounded-lg px-space-md py-1.5 font-label-sm text-label-sm transition-all duration-200 cursor-pointer ${
+                      selectedDocCategory === "coe"
+                        ? "bg-primary text-on-primary font-semibold shadow-[0_0_15px_rgba(78,222,163,0.35)] scale-105"
+                        : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
+                    }`}
+                    onClick={() => setSelectedDocCategory("coe")}
+                  >
+                    Certificates of Employment (2)
+                  </button>
+                  <button
+                    className={`rounded-lg px-space-md py-1.5 font-label-sm text-label-sm transition-all duration-200 cursor-pointer ${
+                      selectedDocCategory === "wes"
+                        ? "bg-primary text-on-primary font-semibold shadow-[0_0_15px_rgba(78,222,163,0.35)] scale-105"
+                        : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
+                    }`}
+                    onClick={() => setSelectedDocCategory("wes")}
+                  >
+                    Work Experience Sheets (3)
+                  </button>
+                </div>
+              </div>
+            </Reveal>
+
+            {/* Document Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
+              {filteredDocs.map((doc, idx) => (
+                <Reveal key={doc.id} delay={idx * 75}>
+                  <div
+                    onClick={() => openDocViewer(doc)}
+                    className="group card-hover-effect rounded-2xl bg-surface-container border border-surface-container-high/70 hover:border-primary/50 shadow-xl p-space-lg flex flex-col justify-between h-full cursor-pointer transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.6)]"
+                  >
+                    <div>
+                      {/* Top Badges */}
+                      <div className="flex items-start justify-between gap-2 mb-space-sm">
+                        <span className="rounded-full bg-surface-container-low px-2.5 py-1 font-label-sm text-label-sm text-secondary font-semibold border border-surface-container-high">
+                          {doc.categoryLabel}
+                        </span>
+                        <span className="rounded-full bg-primary/10 border border-primary/30 px-2.5 py-1 font-label-sm text-label-sm text-primary font-bold flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[14px]">verified</span>
+                          {doc.badge}
+                        </span>
+                      </div>
+
+                      {/* Header */}
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 text-outline font-label-sm text-label-sm">
+                          <span className={`material-symbols-outlined text-[18px] ${doc.iconColor}`}>{doc.icon}</span>
+                          <span className="truncate">{doc.issuer}</span>
+                        </div>
+                        <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface group-hover:text-primary transition-colors">
+                          {doc.title}
+                        </h3>
+                        <p className="font-label-sm text-label-sm text-secondary font-medium">{doc.dateOrDuration}</p>
+                      </div>
+
+                      {/* Summary */}
+                      <p className="mt-space-sm font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                        {doc.summary}
+                      </p>
+
+                      {/* Key Highlights List */}
+                      <div className="mt-space-md space-y-1.5 pt-space-xs border-t border-surface-container-high/60">
+                        {doc.keyPoints.slice(0, 3).map((pt, pIdx) => (
+                          <div key={pIdx} className="flex items-start gap-1.5 font-body-sm text-xs text-on-surface">
+                            <span className="text-primary font-bold shrink-0">✓</span>
+                            <span className="line-clamp-1">{pt}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Bottom CTA Action Bar */}
+                    <div className="mt-space-md pt-space-sm border-t border-surface-container-high/60 flex items-center justify-between font-label-sm text-label-sm">
+                      <span className="text-primary font-semibold flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[16px]">visibility</span>
+                        Inspect Breakdown &amp; PDF
+                      </span>
+                      <span className="text-outline font-mono">PDF Available</span>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 4: 20-YEAR CAREER & WORK EXPERIENCE TIMELINE */}
+        <section className="w-full bg-surface-container-lowest py-space-xl border-y border-surface-container-high/30" id="experience">
+          <div className="mx-auto max-w-[1600px] px-margin">
+            {/* Header */}
+            <Reveal>
+              <div className="mb-space-xl">
+                <span className="font-label-md text-label-md uppercase tracking-wider text-secondary font-semibold">
+                  Two Decades of Public &amp; Private Excellence
+                </span>
+                <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface mt-space-xs">
+                  Career Trajectory &amp; Operational Leadership
+                </h2>
+                <p className="font-body-md text-body-md text-on-surface-variant max-w-2xl mt-1">
+                  Chronological record spanning 12+ years at the Social Security System (SSS) and 9+ years managing microfinance and cooperative financial operations.
+                </p>
+              </div>
+            </Reveal>
+
+            {/* Experience Cards */}
+            <div className="relative space-y-space-lg">
+              {/* Role 1: SSS Admin & Reliever MSR */}
+              <Reveal delay={150}>
+                <div className="relative rounded-2xl bg-surface-container p-space-lg shadow-lg border border-surface-container-high/70 card-hover-effect hover:border-primary/40">
+                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-space-sm">
+                    <div>
+                      <div className="flex items-center gap-space-sm flex-wrap">
+                        <span className="font-headline-md text-headline-md font-bold text-on-surface">
+                          Junior Administrative Assistant &amp; Reliever Member Service Rep
+                        </span>
+                        <span className="rounded bg-primary/20 border border-primary/30 px-space-xs py-0.5 font-label-sm text-label-sm font-semibold text-primary">
+                          Current Permanent Appointment
+                        </span>
+                      </div>
+                      <p className="font-title-md text-title-md text-secondary font-medium">
+                        Social Security System (SSS) • Oroquieta Branch
+                      </p>
+                    </div>
+                    <div className="rounded-lg bg-surface-container-low px-space-sm py-1 font-label-md text-label-md text-outline border border-surface-container-high">
+                      January 03, 2023 – Present
+                    </div>
+                  </div>
+
+                  <div className="mt-space-md grid grid-cols-1 lg:grid-cols-12 gap-space-md">
+                    <div className="lg:col-span-8 space-y-space-xs">
+                      <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                        Direct administrative, procurement, and financial voucher operations under Rosemary Grace P. Jadulos, CEO-I, while concurrently serving as Reliever Member Service Representative under Linda C. Vilar, CEO-II.
+                      </p>
+                      <ul className="space-y-space-xs pt-space-xs">
+                        <li className="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
+                          <span className="material-symbols-outlined text-title-md text-primary shrink-0">check_circle</span>
+                          <span><strong>Financial &amp; Procurement:</strong> Prepared payment vouchers with complete supporting documents and initiated procurement requisitions in full accordance with government procedures.</span>
+                        </li>
+                        <li className="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
+                          <span className="material-symbols-outlined text-title-md text-primary shrink-0">check_circle</span>
+                          <span><strong>HR &amp; Records Management:</strong> Managed employee attendance, timekeeping, leave processing, and structured administrative document archiving for prompt retrieval.</span>
+                        </li>
+                        <li className="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
+                          <span className="material-symbols-outlined text-title-md text-primary shrink-0">check_circle</span>
+                          <span><strong>Frontline Operations:</strong> Screened and processed membership registrations, Annual Confirmation of Pensioners (ACOP), data change requests, and field verifications.</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="lg:col-span-4 rounded-xl bg-surface-container-low p-space-md flex flex-col justify-between border border-surface-container-high/60">
+                      <span className="font-label-sm text-label-sm uppercase text-outline">Major Distinction</span>
+                      <div className="space-y-space-xs my-space-xs">
+                        <div>
+                          <span className="font-headline-md text-headline-md font-bold text-primary">2023 Winner</span>
+                          <span className="font-body-sm text-body-sm text-on-surface-variant block">Best Customer Service Employee (Division Level - MND)</span>
+                        </div>
+                        <div>
+                          <span className="font-headline-md text-headline-md font-bold text-secondary">Branch Level</span>
+                          <span className="font-body-sm text-body-sm text-on-surface-variant block">Best Customer Service Employee (DBO Oroquieta)</span>
+                        </div>
+                      </div>
+                      <span className="font-label-sm text-label-sm text-primary font-semibold">Verified Service Record</span>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+
+              {/* Role 2: SSS Acting Junior MSR */}
+              <Reveal delay={250}>
+                <div className="relative rounded-2xl bg-surface-container p-space-lg shadow-lg border border-surface-container-high/70 card-hover-effect hover:border-secondary/40">
+                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-space-sm">
+                    <div>
+                      <div className="flex items-center gap-space-sm">
+                        <span className="font-headline-md text-headline-md font-bold text-on-surface">
+                          Acting Junior Member Service Representative
+                        </span>
+                      </div>
+                      <p className="font-title-md text-title-md text-secondary font-medium">
+                        Social Security System (SSS) • Member Services Section
+                      </p>
+                    </div>
+                    <div className="rounded-lg bg-surface-container-low px-space-sm py-1 font-label-md text-label-md text-outline border border-surface-container-high">
+                      January 03, 2019 – December 31, 2022
+                    </div>
+                  </div>
+
+                  <div className="mt-space-md grid grid-cols-1 lg:grid-cols-12 gap-space-md">
+                    <div className="lg:col-span-8 space-y-space-xs">
+                      <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                        Spearheaded member benefit claims intake, salary and pension loan applications, pensioner confirmations, and biometric UMID card capture.
+                      </p>
+                      <ul className="space-y-space-xs pt-space-xs">
+                        <li className="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
+                          <span className="material-symbols-outlined text-title-md text-primary shrink-0">check_circle</span>
+                          <span>Screened and verified sickness, maternity, and disability claims ensuring 100% statutory document completeness before processing.</span>
+                        </li>
+                        <li className="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
+                          <span className="material-symbols-outlined text-title-md text-primary shrink-0">check_circle</span>
+                          <span>Conducted field investigations on Fact of Death (FOD), Fact of Partnership (FOP), and Guardian verifications across the provincial jurisdiction.</span>
+                        </li>
+                        <li className="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
+                          <span className="material-symbols-outlined text-title-md text-primary shrink-0">check_circle</span>
+                          <span>Administered UMID biometric capturing and expedited manual data verification workflows for complex member records.</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="lg:col-span-4 rounded-xl bg-surface-container-low p-space-md flex flex-col justify-between border border-surface-container-high/60">
+                      <span className="font-label-sm text-label-sm uppercase text-outline">Scope &amp; Impact</span>
+                      <div className="space-y-space-xs my-space-xs">
+                        <div>
+                          <span className="font-headline-md text-headline-md font-bold text-primary">1,000s</span>
+                          <span className="font-body-sm text-body-sm text-on-surface-variant block">Benefit Claims Screened</span>
+                        </div>
+                        <div>
+                          <span className="font-headline-md text-headline-md font-bold text-tertiary">4 Years</span>
+                          <span className="font-body-sm text-body-sm text-on-surface-variant block">Acting Representative Lead</span>
+                        </div>
+                      </div>
+                      <span className="font-label-sm text-label-sm text-tertiary font-semibold">Zero Process Deficiencies</span>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+
+              {/* Role 3: SSS Admin Assistant & Senior Clerk */}
+              <Reveal delay={350}>
+                <div className="relative rounded-2xl bg-surface-container p-space-lg shadow-lg border border-surface-container-high/70 card-hover-effect hover:border-tertiary/40">
+                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-space-sm">
+                    <div>
+                      <div className="flex items-center gap-space-sm">
+                        <span className="font-headline-md text-headline-md font-bold text-on-surface">
+                          Junior Administrative Assistant &amp; Senior Clerk
+                        </span>
+                      </div>
+                      <p className="font-title-md text-title-md text-secondary font-medium">
+                        Social Security System (SSS) • Admin &amp; Accounts Management Section
+                      </p>
+                    </div>
+                    <div className="rounded-lg bg-surface-container-low px-space-sm py-1 font-label-md text-label-md text-outline border border-surface-container-high">
+                      May 13, 2014 – December 31, 2018
+                    </div>
+                  </div>
+
+                  <div className="mt-space-md space-y-space-xs">
+                    <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                      Generated monthly collection reports (R-3) and loan payments for employers; aided account officers in employer coverage and information drives; administered administrative procurement and UMID card releases under Juliet C. Abuton, Branch Head.
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+
+              {/* Role 4: Lead Bookkeeper across Cooperatives & Microfinance */}
+              <Reveal delay={450}>
+                <div className="relative rounded-2xl bg-surface-container p-space-lg shadow-lg border border-surface-container-high/70 card-hover-effect hover:border-primary/40">
+                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-space-sm">
+                    <div>
+                      <div className="flex items-center gap-space-sm flex-wrap">
+                        <span className="font-headline-md text-headline-md font-bold text-on-surface">
+                          Lead Bookkeeper &amp; Accounting Specialist
+                        </span>
+                        <span className="rounded bg-secondary/20 border border-secondary/30 px-space-xs py-0.5 font-label-sm text-label-sm font-semibold text-secondary">
+                          9+ Years Continuous Practice
+                        </span>
+                      </div>
+                      <p className="font-title-md text-title-md text-secondary font-medium">
+                        Taytay Sa Kauswagan, Inc. • Paglaum Multi-Purpose Coop • BASCOFAMCO
+                      </p>
+                    </div>
+                    <div className="rounded-lg bg-surface-container-low px-space-sm py-1 font-label-md text-label-md text-outline border border-surface-container-high">
+                      June 13, 2004 – October 10, 2013
+                    </div>
+                  </div>
+
+                  <div className="mt-space-md grid grid-cols-1 lg:grid-cols-12 gap-space-md">
+                    <div className="lg:col-span-8 space-y-space-xs">
+                      <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                        Full-cycle double-entry bookkeeping across microfinance institutions and multi-purpose cooperatives, maintaining books of accounts, subsidiary ledgers, loan portfolios, cash flow monitoring, and statutory reports.
+                      </p>
+                      <ul className="space-y-space-xs pt-space-xs">
+                        <li className="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
+                          <span className="material-symbols-outlined text-title-md text-primary shrink-0">check_circle</span>
+                          <span><strong>General Ledger &amp; Cash Book:</strong> Maintained General Journal, General Ledger, Cash Book, daily cash collections, and deposit slips with daily balancing.</span>
+                        </li>
+                        <li className="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
+                          <span className="material-symbols-outlined text-title-md text-primary shrink-0">check_circle</span>
+                          <span><strong>Bank Reconciliation:</strong> Executed monthly bank reconciliations and audited ledger-to-bank discrepancies.</span>
+                        </li>
+                        <li className="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
+                          <span className="material-symbols-outlined text-title-md text-primary shrink-0">check_circle</span>
+                          <span><strong>Financial Schedules:</strong> Authored monthly/annual financial schedules (accruals, prepayments, asset depreciation, loan portfolio aging, and tax schedules).</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="lg:col-span-4 rounded-xl bg-surface-container-low p-space-md flex flex-col justify-between border border-surface-container-high/60">
+                      <span className="font-label-sm text-label-sm uppercase text-outline">Verified Institutions</span>
+                      <div className="space-y-space-xs my-space-xs font-body-sm text-on-surface">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-primary font-bold">1.</span>
+                          <span>Taytay Sa Kauswagan, Inc. (6.5+ Yrs)</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-secondary font-bold">2.</span>
+                          <span>Paglaum Multi-Purpose Coop</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-tertiary font-bold">3.</span>
+                          <span>BASCOFAMCO</span>
+                        </div>
+                      </div>
+                      <span className="font-label-sm text-label-sm text-primary font-semibold">100% Reconciled Ledgers</span>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 5: ACCOUNTING SYSTEMS & SOFTWARE STACK */}
+        <section className="w-full py-space-xl" id="tools">
+          <div className="mx-auto max-w-[1600px] px-margin">
+            {/* Header */}
+            <Reveal>
+              <div className="mb-space-xl">
+                <span className="font-label-md text-label-md uppercase tracking-wider text-primary font-semibold">
+                  Systems &amp; Methodologies
+                </span>
+                <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface mt-space-xs">
+                  Financial Systems, Software Stack &amp; Governance
+                </h2>
+                <p className="font-body-md text-body-md text-on-surface-variant max-w-2xl mt-1">
+                  Bridging modern cloud accounting software with rigorous statutory compliance, manual ledger fundamentals, and institutional public systems.
+                </p>
+              </div>
+            </Reveal>
+
+            {/* Matrix */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-md">
+              {/* Matrix 1 */}
+              <Reveal delay={100}>
+                <div className="card-hover-effect rounded-2xl bg-surface-container p-space-lg shadow-lg flex flex-col justify-between border border-surface-container-high/60 h-full">
+                  <div>
+                    <div className="flex items-center gap-space-xs text-primary mb-space-sm">
+                      <span className="material-symbols-outlined text-headline-sm">account_balance</span>
+                      <span className="font-label-md text-label-md font-bold uppercase">Accounting &amp; GL</span>
+                    </div>
+                    <p className="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+                      Cloud and manual bookkeeping systems for complete financial statement preparation.
+                    </p>
+                    <div className="space-y-space-xs">
+                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
+                        <span className="font-title-md text-title-md text-on-surface font-medium">QuickBooks Online</span>
+                        <span className="rounded bg-primary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-primary font-semibold">Certified</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
+                        <span className="font-title-md text-title-md text-on-surface font-medium">Xero Cloud Accounting</span>
+                        <span className="rounded bg-primary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-primary font-semibold">Certified</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
+                        <span className="font-title-md text-title-md text-on-surface font-medium">Cooperative Ledgers</span>
+                        <span className="rounded bg-primary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-primary font-semibold">9+ Yrs Master</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
+                        <span className="font-title-md text-title-md text-on-surface font-medium">Double-Entry Accrual</span>
+                        <span className="rounded bg-surface-container-high px-space-xs py-0.5 font-label-sm text-label-sm text-outline">GAAP</span>
+                      </div>
+                    </div>
+                  </div>
+                  <span className="font-label-sm text-label-sm text-outline mt-space-md block">Zero Variance Daily Balancing</span>
+                </div>
+              </Reveal>
+
+              {/* Matrix 2 */}
+              <Reveal delay={200}>
+                <div className="card-hover-effect rounded-2xl bg-surface-container p-space-lg shadow-lg flex flex-col justify-between border border-surface-container-high/60 h-full">
+                  <div>
+                    <div className="flex items-center gap-space-xs text-secondary mb-space-sm">
+                      <span className="material-symbols-outlined text-headline-sm">policy</span>
+                      <span className="font-label-md text-label-md font-bold uppercase">Gov&apos;t &amp; Public Systems</span>
+                    </div>
+                    <p className="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+                      Specialized government databases, procurement portals, and member registry systems.
+                    </p>
+                    <div className="space-y-space-xs">
+                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
+                        <span className="font-title-md text-title-md text-on-surface font-medium">SSS My.SSS Systems</span>
+                        <span className="rounded bg-secondary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-secondary font-semibold">12+ Yrs</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
+                        <span className="font-title-md text-title-md text-on-surface font-medium">PIMS Procurement</span>
+                        <span className="rounded bg-secondary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-secondary font-semibold">Trained</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
+                        <span className="font-title-md text-title-md text-on-surface font-medium">UMID Capture System</span>
+                        <span className="rounded bg-secondary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-secondary font-semibold">Operator</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
+                        <span className="font-title-md text-title-md text-on-surface font-medium">ACOP Verification</span>
+                        <span className="rounded bg-surface-container-high px-space-xs py-0.5 font-label-sm text-label-sm text-outline">Lead</span>
+                      </div>
+                    </div>
+                  </div>
+                  <span className="font-label-sm text-label-sm text-outline mt-space-md block">Institutional Compliance</span>
+                </div>
+              </Reveal>
+
+              {/* Matrix 3 */}
+              <Reveal delay={300}>
+                <div className="card-hover-effect rounded-2xl bg-surface-container p-space-lg shadow-lg flex flex-col justify-between border border-surface-container-high/60 h-full">
+                  <div>
+                    <div className="flex items-center gap-space-xs text-tertiary mb-space-sm">
+                      <span className="material-symbols-outlined text-headline-sm">table_view</span>
+                      <span className="font-label-md text-label-md font-bold uppercase">Spreadsheets &amp; Tools</span>
+                    </div>
+                    <p className="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+                      Data models, financial schedules, inventory databases, and reporting templates.
+                    </p>
+                    <div className="space-y-space-xs">
+                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
+                        <span className="font-title-md text-title-md text-on-surface font-medium">Microsoft Excel (Master)</span>
+                        <span className="rounded bg-tertiary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-tertiary font-semibold">Formulas/Models</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
+                        <span className="font-title-md text-title-md text-on-surface font-medium">Cash Flow 13-Week</span>
+                        <span className="rounded bg-tertiary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-tertiary font-semibold">Trained</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
+                        <span className="font-title-md text-title-md text-on-surface font-medium">Google Sheets &amp; Docs</span>
+                        <span className="rounded bg-tertiary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-tertiary font-semibold">Cloud Sync</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
+                        <span className="font-title-md text-title-md text-on-surface font-medium">Financial Schedules</span>
+                        <span className="rounded bg-surface-container-high px-space-xs py-0.5 font-label-sm text-label-sm text-outline">Accruals/Assets</span>
+                      </div>
+                    </div>
+                  </div>
+                  <span className="font-label-sm text-label-sm text-outline mt-space-md block">Structured Data Modeling</span>
+                </div>
+              </Reveal>
+
+              {/* Matrix 4 */}
+              <Reveal delay={400}>
+                <div className="card-hover-effect rounded-2xl bg-surface-container p-space-lg shadow-lg flex flex-col justify-between border border-surface-container-high/60 h-full">
+                  <div>
+                    <div className="flex items-center gap-space-xs text-primary mb-space-sm">
+                      <span className="material-symbols-outlined text-headline-sm">security</span>
+                      <span className="font-label-md text-label-md font-bold uppercase">Compliance &amp; Governance</span>
+                    </div>
+                    <p className="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+                      Statutory regulatory frameworks, data privacy, and anti-fraud protocols.
+                    </p>
+                    <div className="space-y-space-xs">
+                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
+                        <span className="font-title-md text-title-md text-on-surface font-medium">R.A. 10173 Data Privacy</span>
+                        <span className="rounded bg-primary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-primary font-semibold">Compliant</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
+                        <span className="font-title-md text-title-md text-on-surface font-medium">SSS QMS Standards</span>
+                        <span className="rounded bg-primary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-primary font-semibold">Trained</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
+                        <span className="font-title-md text-title-md text-on-surface font-medium">Risk &amp; Anti-Fraud</span>
+                        <span className="rounded bg-primary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-primary font-semibold">Trained</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
+                        <span className="font-title-md text-title-md text-on-surface font-medium">COA Standard Taxonomy</span>
+                        <span className="rounded bg-surface-container-high px-space-xs py-0.5 font-label-sm text-label-sm text-outline">Certified</span>
+                      </div>
+                    </div>
+                  </div>
+                  <span className="font-label-sm text-label-sm text-outline mt-space-md block">Audited Confidentiality</span>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 6: VERIFIED TRAINING CERTIFICATIONS (THE 9 CERTIFICATE IMAGES) */}
+        <section className="w-full bg-surface-container-lowest py-space-xl border-y border-surface-container-high/30" id="certifications">
           <div className="mx-auto max-w-[1600px] px-margin">
             <Reveal>
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-lg">
@@ -852,14 +1578,14 @@ export default function Home() {
                   <div className="inline-flex items-center gap-space-xs">
                     <span className="material-symbols-outlined text-title-md text-primary">military_tech</span>
                     <span className="font-label-md text-label-md uppercase tracking-wider text-primary font-semibold">
-                      Statutory Authority &amp; Proof of Credentials
+                      Training Credentials
                     </span>
                   </div>
                   <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface mt-space-xs">
                     Verified Professional Certifications &amp; Accreditations
                   </h2>
                   <p className="font-body-md text-body-md text-on-surface-variant max-w-2xl mt-1">
-                    Authentic, verifiable training credentials across ERP accounting systems, cooperative bookkeeping, financial management, and corporate operations. Click any credential to inspect the verified certificate.
+                    Authentic training credentials across ERP accounting systems, cooperative bookkeeping, financial management, virtual operations, and executive communication. Click any credential to inspect the high-resolution certificate.
                   </p>
                 </div>
 
@@ -867,49 +1593,49 @@ export default function Home() {
                 <div className="flex flex-wrap items-center gap-space-xs bg-surface-container-low p-1.5 rounded-xl border border-surface-container-high shadow-md">
                   <button
                     className={`rounded-lg px-space-md py-1.5 font-label-sm text-label-sm transition-all duration-200 cursor-pointer ${
-                      selectedCategory === "all"
+                      selectedCertCategory === "all"
                         ? "bg-primary text-on-primary font-semibold shadow-[0_0_15px_rgba(78,222,163,0.35)] scale-105"
                         : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
                     }`}
-                    onClick={() => setSelectedCategory("all")}
+                    onClick={() => setSelectedCertCategory("all")}
                   >
                     All Proofs ({certificateData.length})
                   </button>
                   <button
                     className={`rounded-lg px-space-md py-1.5 font-label-sm text-label-sm transition-all duration-200 cursor-pointer ${
-                      selectedCategory === "accounting"
+                      selectedCertCategory === "accounting"
                         ? "bg-primary text-on-primary font-semibold shadow-[0_0_15px_rgba(78,222,163,0.35)] scale-105"
                         : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
                     }`}
-                    onClick={() => setSelectedCategory("accounting")}
+                    onClick={() => setSelectedCertCategory("accounting")}
                   >
                     Accounting &amp; ERP (4)
                   </button>
                   <button
                     className={`rounded-lg px-space-md py-1.5 font-label-sm text-label-sm transition-all duration-200 cursor-pointer ${
-                      selectedCategory === "finance"
+                      selectedCertCategory === "finance"
                         ? "bg-primary text-on-primary font-semibold shadow-[0_0_15px_rgba(78,222,163,0.35)] scale-105"
                         : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
                     }`}
-                    onClick={() => setSelectedCategory("finance")}
+                    onClick={() => setSelectedCertCategory("finance")}
                   >
-                    Finance &amp; Strategy (2)
+                    Finance &amp; Strategy (3)
                   </button>
                   <button
                     className={`rounded-lg px-space-md py-1.5 font-label-sm text-label-sm transition-all duration-200 cursor-pointer ${
-                      selectedCategory === "ops"
+                      selectedCertCategory === "ops"
                         ? "bg-primary text-on-primary font-semibold shadow-[0_0_15px_rgba(78,222,163,0.35)] scale-105"
                         : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
                     }`}
-                    onClick={() => setSelectedCategory("ops")}
+                    onClick={() => setSelectedCertCategory("ops")}
                   >
-                    Operations &amp; Comms (3)
+                    Operations &amp; Governance (4)
                   </button>
                 </div>
               </div>
             </Reveal>
 
-            {/* Balanced 3x3 Grid with Certificate Picture Previews & Lightbox Integration */}
+            {/* Balanced 3x3 Grid with Certificate Picture Previews & Lightbox */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
               {filteredCertificates.map((cert, idx) => (
                 <Reveal key={cert.id} delay={idx * 75}>
@@ -925,9 +1651,8 @@ export default function Home() {
                           src={cert.imageSrc}
                           className="w-full h-full object-cover object-center filter brightness-95 contrast-[1.03] group-hover:scale-108 group-hover:brightness-100 transition-all duration-500 ease-out"
                         />
-                        {/* Overlay gradient & click indicator */}
                         <div className="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-black/30 opacity-60 group-hover:opacity-30 transition-opacity"></div>
-                        
+
                         {/* Top floating badges */}
                         <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
                           <span className="rounded-full bg-surface-dim/90 backdrop-blur-md border border-surface-container-high px-2.5 py-1 font-label-sm text-label-sm text-secondary font-semibold">
@@ -988,714 +1713,72 @@ export default function Home() {
                 </Reveal>
               ))}
             </div>
-
-            {/* Continuing Education (CPE) Tracker Bar */}
-            <Reveal delay={300}>
-              <div className="mt-space-xl rounded-2xl bg-surface-container-low p-space-lg shadow-xl border border-surface-container-high/80 card-hover-effect">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
-                  <div className="space-y-space-xs">
-                    <div className="flex items-center gap-space-xs">
-                      <span className="material-symbols-outlined text-title-md text-primary">school</span>
-                      <span className="font-headline-sm text-headline-sm font-bold text-on-surface">
-                        Triennial CPE Continuous Education &amp; Audit Ledger
-                      </span>
-                    </div>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant max-w-xl">
-                      California &amp; NY Accountancy Boards require 120 verified CPE hours per triennium. Current verified record stands at 123% compliance.
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-space-md">
-                    <div className="text-right">
-                      <span className="font-headline-md text-headline-md font-bold text-primary">
-                        <CountUp end={148.0} decimals={1} suffix=" Hours" />
-                      </span>
-                      <p className="font-label-sm text-label-sm text-outline">120 Hour Triennial Requirement</p>
-                    </div>
-                    <span className="rounded-full bg-primary/20 border border-primary/30 px-space-sm py-1 font-label-md text-label-md font-bold text-primary animate-pulse">
-                      123% Complete
-                    </span>
-                  </div>
-                </div>
-
-                {/* Visual Progress Bar with gradient animation */}
-                <div className="mt-space-md h-3 w-full overflow-hidden rounded-full bg-surface-container-highest">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-primary via-tertiary to-secondary transition-all duration-1000 ease-out shadow-[0_0_12px_rgba(78,222,163,0.5)]"
-                    style={{ width: "100%" }}
-                  ></div>
-                </div>
-
-                <div className="mt-space-md grid grid-cols-1 sm:grid-cols-3 gap-space-md">
-                  <div className="rounded-lg bg-surface-container p-space-xs border border-surface-container-high/50 card-hover-effect">
-                    <span className="font-label-sm text-label-sm text-secondary font-medium">Regulatory &amp; Board Ethics</span>
-                    <p className="font-headline-sm text-headline-sm font-bold text-on-surface mt-0.5">16.0 Hrs (100%)</p>
-                  </div>
-                  <div className="rounded-lg bg-surface-container p-space-xs border border-surface-container-high/50 card-hover-effect">
-                    <span className="font-label-sm text-label-sm text-primary font-medium">Technical Accounting &amp; GAAP</span>
-                    <p className="font-headline-sm text-headline-sm font-bold text-on-surface mt-0.5">92.5 Hrs (142%)</p>
-                  </div>
-                  <div className="rounded-lg bg-surface-container p-space-xs border border-surface-container-high/50 card-hover-effect">
-                    <span className="font-label-sm text-label-sm text-tertiary font-medium">Financial Cybersecurity &amp; AI</span>
-                    <p className="font-headline-sm text-headline-sm font-bold text-on-surface mt-0.5">39.5 Hrs (110%)</p>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
           </div>
         </section>
 
-        {/* SECTION 4: WORK EXPERIENCE & CAREER TRAJECTORY */}
-        <section className="w-full bg-surface-container-lowest py-space-xl border-y border-surface-container-high/30" id="experience">
-          <div className="mx-auto max-w-[1600px] px-margin">
-            {/* Section Header */}
-            <Reveal>
-              <div className="mb-space-xl">
-                <span className="font-label-md text-label-md uppercase tracking-wider text-secondary font-semibold">
-                  Proven Trajectory
-                </span>
-                <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface mt-space-xs">
-                  Executive Career &amp; Operational Leadership
-                </h2>
-                <p className="font-body-md text-body-md text-on-surface-variant max-w-2xl mt-1">
-                  Fourteen years navigating hyper-growth scaleups, public corporate controllership, and Big 4 audit scrutiny.
-                </p>
-              </div>
-            </Reveal>
-
-            {/* Experience Timeline */}
-            <div className="relative space-y-space-lg">
-              {/* Role 1 */}
-              <Reveal delay={150}>
-                <div className="relative rounded-2xl bg-surface-container p-space-lg shadow-lg border border-surface-container-high/70 card-hover-effect hover:border-primary/40">
-                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-space-sm">
-                    <div>
-                      <div className="flex items-center gap-space-sm flex-wrap">
-                        <span className="font-headline-md text-headline-md font-bold text-on-surface">
-                          Managing Partner &amp; Fractional CFO
-                        </span>
-                        <span className="rounded bg-primary/20 border border-primary/30 px-space-xs py-0.5 font-label-sm text-label-sm font-semibold text-primary">
-                          Current Mandate
-                        </span>
-                      </div>
-                      <p className="font-title-md text-title-md text-secondary font-medium">Vance Advisory Group PLLC</p>
-                    </div>
-                    <div className="rounded-lg bg-surface-container-low px-space-sm py-1 font-label-md text-label-md text-outline border border-surface-container-high">
-                      2022 – Present • New York &amp; San Francisco
-                    </div>
-                  </div>
-
-                  <div className="mt-space-md grid grid-cols-1 lg:grid-cols-12 gap-space-md">
-                    <div className="lg:col-span-8 space-y-space-xs">
-                      <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-                        Directing financial operations, treasury governance, and full-cycle controllership for 8 concurrent high-growth SaaS, FinTech, and D2C enterprises generating between $10M and $65M ARR.
-                      </p>
-                      <ul className="space-y-space-xs pt-space-xs">
-                        <li className="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
-                          <span className="material-symbols-outlined text-title-md text-primary shrink-0">check_circle</span>
-                          <span>Compressed client average month-end close by 71% (from 14.5 days down to 4.2 days) utilizing custom automated NetSuite/QBO API pipeline reconciliation logic.</span>
-                        </li>
-                        <li className="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
-                          <span className="material-symbols-outlined text-title-md text-primary shrink-0">check_circle</span>
-                          <span>Structured debt financing and revolving credit facilities totaling $85M across 4 portfolio clients, negotiating strict covenant covenants to protect shareholder equity.</span>
-                        </li>
-                        <li className="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
-                          <span className="material-symbols-outlined text-title-md text-primary shrink-0">check_circle</span>
-                          <span>Supervised cross-border legal consolidation across Delaware C-Corps, UK Subsidiaries, and Canadian R&amp;D entities with complex ASC 830 foreign currency translation.</span>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="lg:col-span-4 rounded-xl bg-surface-container-low p-space-md flex flex-col justify-between border border-surface-container-high/60">
-                      <span className="font-label-sm text-label-sm uppercase text-outline">Quantified Impact</span>
-                      <div className="space-y-space-xs my-space-xs">
-                        <div>
-                          <span className="font-headline-md text-headline-md font-bold text-primary">
-                            <CountUp end={71} suffix="%" />
-                          </span>
-                          <span className="font-body-sm text-body-sm text-on-surface-variant"> Close Cycle Reduction</span>
-                        </div>
-                        <div>
-                          <span className="font-headline-md text-headline-md font-bold text-secondary">
-                            <CountUp end={85} prefix="$" suffix="M+" />
-                          </span>
-                          <span className="font-body-sm text-body-sm text-on-surface-variant"> Non-Dilutive Capital Secured</span>
-                        </div>
-                      </div>
-                      <span className="font-label-sm text-label-sm text-primary font-semibold">Verified Fiduciary Record</span>
-                    </div>
-                  </div>
-                </div>
-              </Reveal>
-
-              {/* Role 2 */}
-              <Reveal delay={250}>
-                <div className="relative rounded-2xl bg-surface-container p-space-lg shadow-lg border border-surface-container-high/70 card-hover-effect hover:border-secondary/40">
-                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-space-sm">
-                    <div>
-                      <div className="flex items-center gap-space-sm">
-                        <span className="font-headline-md text-headline-md font-bold text-on-surface">
-                          Corporate Controller &amp; VP of Finance
-                        </span>
-                      </div>
-                      <p className="font-title-md text-title-md text-secondary font-medium">FinPulse Technologies Inc. (B2B Enterprise SaaS)</p>
-                    </div>
-                    <div className="rounded-lg bg-surface-container-low px-space-sm py-1 font-label-md text-label-md text-outline border border-surface-container-high">
-                      2018 – 2022 • San Francisco, CA
-                    </div>
-                  </div>
-
-                  <div className="mt-space-md grid grid-cols-1 lg:grid-cols-12 gap-space-md">
-                    <div className="lg:col-span-8 space-y-space-xs">
-                      <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-                        Built and led a 14-person global corporate accounting and finance team spanning US, UK, and EMEA subsidiaries for a SaaS enterprise scaling from $18M to $75M ARR.
-                      </p>
-                      <ul className="space-y-space-xs pt-space-xs">
-                        <li className="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
-                          <span className="material-symbols-outlined text-title-md text-primary shrink-0">check_circle</span>
-                          <span>Led four consecutive unmodified Ernst &amp; Young audits with zero material weaknesses, zero deficiencies, and zero post-closing journal restatements.</span>
-                        </li>
-                        <li className="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
-                          <span className="material-symbols-outlined text-title-md text-primary shrink-0">check_circle</span>
-                          <span>Migrated legacy disparate QuickBooks &amp; billings into Oracle NetSuite ERP with full ASC 606 automated rev-rec engine in under 90 days.</span>
-                        </li>
-                        <li className="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
-                          <span className="material-symbols-outlined text-title-md text-primary shrink-0">check_circle</span>
-                          <span>Presided over banking syndication diligence during $110M Series C round led by top-tier growth funds.</span>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="lg:col-span-4 rounded-xl bg-surface-container-low p-space-md flex flex-col justify-between border border-surface-container-high/60">
-                      <span className="font-label-sm text-label-sm uppercase text-outline">Key Metric</span>
-                      <div className="space-y-space-xs my-space-xs">
-                        <div>
-                          <span className="font-headline-md text-headline-md font-bold text-primary">4 / 4</span>
-                          <span className="font-body-sm text-body-sm text-on-surface-variant"> Clean EY Audits</span>
-                        </div>
-                        <div>
-                          <span className="font-headline-md text-headline-md font-bold text-tertiary">
-                            <CountUp end={350} suffix="+" />
-                          </span>
-                          <span className="font-body-sm text-body-sm text-on-surface-variant"> Global Headcount Financed</span>
-                        </div>
-                      </div>
-                      <span className="font-label-sm text-label-sm text-tertiary font-semibold">Zero SOX Deficiencies</span>
-                    </div>
-                  </div>
-                </div>
-              </Reveal>
-
-              {/* Role 3 */}
-              <Reveal delay={350}>
-                <div className="relative rounded-2xl bg-surface-container p-space-lg shadow-lg border border-surface-container-high/70 card-hover-effect hover:border-tertiary/40">
-                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-space-sm">
-                    <div>
-                      <div className="flex items-center gap-space-sm">
-                        <span className="font-headline-md text-headline-md font-bold text-on-surface">
-                          Senior Audit Manager &amp; Forensic Lead
-                        </span>
-                      </div>
-                      <p className="font-title-md text-title-md text-secondary font-medium">Deloitte &amp; Touche LLP</p>
-                    </div>
-                    <div className="rounded-lg bg-surface-container-low px-space-sm py-1 font-label-md text-label-md text-outline border border-surface-container-high">
-                      2014 – 2018 • New York, NY
-                    </div>
-                  </div>
-
-                  <div className="mt-space-md grid grid-cols-1 lg:grid-cols-12 gap-space-md">
-                    <div className="lg:col-span-8 space-y-space-xs">
-                      <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-                        Directed integrated audits and forensic fraud investigations for mid-market and multinational corporate clients ($50M to $400M revenue) under PCAOB and AICPA auditing standards.
-                      </p>
-                      <ul className="space-y-space-xs pt-space-xs">
-                        <li className="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
-                          <span className="material-symbols-outlined text-title-md text-primary shrink-0">check_circle</span>
-                          <span>Formulated SOX 404 internal control testing programs and identified $12M in fraudulent payroll padding at an industrial manufacturing client.</span>
-                        </li>
-                        <li className="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
-                          <span className="material-symbols-outlined text-title-md text-primary shrink-0">check_circle</span>
-                          <span>Authored technical accounting memoranda on complex debt-equity instruments, bifurcated warrants, and business combinations.</span>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="lg:col-span-4 rounded-xl bg-surface-container-low p-space-md flex flex-col justify-between border border-surface-container-high/60">
-                      <span className="font-label-sm text-label-sm uppercase text-outline">Big 4 Experience</span>
-                      <div className="space-y-space-xs my-space-xs">
-                        <div>
-                          <span className="font-headline-md text-headline-md font-bold text-secondary">
-                            <CountUp end={32} suffix="+" />
-                          </span>
-                          <span className="font-body-sm text-body-sm text-on-surface-variant"> Lead Engagement Audits</span>
-                        </div>
-                        <div>
-                          <span className="font-headline-md text-headline-md font-bold text-primary">100%</span>
-                          <span className="font-body-sm text-body-sm text-on-surface-variant"> Technical Review Pass Rate</span>
-                        </div>
-                      </div>
-                      <span className="font-label-sm text-label-sm text-secondary font-semibold">Forensic Specialization</span>
-                    </div>
-                  </div>
-                </div>
-              </Reveal>
-
-              {/* Role 4 */}
-              <Reveal delay={450}>
-                <div className="relative rounded-2xl bg-surface-container p-space-lg shadow-lg border border-surface-container-high/70 card-hover-effect">
-                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-space-sm">
-                    <div>
-                      <div className="flex items-center gap-space-sm">
-                        <span className="font-headline-md text-headline-md font-bold text-on-surface">
-                          Senior Staff Accountant &amp; Bookkeeping Specialist
-                        </span>
-                      </div>
-                      <p className="font-title-md text-title-md text-secondary font-medium">Apex Wealth &amp; Corporate Services</p>
-                    </div>
-                    <div className="rounded-lg bg-surface-container-low px-space-sm py-1 font-label-md text-label-md text-outline border border-surface-container-high">
-                      2010 – 2014 • Los Angeles, CA
-                    </div>
-                  </div>
-                  <div className="mt-space-md space-y-space-xs">
-                    <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-                      Reconstructed distressed client books with up to 18-month transaction backlogs. Built customized GL architectures in QuickBooks Enterprise, standardized month-end accrual checklists, and instituted sales tax nexus filings across 24 states.
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-            </div>
-          </div>
-        </section>
-
-        {/* SECTION 5: TOOLS, ERP & FINANCIAL TECH STACK */}
-        <section className="w-full py-space-xl" id="tools">
-          <div className="mx-auto max-w-[1600px] px-margin">
-            {/* Header */}
-            <Reveal>
-              <div className="mb-space-xl">
-                <span className="font-label-md text-label-md uppercase tracking-wider text-primary font-semibold">
-                  Infrastructure &amp; Tooling
-                </span>
-                <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface mt-space-xs">
-                  Enterprise Financial Tooling &amp; Automated Ecosystem
-                </h2>
-                <p className="font-body-md text-body-md text-on-surface-variant max-w-2xl mt-1">
-                  We do not rely on manual spreadsheets alone. We architect high-integrity, automated data pipelines that eliminate human entry error and reconcile millions in transactions seamlessly.
-                </p>
-              </div>
-            </Reveal>
-
-            {/* Segmented Matrix */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-md">
-              {/* Matrix 1: Core GL */}
-              <Reveal delay={100}>
-                <div className="card-hover-effect rounded-2xl bg-surface-container p-space-lg shadow-lg flex flex-col justify-between border border-surface-container-high/60 h-full">
-                  <div>
-                    <div className="flex items-center gap-space-xs text-primary mb-space-sm">
-                      <span className="material-symbols-outlined text-headline-sm">account_balance</span>
-                      <span className="font-label-md text-label-md font-bold uppercase">Core GL Systems</span>
-                    </div>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
-                      Primary ledger engines for GAAP-compliant balance sheet and P&amp;L consolidation.
-                    </p>
-                    <div className="space-y-space-xs">
-                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-title-md text-title-md text-on-surface font-medium">Oracle NetSuite</span>
-                        <span className="rounded bg-primary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-primary font-semibold">Master ERP</span>
-                      </div>
-                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-title-md text-title-md text-on-surface font-medium">QuickBooks Online Adv.</span>
-                        <span className="rounded bg-primary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-primary font-semibold">ProAdvisor</span>
-                      </div>
-                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-title-md text-title-md text-on-surface font-medium">Xero Platinum</span>
-                        <span className="rounded bg-primary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-primary font-semibold">Partner</span>
-                      </div>
-                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-title-md text-title-md text-on-surface font-medium">Sage Intacct</span>
-                        <span className="rounded bg-surface-container-high px-space-xs py-0.5 font-label-sm text-label-sm text-outline">Certified</span>
-                      </div>
-                    </div>
-                  </div>
-                  <span className="font-label-sm text-label-sm text-outline mt-space-md block">Multi-Entity Consolidation Ready</span>
-                </div>
-              </Reveal>
-
-              {/* Matrix 2: FP&A */}
-              <Reveal delay={200}>
-                <div className="card-hover-effect rounded-2xl bg-surface-container p-space-lg shadow-lg flex flex-col justify-between border border-surface-container-high/60 h-full">
-                  <div>
-                    <div className="flex items-center gap-space-xs text-secondary mb-space-sm">
-                      <span className="material-symbols-outlined text-headline-sm">trending_up</span>
-                      <span className="font-label-md text-label-md font-bold uppercase">FP&amp;A &amp; Modeling</span>
-                    </div>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
-                      Rolling 13-week liquidity, scenario budgeting, and venture board models.
-                    </p>
-                    <div className="space-y-space-xs">
-                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-title-md text-title-md text-on-surface font-medium">Jirav</span>
-                        <span className="rounded bg-secondary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-secondary font-semibold">Expert</span>
-                      </div>
-                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-title-md text-title-md text-on-surface font-medium">Cube Software</span>
-                        <span className="rounded bg-secondary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-secondary font-semibold">Integrated</span>
-                      </div>
-                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-title-md text-title-md text-on-surface font-medium">Float / Cash Flow</span>
-                        <span className="rounded bg-secondary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-secondary font-semibold">Daily Sync</span>
-                      </div>
-                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-title-md text-title-md text-on-surface font-medium">Pigment / Anaplan</span>
-                        <span className="rounded bg-surface-container-high px-space-xs py-0.5 font-label-sm text-label-sm text-outline">Scaleups</span>
-                      </div>
-                    </div>
-                  </div>
-                  <span className="font-label-sm text-label-sm text-outline mt-space-md block">13-Week Cash Burn Specialists</span>
-                </div>
-              </Reveal>
-
-              {/* Matrix 3: Billing & Ops */}
-              <Reveal delay={300}>
-                <div className="card-hover-effect rounded-2xl bg-surface-container p-space-lg shadow-lg flex flex-col justify-between border border-surface-container-high/60 h-full">
-                  <div>
-                    <div className="flex items-center gap-space-xs text-tertiary mb-space-sm">
-                      <span className="material-symbols-outlined text-headline-sm">payments</span>
-                      <span className="font-label-md text-label-md font-bold uppercase">AP/AR &amp; Operations</span>
-                    </div>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
-                      Frictionless payable approvals, automated tax nexus, and payroll engines.
-                    </p>
-                    <div className="space-y-space-xs">
-                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-title-md text-title-md text-on-surface font-medium">Bill.com &amp; Ramp</span>
-                        <span className="rounded bg-tertiary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-tertiary font-semibold">AP Automated</span>
-                      </div>
-                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-title-md text-title-md text-on-surface font-medium">Brex Treasury</span>
-                        <span className="rounded bg-tertiary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-tertiary font-semibold">Integrated</span>
-                      </div>
-                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-title-md text-title-md text-on-surface font-medium">Gusto &amp; Rippling</span>
-                        <span className="rounded bg-tertiary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-tertiary font-semibold">GL Payroll</span>
-                      </div>
-                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-title-md text-title-md text-on-surface font-medium">Avalara AvaTax</span>
-                        <span className="rounded bg-surface-container-high px-space-xs py-0.5 font-label-sm text-label-sm text-outline">50 States</span>
-                      </div>
-                    </div>
-                  </div>
-                  <span className="font-label-sm text-label-sm text-outline mt-space-md block">Zero Phantom AP Leaks</span>
-                </div>
-              </Reveal>
-
-              {/* Matrix 4: Forensic Data Pipeline */}
-              <Reveal delay={400}>
-                <div className="card-hover-effect rounded-2xl bg-surface-container p-space-lg shadow-lg flex flex-col justify-between border border-surface-container-high/60 h-full">
-                  <div>
-                    <div className="flex items-center gap-space-xs text-primary mb-space-sm">
-                      <span className="material-symbols-outlined text-headline-sm">database</span>
-                      <span className="font-label-md text-label-md font-bold uppercase">Forensic Pipelines</span>
-                    </div>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
-                      Direct SQL ledger query scripts, automated ETL, and data verification scripts.
-                    </p>
-                    <div className="space-y-space-xs">
-                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-title-md text-title-md text-on-surface font-medium">BigQuery / SQL</span>
-                        <span className="rounded bg-primary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-primary font-semibold">Ledger Query</span>
-                      </div>
-                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-title-md text-title-md text-on-surface font-medium">Alteryx</span>
-                        <span className="rounded bg-primary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-primary font-semibold">Forensic ETL</span>
-                      </div>
-                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-title-md text-title-md text-on-surface font-medium">Excel VBA / PowerQuery</span>
-                        <span className="rounded bg-primary/10 px-space-xs py-0.5 font-label-sm text-label-sm text-primary font-semibold">Master Models</span>
-                      </div>
-                      <div className="flex items-center justify-between rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-title-md text-title-md text-on-surface font-medium">Stripe API Webhooks</span>
-                        <span className="rounded bg-surface-container-high px-space-xs py-0.5 font-label-sm text-label-sm text-outline">Custom Clear</span>
-                      </div>
-                    </div>
-                  </div>
-                  <span className="font-label-sm text-label-sm text-outline mt-space-md block">100k+ Row Reconciliations</span>
-                </div>
-              </Reveal>
-            </div>
-
-            {/* Architecture Flow Diagram Card */}
-            <Reveal delay={200}>
-              <div className="mt-space-lg rounded-2xl bg-surface-container-low p-space-lg shadow-xl border border-surface-container-high/80 card-hover-effect">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-space-sm mb-space-md">
-                  <div className="flex items-center gap-space-xs">
-                    <span className="material-symbols-outlined text-headline-sm text-primary">hub</span>
-                    <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface">
-                      API Integration &amp; Real-Time Ledger Sync Architecture
-                    </h3>
-                  </div>
-                  <span className="rounded-full bg-primary/10 border border-primary/20 px-space-sm py-1 font-label-sm text-label-sm text-primary font-semibold animate-pulse">
-                    AUTOMATED AUDIT TRAIL
-                  </span>
-                </div>
-
-                {/* Architectural Visual Representation */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-space-sm text-center">
-                  <div className="card-hover-effect rounded-xl bg-surface-container p-space-md border border-surface-container-high/50 hover:border-secondary/40 transition-all">
-                    <div className="font-label-sm text-label-sm text-secondary uppercase font-bold">1. Ingestion Layer</div>
-                    <p className="font-title-md text-title-md font-bold text-on-surface mt-1">Payment Gateways &amp; Banks</p>
-                    <p className="font-body-sm text-body-sm text-outline mt-1 leading-relaxed">
-                      Stripe, SVB, Brex, Chase, Shopify API webhooks streaming hourly raw payloads.
-                    </p>
-                  </div>
-                  <div className="card-hover-effect rounded-xl bg-surface-container p-space-md border border-surface-container-high/50 hover:border-primary/40 transition-all">
-                    <div className="font-label-sm text-label-sm text-primary uppercase font-bold">2. Clearing Transformation</div>
-                    <p className="font-title-md text-title-md font-bold text-on-surface mt-1">Custom Settlement Scripts</p>
-                    <p className="font-body-sm text-body-sm text-outline mt-1 leading-relaxed">
-                      Splits processing fees, refunds, chargebacks &amp; transit holds into isolated clearing accounts.
-                    </p>
-                  </div>
-                  <div className="card-hover-effect rounded-xl bg-surface-container p-space-md border border-surface-container-high/50 hover:border-tertiary/40 transition-all">
-                    <div className="font-label-sm text-label-sm text-tertiary uppercase font-bold">3. GAAP Core Ledger</div>
-                    <p className="font-title-md text-title-md font-bold text-on-surface mt-1">NetSuite / QBO GL</p>
-                    <p className="font-body-sm text-body-sm text-outline mt-1 leading-relaxed">
-                      ASC 606 waterfall recognized; automated balance-sheet roll-forwards verified daily.
-                    </p>
-                  </div>
-                  <div className="card-hover-effect rounded-xl bg-surface-container p-space-md border border-surface-container-high/50 hover:border-secondary/40 transition-all">
-                    <div className="font-label-sm text-label-sm text-secondary uppercase font-bold">4. Board Output</div>
-                    <p className="font-title-md text-title-md font-bold text-on-surface mt-1">Executive Dashboard</p>
-                    <p className="font-body-sm text-body-sm text-outline mt-1 leading-relaxed">
-                      Live 13-week liquidity, EBITDA bridge, and debt-service coverage ratio telemetry.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-        </section>
-
-        {/* SECTION 6: WORK SAMPLES & ADVISORY CASE STUDIES */}
-        <section className="w-full bg-surface-container-lowest py-space-xl border-y border-surface-container-high/30" id="samples">
-          <div className="mx-auto max-w-[1600px] px-margin">
-            {/* Section Title */}
-            <Reveal>
-              <div className="mb-space-xl">
-                <span className="font-label-md text-label-md uppercase tracking-wider text-secondary font-semibold">
-                  Measurable Outcomes
-                </span>
-                <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface mt-space-xs">
-                  Proven Turnarounds &amp; High-Impact Case Deliverables
-                </h2>
-                <p className="font-body-md text-body-md text-on-surface-variant max-w-2xl mt-1">
-                  Real enterprise engagements showcasing forensic precision, backlog liquidation, and balance sheet protection under high-stakes audit conditions.
-                </p>
-              </div>
-            </Reveal>
-
-            {/* Case Studies Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-space-lg">
-              {/* Case 1 */}
-              <Reveal delay={100}>
-                <div className="card-hover-effect rounded-2xl bg-surface-container p-space-lg shadow-xl flex flex-col justify-between border border-surface-container-high/70 hover:border-primary/40 transition-all duration-300 h-full">
-                  <div>
-                    <div className="flex items-center justify-between mb-space-sm">
-                      <span className="rounded bg-primary/20 border border-primary/30 px-space-xs py-0.5 font-label-sm text-label-sm font-semibold text-primary">
-                        VENTURE DUE DILIGENCE
-                      </span>
-                      <span className="font-label-sm text-label-sm text-outline font-medium">FinTech • Series B</span>
-                    </div>
-                    <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface leading-snug">
-                      18-Month Ledger Backlog Remediation for Series B FinTech
-                    </h3>
-                    <div className="mt-space-md space-y-space-sm">
-                      <div className="rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-label-sm text-label-sm font-bold text-error">The Problem:</span>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-relaxed">
-                          14,000+ un-reconciled Stripe transactions, co-mingled merchant payouts, and a $3.1M suspense balance halting a $42M venture round with 4 weeks to deadline.
-                        </p>
-                      </div>
-                      <div className="rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-label-sm text-label-sm font-bold text-secondary">The Intervention:</span>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-relaxed">
-                          Wrote programmatic clearing scripts to parse raw Stripe webhook logs into NetSuite, mapped deferred revenue waterfalls, and reconstructed 18 balance sheets.
-                        </p>
-                      </div>
-                      <div className="rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-label-sm text-label-sm font-bold text-primary">The Result:</span>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-relaxed">
-                          Unqualified due-diligence sign-off from tier-1 institutional VC; $42M Series B closed on time with zero valuation haircut.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-space-lg pt-space-sm border-t border-surface-container-high flex items-center justify-between">
-                    <span className="font-label-sm text-label-sm text-primary font-bold">Cleared 100% Variance</span>
-                    <span className="font-label-sm text-label-sm text-outline">6-Week Execution</span>
-                  </div>
-                </div>
-              </Reveal>
-
-              {/* Case 2 */}
-              <Reveal delay={250}>
-                <div className="card-hover-effect rounded-2xl bg-surface-container p-space-lg shadow-xl flex flex-col justify-between border border-surface-container-high/70 hover:border-secondary/40 transition-all duration-300 h-full">
-                  <div>
-                    <div className="flex items-center justify-between mb-space-sm">
-                      <span className="rounded bg-secondary/20 border border-secondary/30 px-space-xs py-0.5 font-label-sm text-label-sm font-semibold text-secondary">
-                        OPERATIONAL RECOVERY
-                      </span>
-                      <span className="font-label-sm text-label-sm text-outline font-medium">Omnichannel Retail</span>
-                    </div>
-                    <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface leading-snug">
-                      Multi-Entity E-Commerce Accounting &amp; COGS Modernization
-                    </h3>
-                    <div className="mt-space-md space-y-space-sm">
-                      <div className="rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-label-sm text-label-sm font-bold text-error">The Problem:</span>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-relaxed">
-                          Disconnected Amazon FBA, Shopify Plus, and wholesale EDI channels causing phantom inventory bleed, erroneous gross margins, and missed state sales tax filings.
-                        </p>
-                      </div>
-                      <div className="rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-label-sm text-label-sm font-bold text-secondary">The Intervention:</span>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-relaxed">
-                          Re-engineered perpetual landed-cost inventory accounting, deployed Avalara automated nexus calculation, and consolidated 3 warehouse ledgers into QBO Advanced.
-                        </p>
-                      </div>
-                      <div className="rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-label-sm text-label-sm font-bold text-primary">The Result:</span>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-relaxed">
-                          Uncovered $840k/yr in vendor double-billing and inventory shrinkage; elevated gross profit visibility by +7.4 percentage points.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-space-lg pt-space-sm border-t border-surface-container-high flex items-center justify-between">
-                    <span className="font-label-sm text-label-sm text-secondary font-bold">+$840,000 Recovered</span>
-                    <span className="font-label-sm text-label-sm text-outline">3 Warehouse Sites</span>
-                  </div>
-                </div>
-              </Reveal>
-
-              {/* Case 3 */}
-              <Reveal delay={400}>
-                <div className="card-hover-effect rounded-2xl bg-surface-container p-space-lg shadow-xl flex flex-col justify-between border border-surface-container-high/70 hover:border-tertiary/40 transition-all duration-300 h-full">
-                  <div>
-                    <div className="flex items-center justify-between mb-space-sm">
-                      <span className="rounded bg-tertiary/20 border border-tertiary/30 px-space-xs py-0.5 font-label-sm text-label-sm font-semibold text-tertiary">
-                        AUDIT DEFENSE &amp; TAX
-                      </span>
-                      <span className="font-label-sm text-label-sm text-outline font-medium">Enterprise SaaS</span>
-                    </div>
-                    <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface leading-snug">
-                      IRS Audit Defense &amp; $1.8M R&amp;D Tax Credit Recovery
-                    </h3>
-                    <div className="mt-space-md space-y-space-sm">
-                      <div className="rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-label-sm text-label-sm font-bold text-error">The Problem:</span>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-relaxed">
-                          Notice of deficiency and $380,000 in proposed penalties from state and federal auditors following inaccurate payroll allocations by an uncertified bookkeeper.
-                        </p>
-                      </div>
-                      <div className="rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-label-sm text-label-sm font-bold text-secondary">The Intervention:</span>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-relaxed">
-                          Invoked Enrolled Agent representation privileges, produced contemporaneous time-tracking audit trails, and conducted forensic engineering wage classification under IRC Sec 41.
-                        </p>
-                      </div>
-                      <div className="rounded-lg bg-surface-container-low p-space-xs border border-surface-container-high/40">
-                        <span className="font-label-sm text-label-sm font-bold text-primary">The Result:</span>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-relaxed">
-                          100% penalty abatement secured, IRS audit closed with no change, and recaptured $1,824,500 in liquid federal R&amp;D payroll tax offset credits.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-space-lg pt-space-sm border-t border-surface-container-high flex items-center justify-between">
-                    <span className="font-label-sm text-label-sm text-tertiary font-bold">$1.82M Recaptured</span>
-                    <span className="font-label-sm text-label-sm text-outline">Full Abatement</span>
-                  </div>
-                </div>
-              </Reveal>
-            </div>
-
-            {/* Downloadable Work Sample Deliverables */}
-            <Reveal delay={200}>
-              <div className="mt-space-xl rounded-2xl bg-surface-container-low p-space-lg shadow-xl border border-surface-container-high/80 card-hover-effect">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
-                  <div className="space-y-space-xs">
-                    <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface">
-                      Inspect Sanitized Sample Deliverables
-                    </h3>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant max-w-xl">
-                      Download sanitized, anonymized financial artifacts demonstrating our reporting rigor, executive dashboard formatting, and forensic reconciliation proof-of-work.
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-space-sm">
-                    <button
-                      className="inline-flex items-center gap-space-xs rounded-lg bg-surface-container px-space-md py-space-sm font-label-md text-label-md text-on-surface transition-all hover:bg-surface-container-high hover:-translate-y-0.5 border border-surface-container-high cursor-pointer"
-                      onClick={() => handleInspectArtifact("cash-forecast")}
-                    >
-                      <span className="material-symbols-outlined text-title-md text-primary">table_chart</span>
-                      13-Week Cash Forecast Model (.xlsx)
-                    </button>
-                    <button
-                      className="inline-flex items-center gap-space-xs rounded-lg bg-surface-container px-space-md py-space-sm font-label-md text-label-md text-on-surface transition-all hover:bg-surface-container-high hover:-translate-y-0.5 border border-surface-container-high cursor-pointer"
-                      onClick={() => handleInspectArtifact("board-package")}
-                    >
-                      <span className="material-symbols-outlined text-title-md text-secondary">picture_as_pdf</span>
-                      Board Reporting Package (.pdf)
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-        </section>
-
-        {/* SECTION 7: WORK WITH ME / ADVISORY ENGAGEMENT & INTAKE */}
+        {/* SECTION 7: CONTACT & RETAINER INQUIRY */}
         <section className="relative w-full py-space-xl" id="contact">
           <div className="mx-auto max-w-[1600px] px-margin">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-xl">
-              {/* Left: Engagement Protocol & Terms */}
+              {/* Left Column: Direct Inquiry Information */}
               <div className="flex flex-col justify-between lg:col-span-5">
                 <Reveal direction="left">
                   <div className="space-y-space-md">
                     <div className="inline-flex items-center gap-space-xs">
                       <span className="material-symbols-outlined text-title-md text-primary">handshake</span>
                       <span className="font-label-md text-label-md uppercase tracking-wider text-primary font-semibold">
-                        Advisory Retainer
+                        Professional Inquiry &amp; Retainer
                       </span>
                     </div>
                     <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface">
-                      Retain Audit-Grade Bookkeeping &amp; Fractional CFO Leadership
+                      Engage Proven Bookkeeping, GL Reconciliation &amp; Administrative Support
                     </h2>
                     <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-                      We maintain a strictly capped roster of clients to preserve uncompromised fiduciary focus. Currently accepting{" "}
-                      <strong className="text-secondary">2 new enterprise or high-growth scaleup advisory mandates</strong> for Q3/Q4.
+                      Available for high-stakes bookkeeping mandates, QuickBooks/Xero ledger catch-up, monthly accrual closes, SSS process advisory, and executive virtual administrative assistance.
                     </p>
                     <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-                      Every prospective engagement begins with a mutual Non-Disclosure Agreement (NDA), followed by a comprehensive forensic discovery audit of your existing chart of accounts, bank feeds, and statutory tax filings.
+                      Backed by 20+ years of verified compliance, permanent government tenure, and an unblemished fiduciary audit record.
                     </p>
 
                     {/* Direct Contact List */}
                     <div className="mt-space-lg space-y-space-sm rounded-xl bg-surface-container p-space-md border border-surface-container-high/60 card-hover-effect">
-                      <div className="flex items-center gap-space-sm">
+                      <div className="flex items-center gap-space-sm pb-space-sm border-b border-surface-container-high/60">
+                        <div className="relative h-12 w-12 shrink-0 rounded-full overflow-hidden border-2 border-primary/50 shadow-md">
+                          <img
+                            src="/profile/avatar.jpg"
+                            alt="Ma. Faith B. Briones"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div>
+                          <p className="font-title-md text-title-md font-bold text-on-surface">Ma. Faith B. Briones, BSA, CSE</p>
+                          <p className="font-label-sm text-label-sm text-primary font-medium flex items-center gap-1">
+                            <span className="h-2 w-2 rounded-full bg-primary inline-block animate-pulse"></span>
+                            Available for Bookkeeping Mandates &amp; Advisory
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-space-sm pt-1">
                         <span className="material-symbols-outlined text-headline-sm text-primary">mail</span>
                         <div>
-                          <span className="font-label-sm text-label-sm text-outline">Encrypted Direct Inquiry</span>
-                          <p className="font-title-md text-title-md text-on-surface font-medium">rayyan.vance@vance-advisory.com</p>
+                          <span className="font-label-sm text-label-sm text-outline">Direct Government / Official Email</span>
+                          <p className="font-title-md text-title-md text-on-surface font-medium">brionesmb@sss.gov.ph</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-space-sm">
                         <span className="material-symbols-outlined text-headline-sm text-secondary">phone_in_talk</span>
                         <div>
-                          <span className="font-label-sm text-label-sm text-outline">Executive Office Direct</span>
-                          <p className="font-title-md text-title-md text-on-surface font-medium">+1 (212) 847-9201</p>
+                          <span className="font-label-sm text-label-sm text-outline">Official Contact Mobile</span>
+                          <p className="font-title-md text-title-md text-on-surface font-medium">+63 951 578 4797</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-space-sm">
                         <span className="material-symbols-outlined text-headline-sm text-tertiary">location_on</span>
                         <div>
-                          <span className="font-label-sm text-label-sm text-outline">Practice Chambers</span>
+                          <span className="font-label-sm text-label-sm text-outline">Location</span>
                           <p className="font-title-md text-title-md text-on-surface font-medium">
-                            One Financial Plaza, Suite 3400, New York, NY
+                            Oroquieta City, Misamis Occidental, Philippines
                           </p>
                         </div>
                       </div>
@@ -1703,28 +1786,28 @@ export default function Home() {
                   </div>
                 </Reveal>
 
-                {/* Peer Review & Regulatory Note */}
+                {/* Professional Accord Notice */}
                 <Reveal delay={200} direction="up">
                   <div className="mt-space-lg rounded-xl bg-surface-container-low p-space-md border border-surface-container-high/50 card-hover-effect">
-                    <span className="font-label-sm text-label-sm font-bold text-secondary">AICPA PEER REVIEW NOTICE</span>
+                    <span className="font-label-sm text-label-sm font-bold text-secondary">FIDUCIARY &amp; CONFIDENTIALITY ACCORD</span>
                     <p className="font-body-sm text-body-sm text-outline mt-1 leading-relaxed">
-                      Rayyan Vance, CPA adheres strictly to AICPA Code of Professional Conduct, California Board of Accountancy standards, and statutory forensic guidelines. All financial statements prepared under SSARS guidance.
+                      All financial records, corporate ledgers, and consultation inquiries are processed with strict confidentiality adhering to the Data Privacy Act of 2012 (R.A. 10173) and professional accountancy standards.
                     </p>
                   </div>
                 </Reveal>
               </div>
 
-              {/* Right: Mandate Intake Form */}
+              {/* Right Column: Intake Inquiry Form */}
               <div className="lg:col-span-7">
                 <Reveal delay={200} direction="scale">
                   <div className="rounded-2xl bg-surface-container p-space-xl shadow-2xl border border-surface-container-high/80">
                     <div className="flex items-center justify-between mb-space-md">
                       <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface">
-                        Confidential Mandate Application
+                        Direct Service &amp; Consultation Inquiry
                       </h3>
                       <span className="rounded bg-primary/10 border border-primary/30 px-space-xs py-0.5 font-label-sm text-label-sm text-primary font-medium flex items-center gap-1">
                         <span className="material-symbols-outlined text-[14px]">lock</span>
-                        256-Bit Encrypted
+                        Confidential &amp; Direct
                       </span>
                     </div>
 
@@ -1734,11 +1817,11 @@ export default function Home() {
                           <span className="material-symbols-outlined text-display-lg text-primary">verified</span>
                         </div>
                         <span className="font-headline-sm text-headline-sm font-bold text-primary block">
-                          Mandate Inquiry Transmitted Privileged &amp; Encrypted
+                          Inquiry Transmitted Successfully
                         </span>
                         <p className="font-body-md text-body-md text-on-surface max-w-lg mx-auto">
-                          Thank you, <strong className="text-secondary">{formData.fullName || "Partner"}</strong>. Your context for{" "}
-                          <strong className="text-primary">{formData.companyName || "your enterprise"}</strong> has been logged into Vance Advisory&apos;s secured queue. Rayyan Vance will review your operational context and reach out within 12 business hours.
+                          Thank you, <strong className="text-secondary">{formData.fullName || "Partner"}</strong>. Your message regarding{" "}
+                          <strong className="text-primary">{formData.serviceNeeded || "your financial requirements"}</strong> has been received. Ma. Faith B. Briones will review your context and respond promptly.
                         </p>
                         <button
                           onClick={() => {
@@ -1748,16 +1831,14 @@ export default function Home() {
                               companyName: "",
                               email: "",
                               phone: "",
-                              revenueBand: "",
-                              ledgerStack: "",
-                              scope: "",
+                              serviceNeeded: "",
                               context: "",
                               ndaAgreed: false,
                             });
                           }}
                           className="mt-4 inline-flex items-center gap-2 px-space-md py-space-sm rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md hover:bg-surface-container hover:text-primary transition-colors cursor-pointer"
                         >
-                          Submit Another Inquiry
+                          Send Another Message
                         </button>
                       </div>
                     ) : (
@@ -1765,10 +1846,10 @@ export default function Home() {
                         {/* Name & Company */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
                           <div className="space-y-space-xs">
-                            <label className="font-label-sm text-label-sm text-on-surface font-medium">Full Name *</label>
+                            <label className="font-label-sm text-label-sm text-on-surface font-medium">Your Full Name *</label>
                             <input
                               className="h-10 w-full rounded-lg bg-surface-container-low px-space-sm font-body-sm text-on-surface placeholder:text-outline border border-surface-container-high focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
-                              placeholder="e.g. Eleanor Vance"
+                              placeholder="e.g. John Doe"
                               required
                               type="text"
                               value={formData.fullName}
@@ -1776,11 +1857,10 @@ export default function Home() {
                             />
                           </div>
                           <div className="space-y-space-xs">
-                            <label className="font-label-sm text-label-sm text-on-surface font-medium">Enterprise / Company Name *</label>
+                            <label className="font-label-sm text-label-sm text-on-surface font-medium">Organization / Enterprise</label>
                             <input
                               className="h-10 w-full rounded-lg bg-surface-container-low px-space-sm font-body-sm text-on-surface placeholder:text-outline border border-surface-container-high focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
-                              placeholder="e.g. Apex Dynamics Corp."
-                              required
+                              placeholder="e.g. Acme Corp / Cooperative"
                               type="text"
                               value={formData.companyName}
                               onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
@@ -1788,13 +1868,13 @@ export default function Home() {
                           </div>
                         </div>
 
-                        {/* Corporate Email & Phone */}
+                        {/* Email & Phone */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
                           <div className="space-y-space-xs">
-                            <label className="font-label-sm text-label-sm text-on-surface font-medium">Corporate Email *</label>
+                            <label className="font-label-sm text-label-sm text-on-surface font-medium">Email Address *</label>
                             <input
                               className="h-10 w-full rounded-lg bg-surface-container-low px-space-sm font-body-sm text-on-surface placeholder:text-outline border border-surface-container-high focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
-                              placeholder="name@company.com"
+                              placeholder="name@organization.com"
                               required
                               type="email"
                               value={formData.email}
@@ -1802,10 +1882,10 @@ export default function Home() {
                             />
                           </div>
                           <div className="space-y-space-xs">
-                            <label className="font-label-sm text-label-sm text-on-surface font-medium">Direct Phone Number *</label>
+                            <label className="font-label-sm text-label-sm text-on-surface font-medium">Contact Number *</label>
                             <input
                               className="h-10 w-full rounded-lg bg-surface-container-low px-space-sm font-body-sm text-on-surface placeholder:text-outline border border-surface-container-high focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
-                              placeholder="+1 (555) 000-0000"
+                              placeholder="+63 900 000 0000"
                               required
                               type="tel"
                               value={formData.phone}
@@ -1814,73 +1894,40 @@ export default function Home() {
                           </div>
                         </div>
 
-                        {/* Annual Revenue Tier */}
+                        {/* Service Scope Needed */}
                         <div className="space-y-space-xs">
-                          <label className="font-label-sm text-label-sm text-on-surface font-medium">Annual Revenue Band *</label>
+                          <label className="font-label-sm text-label-sm text-on-surface font-medium">Service / Requirement Scope *</label>
                           <select
                             className="h-10 w-full rounded-lg bg-surface-container-low px-space-sm font-body-sm text-on-surface border border-surface-container-high focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
                             required
-                            value={formData.revenueBand}
-                            onChange={(e) => setFormData({ ...formData, revenueBand: e.target.value })}
+                            value={formData.serviceNeeded}
+                            onChange={(e) => setFormData({ ...formData, serviceNeeded: e.target.value })}
                           >
-                            <option disabled value="">Select Current Scale</option>
-                            <option value="1-5m">$1,000,000 – $5,000,000 ARR</option>
-                            <option value="5-20m">$5,000,000 – $20,000,000 ARR</option>
-                            <option value="20-50m">$20,000,000 – $50,000,000 ARR</option>
-                            <option value="50m+">$50,000,000+ Enterprise ARR</option>
+                            <option disabled value="">Select Requirement</option>
+                            <option value="bookkeeping">Full-Cycle Bookkeeping &amp; General Ledger Management</option>
+                            <option value="reconciliation">Bank Reconciliation &amp; Ledger Catch-Up Cleanup</option>
+                            <option value="quickbooks-xero">QuickBooks Online / Xero Cloud Setup &amp; Migration</option>
+                            <option value="cooperative-accounting">Cooperative &amp; Microfinance Loan Portfolio Accounting</option>
+                            <option value="admin-support">Executive Virtual Assistance &amp; Administrative Support</option>
+                            <option value="consultation">Financial Records Consultation &amp; Compliance Audit</option>
                           </select>
                         </div>
 
-                        {/* Current Accounting Tooling & Mandate Scope */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
-                          <div className="space-y-space-xs">
-                            <label className="font-label-sm text-label-sm text-on-surface font-medium">Current General Ledger Stack *</label>
-                            <select
-                              className="h-10 w-full rounded-lg bg-surface-container-low px-space-sm font-body-sm text-on-surface border border-surface-container-high focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
-                              required
-                              value={formData.ledgerStack}
-                              onChange={(e) => setFormData({ ...formData, ledgerStack: e.target.value })}
-                            >
-                              <option disabled value="">Select Core Platform</option>
-                              <option value="netsuite">Oracle NetSuite</option>
-                              <option value="qbo">QuickBooks Online Advanced</option>
-                              <option value="xero">Xero</option>
-                              <option value="sage">Sage Intacct</option>
-                              <option value="other">Distressed / Multiple Disparate</option>
-                            </select>
-                          </div>
-                          <div className="space-y-space-xs">
-                            <label className="font-label-sm text-label-sm text-on-surface font-medium">Primary Engagement Scope *</label>
-                            <select
-                              className="h-10 w-full rounded-lg bg-surface-container-low px-space-sm font-body-sm text-on-surface border border-surface-container-high focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
-                              required
-                              value={formData.scope}
-                              onChange={(e) => setFormData({ ...formData, scope: e.target.value })}
-                            >
-                              <option disabled value="">Select Primary Need</option>
-                              <option value="fractional-cfo">Fractional CFO &amp; Strategic Finance</option>
-                              <option value="controllership">Ongoing Controllership &amp; Full Bookkeeping</option>
-                              <option value="backlog-cleanup">Emergency Ledger Backlog &amp; Diligence Cleanup</option>
-                              <option value="audit-defense">Audit Prep / Forensic Reconstruction</option>
-                            </select>
-                          </div>
-                        </div>
-
-                        {/* Brief Operational Context */}
+                        {/* Brief Context */}
                         <div className="space-y-space-xs">
                           <label className="font-label-sm text-label-sm text-on-surface font-medium">
-                            Brief Operational Context / Immediate Priorities
+                            Details / Project Context
                           </label>
                           <textarea
                             className="w-full rounded-lg bg-surface-container-low p-space-sm font-body-sm text-on-surface placeholder:text-outline border border-surface-container-high focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
-                            placeholder="Outline your current bottlenecks, transaction volume, audit timeline, or backlog conditions..."
+                            placeholder="Please share details about your transaction volume, existing software, timeline, or requirements..."
                             rows={3}
                             value={formData.context}
                             onChange={(e) => setFormData({ ...formData, context: e.target.value })}
                           ></textarea>
                         </div>
 
-                        {/* Fiduciary Accord Check */}
+                        {/* Accord Checkbox */}
                         <div className="flex items-start gap-space-xs pt-space-xs">
                           <input
                             className="mt-1 h-4 w-4 rounded bg-surface-container-low text-primary focus:ring-primary accent-primary cursor-pointer"
@@ -1891,7 +1938,7 @@ export default function Home() {
                             onChange={(e) => setFormData({ ...formData, ndaAgreed: e.target.checked })}
                           />
                           <label className="font-body-sm text-body-sm text-on-surface-variant cursor-pointer select-none" htmlFor="nda-accord">
-                            I understand that initial discovery is strictly confidential and Vance Advisory executes bilateral NDAs prior to accessing proprietary financial ledgers.
+                            I understand that all communications and shared documentation are safeguarded under strict statutory confidentiality.
                           </label>
                         </div>
 
@@ -1900,7 +1947,7 @@ export default function Home() {
                           className="w-full rounded-lg bg-primary-container py-space-sm font-headline-sm text-label-md tracking-tight text-on-primary-container shadow-xl transition-all duration-200 hover:bg-primary hover:shadow-[0_0_25px_rgba(78,222,163,0.4)] cursor-pointer font-bold hover:-translate-y-0.5"
                           type="submit"
                         >
-                          Submit Confidential Mandate Inquiry
+                          Submit Consultation Inquiry
                         </button>
                       </form>
                     )}
@@ -1918,41 +1965,43 @@ export default function Home() {
           <div className="space-y-space-xs">
             <div className="flex items-center gap-space-sm">
               <span className="font-label-md text-label-md uppercase tracking-wider text-on-surface font-bold">
-                Rayyan Vance, CPA
+                Ma. Faith Batilona Briones, BSA, CSE
               </span>
               <span className="font-label-sm text-label-sm px-space-xs py-0.5 rounded bg-surface-container-high text-secondary border border-secondary/20">
-                License #CPA-782410
+                CSE Professional (80.24%)
               </span>
             </div>
             <p className="font-body-sm text-body-sm text-outline max-w-xl">
-              Strict fiduciary advisory, forensic reconciliations, and sovereign enterprise bookkeeping. Prepared in adherence to AICPA and statutory audit standards.
+              Bachelor of Science in Accountancy • 20+ Years Accounting, Microfinance Bookkeeping, and Public Administration. Conferred by the Civil Service Commission and Andres Bonifacio College.
             </p>
           </div>
           <div className="flex flex-col md:items-end gap-space-xs">
             <div className="flex items-center gap-space-md flex-wrap">
-              <button
-                onClick={() => setActiveModal("regulatory")}
+              <a
+                href="/personal-data-sheet/PersonalDataSheet BRIONES.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
               >
-                Regulatory Disclosures
-              </button>
+                PDS (CS Form 212)
+              </a>
               <span className="text-outline-variant">•</span>
-              <button
-                onClick={() => setActiveModal("privacy")}
+              <a
+                href="#dossier"
                 className="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
               >
-                Privacy Accord
-              </button>
+                Work Experience Sheets
+              </a>
               <span className="text-outline-variant">•</span>
-              <button
-                onClick={() => setActiveModal("terms")}
+              <a
+                href="#certifications"
                 className="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
               >
-                Terms of Engagement
-              </button>
+                Certificates
+              </a>
             </div>
             <p className="font-label-sm text-label-sm text-outline">
-              &copy; {new Date().getFullYear()} Vance Advisory PLLC. All Fiduciary Rights Reserved.
+              &copy; {new Date().getFullYear()} Ma. Faith B. Briones. All Fiduciary Rights Reserved.
             </p>
           </div>
         </div>
@@ -1965,8 +2014,8 @@ export default function Home() {
             href="#contact"
             className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-primary/90 text-on-primary font-bold text-xs shadow-[0_4px_20px_rgba(78,222,163,0.35)] backdrop-blur-md hover:bg-primary hover:scale-105 transition-all"
           >
-            <span className="material-symbols-outlined text-[16px]">calendar_today</span>
-            Discovery Call
+            <span className="material-symbols-outlined text-[16px]">send</span>
+            Direct Inquiry
           </a>
           <button
             onClick={scrollToTop}
@@ -1987,6 +2036,7 @@ export default function Home() {
           onClick={() => {
             setActiveModal(null);
             setSelectedCertificate(null);
+            setSelectedDoc(null);
           }}
         >
           <div
@@ -1997,13 +2047,82 @@ export default function Home() {
               onClick={() => {
                 setActiveModal(null);
                 setSelectedCertificate(null);
+                setSelectedDoc(null);
               }}
               className="absolute top-4 right-4 p-2 rounded-lg bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors cursor-pointer z-10"
             >
               <span className="material-symbols-outlined text-title-md">close</span>
             </button>
 
-            {/* LIGHTBOX MODAL FOR CERTIFICATES */}
+            {/* DOCUMENT VIEWER MODAL */}
+            {activeModal === "doc-viewer" && selectedDoc && (
+              <div className="space-y-space-md">
+                <div className="flex items-center gap-space-sm">
+                  <span className={`material-symbols-outlined text-headline-md ${selectedDoc.iconColor}`}>
+                    {selectedDoc.icon}
+                  </span>
+                  <div>
+                    <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface">
+                      {selectedDoc.title}
+                    </h3>
+                    <p className="font-label-sm text-label-sm text-secondary font-medium mt-0.5">
+                      {selectedDoc.issuer} • {selectedDoc.dateOrDuration}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-space-md rounded-xl bg-surface-container-low border border-surface-container-high space-y-space-xs">
+                  <span className="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">
+                    Official Summary
+                  </span>
+                  <p className="font-body-md text-body-md text-on-surface leading-relaxed">
+                    {selectedDoc.summary}
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <span className="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">
+                    Key Highlights &amp; Scope of Responsibilities
+                  </span>
+                  <div className="space-y-2">
+                    {selectedDoc.keyPoints.map((pt, i) => (
+                      <div
+                        key={i}
+                        className="p-space-xs rounded-lg bg-surface-container-low border border-surface-container-high/50 flex items-start gap-2 font-body-sm text-sm text-on-surface-variant"
+                      >
+                        <span className="text-primary font-bold mt-0.5">✓</span>
+                        <span className="leading-relaxed">{pt}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-2 flex justify-between items-center flex-wrap gap-2 border-t border-surface-container-high/60">
+                  <span className="font-label-sm text-label-sm text-outline">
+                    Status: <span className="text-primary font-bold">Official Signed Document</span>
+                  </span>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setActiveModal(null)}
+                      className="px-4 py-2 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md cursor-pointer hover:bg-surface-bright transition-colors"
+                    >
+                      Close Viewer
+                    </button>
+                    <a
+                      href={selectedDoc.pdfPath}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary-container transition-colors inline-flex items-center gap-1.5 cursor-pointer shadow-lg"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+                      Open Official PDF
+                    </a>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* CERTIFICATE LIGHTBOX MODAL */}
             {activeModal === "certificate-lightbox" && selectedCertificate && (
               <div className="space-y-space-md">
                 <div className="flex items-center gap-space-sm">
@@ -2046,223 +2165,38 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="pt-2 flex justify-between items-center flex-wrap gap-2">
+                <div className="pt-2 flex justify-between items-center flex-wrap gap-2 border-t border-surface-container-high/60">
                   <span className="font-label-sm text-label-sm text-outline">
                     Status: <span className="text-primary font-bold">Verified &amp; Active</span>
                   </span>
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     <button
                       onClick={() => setActiveModal(null)}
                       className="px-4 py-2 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md cursor-pointer hover:bg-surface-bright transition-colors"
                     >
                       Close Viewer
                     </button>
+                    {selectedCertificate.pdfPath && (
+                      <a
+                        href={selectedCertificate.pdfPath}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-4 py-2 rounded-lg bg-surface-container-highest text-primary border border-primary/30 font-label-md text-label-md font-semibold hover:bg-primary/10 transition-colors inline-flex items-center gap-1.5 cursor-pointer shadow-md"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+                        Open Original PDF
+                      </a>
+                    )}
                     <a
                       href={selectedCertificate.imageSrc}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary-container transition-colors inline-flex items-center gap-1.5 cursor-pointer"
+                      className="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary-container transition-colors inline-flex items-center gap-1.5 cursor-pointer shadow-lg"
                     >
                       <span className="material-symbols-outlined text-[16px]">open_in_new</span>
                       Open Full Size
                     </a>
                   </div>
-                </div>
-              </div>
-            )}
-
-            {activeModal === "cv" && (
-              <div className="space-y-space-md">
-                <div className="flex items-center gap-space-sm text-primary">
-                  <span className="material-symbols-outlined text-headline-md">verified_user</span>
-                  <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface">
-                    Executive Fiduciary CV &amp; Dossier
-                  </h3>
-                </div>
-                <p className="font-body-md text-body-md text-on-surface-variant">
-                  Rayyan Vance, CPA, CGMA, CMA, EA, CFE — Comprehensive 14-year career dossier including verified statutory licenses, Big 4 audit history, and transaction record.
-                </p>
-                <div className="rounded-xl bg-surface-container-low p-space-md border border-surface-container-high space-y-2 font-mono text-xs text-outline">
-                  <div className="flex justify-between">
-                    <span className="text-secondary">SHA-256 HASH:</span>
-                    <span className="text-primary truncate ml-2">9f8e4b7c2a1d0e5f8842...31ec87</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>STATE CPA LICENSES:</span>
-                    <span className="text-on-surface">CA #148920 | NY #092819</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>STATUS:</span>
-                    <span className="text-primary font-bold">ACTIVE &amp; IN GOOD STANDING</span>
-                  </div>
-                </div>
-                <div className="pt-2 flex justify-end gap-2">
-                  <button
-                    onClick={() => setActiveModal(null)}
-                    className="px-4 py-2 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md cursor-pointer"
-                  >
-                    Close
-                  </button>
-                  <button
-                    onClick={() => {
-                      alert("Executive CV Dossier (PDF with cryptographic signature) has been prepared and downloaded.");
-                      setActiveModal(null);
-                    }}
-                    className="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary-container transition-colors cursor-pointer"
-                  >
-                    Download Signed PDF
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {activeModal === "cash-forecast" && (
-              <div className="space-y-space-md">
-                <div className="flex items-center gap-space-sm text-primary">
-                  <span className="material-symbols-outlined text-headline-md">table_chart</span>
-                  <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface">
-                    13-Week Dynamic Liquidity &amp; Cash Flow Model
-                  </h3>
-                </div>
-                <p className="font-body-md text-body-md text-on-surface-variant">
-                  Sanitized enterprise model featuring rolling AP/AR disbursements, cash runway burn curves, multi-bank balance feeds, and scenario sensitivity dials.
-                </p>
-                <div className="rounded-xl bg-surface-container-low p-space-md border border-surface-container-high overflow-x-auto">
-                  <table className="w-full text-left font-mono text-xs">
-                    <thead>
-                      <tr className="border-b border-surface-container-high text-secondary">
-                        <th className="py-2 px-2">Metric ($k)</th>
-                        <th className="py-2 px-2">Wk 1</th>
-                        <th className="py-2 px-2">Wk 2</th>
-                        <th className="py-2 px-2">Wk 3</th>
-                        <th className="py-2 px-2">Wk 4</th>
-                        <th className="py-2 px-2">Wk 13</th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-on-surface-variant divide-y divide-surface-container-high/40">
-                      <tr>
-                        <td className="py-2 px-2 font-medium text-on-surface">Starting Cash</td>
-                        <td className="py-2 px-2">$4,820</td>
-                        <td className="py-2 px-2">$4,690</td>
-                        <td className="py-2 px-2">$5,140</td>
-                        <td className="py-2 px-2">$4,980</td>
-                        <td className="py-2 px-2">$6,250</td>
-                      </tr>
-                      <tr>
-                        <td className="py-2 px-2 font-medium text-primary">Collections (ARR)</td>
-                        <td className="py-2 px-2 text-primary">+$340</td>
-                        <td className="py-2 px-2 text-primary">+$820</td>
-                        <td className="py-2 px-2 text-primary">+$290</td>
-                        <td className="py-2 px-2 text-primary">+$710</td>
-                        <td className="py-2 px-2 text-primary">+$950</td>
-                      </tr>
-                      <tr>
-                        <td className="py-2 px-2 font-medium text-error">Operating OPEX</td>
-                        <td className="py-2 px-2 text-error">-$470</td>
-                        <td className="py-2 px-2 text-error">-$370</td>
-                        <td className="py-2 px-2 text-error">-$450</td>
-                        <td className="py-2 px-2 text-error">-$390</td>
-                        <td className="py-2 px-2 text-error">-$480</td>
-                      </tr>
-                      <tr className="font-bold text-on-surface bg-surface-container-high/20">
-                        <td className="py-2 px-2">Ending Runway</td>
-                        <td className="py-2 px-2 text-tertiary">21.8 Mos</td>
-                        <td className="py-2 px-2 text-tertiary">22.4 Mos</td>
-                        <td className="py-2 px-2 text-tertiary">22.1 Mos</td>
-                        <td className="py-2 px-2 text-tertiary">23.0 Mos</td>
-                        <td className="py-2 px-2 text-tertiary">24.6 Mos</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div className="pt-2 flex justify-end gap-2">
-                  <button
-                    onClick={() => setActiveModal(null)}
-                    className="px-4 py-2 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md cursor-pointer"
-                  >
-                    Close Preview
-                  </button>
-                  <button
-                    onClick={() => {
-                      alert("Opening sanitized 13-Week Dynamic Liquidity Model (.xlsx). All proprietary corporate names and tax IDs obfuscated.");
-                      setActiveModal(null);
-                    }}
-                    className="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary-container transition-colors cursor-pointer"
-                  >
-                    Download Excel Model
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {activeModal === "board-package" && (
-              <div className="space-y-space-md">
-                <div className="flex items-center gap-space-sm text-secondary">
-                  <span className="material-symbols-outlined text-headline-md">picture_as_pdf</span>
-                  <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface">
-                    Board Governance Financial Package
-                  </h3>
-                </div>
-                <p className="font-body-md text-body-md text-on-surface-variant">
-                  GAAP &amp; ASC 606 certified board presentation deck with EBITDA bridges, cohort retention waterfalls, GAAP to Non-GAAP reconciliations, and debt covenant compliance certificates.
-                </p>
-                <div className="rounded-xl bg-surface-container-low p-space-md border border-surface-container-high space-y-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-on-surface font-medium">Executive Summary &amp; KPI Radar</span>
-                    <span className="text-primary font-mono text-xs">Page 1-4</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-on-surface font-medium">GAAP Financials &amp; Balance Sheet Rollforwards</span>
-                    <span className="text-primary font-mono text-xs">Page 5-12</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-on-surface font-medium">Unit Economics: Magic Number &amp; CAC Payback</span>
-                    <span className="text-primary font-mono text-xs">Page 13-18</span>
-                  </div>
-                </div>
-                <div className="pt-2 flex justify-end gap-2">
-                  <button
-                    onClick={() => setActiveModal(null)}
-                    className="px-4 py-2 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md cursor-pointer"
-                  >
-                    Close Preview
-                  </button>
-                  <button
-                    onClick={() => {
-                      alert("Opening sanitized Board Governance Financial Package (.pdf).");
-                      setActiveModal(null);
-                    }}
-                    className="px-4 py-2 rounded-lg bg-secondary text-on-secondary font-label-md text-label-md font-bold hover:bg-secondary-container transition-colors cursor-pointer"
-                  >
-                    Download Board PDF
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {(activeModal === "regulatory" || activeModal === "privacy" || activeModal === "terms") && (
-              <div className="space-y-space-md">
-                <div className="flex items-center gap-space-sm text-primary">
-                  <span className="material-symbols-outlined text-headline-md">gavel</span>
-                  <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface capitalize">
-                    {activeModal.replace("-", " ")} Accord &amp; Protocol
-                  </h3>
-                </div>
-                <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-                  Vance Advisory Group PLLC operates in strict conformance with the AICPA Code of Professional Conduct, California Board of Accountancy Regulations, and New York State Education Department Office of the Professions rules.
-                </p>
-                <div className="rounded-xl bg-surface-container-low p-space-md border border-surface-container-high text-body-sm text-outline space-y-2 leading-relaxed">
-                  <p>
-                    All client interactions and initial advisory discovery requests are cloaked in strict statutory confidentiality. Proprietary financial ledgers and tax disclosures are safeguarded with SOC2-compliant encryption.
-                  </p>
-                </div>
-                <div className="pt-2 flex justify-end">
-                  <button
-                    onClick={() => setActiveModal(null)}
-                    className="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary-container transition-colors cursor-pointer"
-                  >
-                    Acknowledged
-                  </button>
                 </div>
               </div>
             )}
