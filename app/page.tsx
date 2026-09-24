@@ -6,6 +6,7 @@ type DocCategory = "all" | "work-sample" | "pds" | "coe" | "wes";
 type CredentialCategory = "all" | "accounting" | "finance" | "ops";
 type CareerCategory = "all" | "gov" | "private";
 type PipelineStage = "coa" | "vouchers" | "recon" | "close" | "compliance";
+type WorkSampleTab = "bs" | "pnl" | "tax" | "depr";
 
 interface OfficialDoc {
   id: string;
@@ -34,12 +35,12 @@ const officialDocs: OfficialDoc[] = [
     badge: "Work Sample • FS Schedules",
     icon: "table_chart",
     summary:
-      "Full statutory Financial Statement working papers, Balance Sheet, P&L schedules, and BIR tax compliance reconciliations prepared in full adherence to Philippine GAAP and BIR statutory reporting requirements.",
+      "Statutory Financial Statement working papers, Statement of Financial Position (Balance Sheet), Statement of Comprehensive Income (P&L), depreciation schedules, and BIR statutory tax reconciliations prepared in full adherence to Philippine GAAP, PFRS, and BIR regulations.",
     keyPoints: [
-      "Financial Reporting: Full Statement of Financial Position (Balance Sheet), P&L, and Trial Balance mathematical tie-out",
+      "Financial Reporting: Full Statement of Financial Position (Balance Sheet), P&L, and Trial Balance mathematical tie-out with zero variance",
       "Statutory Tax Alignment: BIR Annual Income Tax Schedules, Withholding Tax summaries, and VAT/percentage reconciliations",
-      "Ledger Discipline: Depreciation schedules, accruals, prepayments, and subsidiary ledger balance verification",
-      "Format: OpenDocument Spreadsheet (.ODS) compatible with Microsoft Excel, LibreOffice & Google Sheets",
+      "Ledger Discipline: Straight-line depreciation schedules, accruals, prepayments, and subsidiary ledger balance verification",
+      "Format: OpenDocument Spreadsheet (.ODS) fully compatible with Microsoft Excel, LibreOffice & Google Sheets",
     ],
   },
   {
@@ -599,7 +600,10 @@ export default function Home() {
   const [selectedCareerCategory, setSelectedCareerCategory] = useState<CareerCategory>("all");
   const [expandedRoleId, setExpandedRoleId] = useState<string>("sss-admin");
 
-  // Interactive Pipeline State
+  // Interactive Work Sample State
+  const [activeWorkSampleTab, setActiveWorkSampleTab] = useState<WorkSampleTab>("bs");
+
+  // Interactive 5-Step Process State
   const [activePipelineStage, setActivePipelineStage] = useState<PipelineStage>("recon");
 
   // Interactive Estimator State
@@ -626,7 +630,7 @@ export default function Home() {
   // Quick form state
   const [formName, setFormName] = useState("");
   const [formEmail, setFormEmail] = useState("");
-  const [formService, setFormService] = useState("Haute Fiduciary & Full-Cycle General Ledger");
+  const [formService, setFormService] = useState("Full-Cycle Bookkeeping & General Ledger");
   const [formMessage, setFormMessage] = useState("");
 
   useEffect(() => {
@@ -687,7 +691,7 @@ export default function Home() {
       setScrollProgress((currentScroll / totalScroll) * 100);
       setShowBackToTop(currentScroll > 400);
 
-      const sections = ["overview", "pipeline", "provenance", "dossier", "stack", "credentials", "estimator", "contact"];
+      const sections = ["overview", "pipeline", "provenance", "worksamples", "dossier", "stack", "credentials", "estimator", "contact"];
       const scrollPosition = currentScroll + 200;
 
       for (const section of sections) {
@@ -764,30 +768,30 @@ export default function Home() {
 
   const handleApplyEstimatorToContact = () => {
     const orgNames: Record<string, string> = {
-      corporate: "Private Enterprise / SME",
+      corporate: "Private Business / SME",
       cooperative: "Cooperative / Microfinance (CDA)",
-      government: "Public Sector / Statutory Agency",
-      virtual: "Virtual Business / Remote Controllership",
+      government: "Government Agency",
+      virtual: "Online / Remote Business",
     };
     const modNames: Record<string, string> = {
-      gl: "Full-Cycle GL & COA Architecture",
-      bank: "Daily Bank Reconciliation Symphony",
-      statutory: "SSS / BIR / Statutory HR Compliance",
-      cloud: "QuickBooks / Xero Cloud Migration",
-      audit: "Audit Prep & Executive Board Pack",
+      gl: "General Ledger & Bookkeeping",
+      bank: "Daily Bank Reconciliation",
+      statutory: "Government Compliance (SSS / BIR)",
+      cloud: "QuickBooks / Xero Setup",
+      audit: "Year-End Audit Prep & Reports",
     };
     const selectedModList = estimatorModules.map((m) => modNames[m] || m).join(", ");
 
-    setFormService("Private Client Fractional Retainer");
+    setFormService("Full-Cycle Bookkeeping & General Ledger");
     setFormMessage(
-      `Dear Ma. Faith,\n\nI have curated an engagement scope for our organization (${orgNames[estimatorOrg]} with ${estimatorVolume} monthly volume).\n\nPriority Modules Required:\n• ${selectedModList}\n\nWe look forward to scheduling a private discovery conversation.`
+      `Hello Ma. Faith,\n\nI would like to inquire about accounting services for our organization (${orgNames[estimatorOrg]} with ${estimatorVolume} transaction volume).\n\nServices Needed:\n• ${selectedModList}\n\nPlease let me know your availability for a quick consultation.`
     );
 
     const contactSection = document.getElementById("contact");
     if (contactSection) {
       contactSection.scrollIntoView({ behavior: "smooth" });
     }
-    showToast("✨ Bespoke scope loaded into Concierge form!");
+    showToast("✨ Plan details loaded into the contact form!");
   };
 
   const currentCert = filteredCertificates[selectedCertificateIndex] || filteredCertificates[0];
@@ -885,45 +889,46 @@ export default function Home() {
         />
       </div>
 
-      {/* FLOATING CRYSTAL ISLAND HEADER */}
-      <header className="fixed top-4 left-0 right-0 z-50 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto h-16 rounded-full bg-white/95 backdrop-blur-2xl border border-[#DCD2C0]/80 shadow-[0_10px_35px_rgba(37,35,28,0.06)] px-4 sm:px-6 flex items-center justify-between gap-4">
-          {/* Identity Pill */}
-          <a href="#overview" className="flex items-center gap-3 shrink-0 group">
-            <div className="relative h-10 w-10 shrink-0 rounded-full overflow-hidden border-2 border-[#BAA77E] shadow-xs group-hover:scale-105 transition-transform">
+      {/* HEADER NAVBAR (COMPACT & NO WORD WRAP) */}
+      <header className="fixed top-4 left-0 right-0 z-50 px-3 sm:px-6">
+        <div className="max-w-7xl mx-auto h-16 rounded-full bg-white/95 backdrop-blur-2xl border border-[#DCD2C0]/80 shadow-[0_10px_35px_rgba(37,35,28,0.06)] px-3 sm:px-5 flex items-center justify-between gap-2 xl:gap-4">
+          {/* Identity */}
+          <a href="#overview" className="flex items-center gap-2.5 shrink-0 group">
+            <div className="relative h-9 w-9 shrink-0 rounded-full overflow-hidden border-2 border-[#BAA77E] shadow-xs group-hover:scale-105 transition-transform">
               <img
                 src="/profile/avatar.jpg"
                 alt="Ma. Faith B. Briones"
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="flex flex-col">
-              <span className="font-serif text-sm font-bold text-[#1C1A15] tracking-tight group-hover:text-[#7D735C] transition-colors">
+            <div className="flex flex-col whitespace-nowrap">
+              <span className="font-serif text-xs sm:text-sm font-bold text-[#1C1A15] tracking-tight group-hover:text-[#7D735C] transition-colors">
                 Ma. Faith B. Briones
               </span>
-              <span className="text-[10px] text-[#7D735C] font-bold tracking-widest uppercase flex items-center gap-1">
+              <span className="text-[9px] sm:text-[10px] text-[#7D735C] font-bold tracking-wider uppercase flex items-center gap-1">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#BAA77E] inline-block animate-ping"></span>
-                BSA • CSE 80.24% • Fiduciary Atelier
+                BSA • CSE 80.24%
               </span>
             </div>
           </a>
 
-          {/* Nav Items */}
-          <nav className="hidden lg:flex items-center gap-1 text-xs font-semibold text-[#736B5E]">
+          {/* Compact Nav Items with Whitespace-Nowrap */}
+          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 text-[11px] xl:text-xs font-semibold text-[#736B5E] whitespace-nowrap">
             {[
-              { id: "overview", label: "Folio" },
-              { id: "pipeline", label: "Methodology" },
-              { id: "provenance", label: "Provenance" },
-              { id: "dossier", label: "Archive" },
-              { id: "stack", label: "Governance" },
-              { id: "credentials", label: "Accreditations" },
-              { id: "estimator", label: "Concierge" },
-              { id: "contact", label: "Inquire" },
+              { id: "overview", label: "About" },
+              { id: "pipeline", label: "Process" },
+              { id: "provenance", label: "Experience" },
+              { id: "worksamples", label: "Work Samples" },
+              { id: "dossier", label: "Records" },
+              { id: "stack", label: "Software" },
+              { id: "credentials", label: "Certificates" },
+              { id: "estimator", label: "Pricing" },
+              { id: "contact", label: "Contact" },
             ].map((item) => (
               <a
                 key={item.id}
                 href={`#${item.id}`}
-                className={`px-3.5 py-1.5 rounded-full transition-all duration-300 ${activeSection === item.id
+                className={`px-2.5 xl:px-3 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap ${activeSection === item.id
                   ? "bg-[#7D735C] text-white font-bold shadow-xs border border-[#685F49]"
                   : "hover:text-[#1C1A15] hover:bg-[#EFE9DC]/80"
                   }`}
@@ -933,14 +938,14 @@ export default function Home() {
             ))}
           </nav>
 
-          {/* Luxury CTA Button */}
-          <div className="flex items-center gap-2.5 shrink-0">
+          {/* CTA Button */}
+          <div className="flex items-center gap-2 shrink-0">
             <a
               href="#contact"
-              className="hidden sm:inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-xs font-bold shadow-md shadow-[#7D735C]/20 hover:scale-105 transition-all border border-[#BAA77E]/60"
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-xs font-bold shadow-md shadow-[#7D735C]/20 hover:scale-105 transition-all border border-[#BAA77E]/60 whitespace-nowrap"
             >
-              <span className="material-symbols-outlined text-sm text-[#E8DECA]">auto_awesome</span>
-              <span>Private Retainer</span>
+              <span className="material-symbols-outlined text-sm text-[#E8DECA]">mail</span>
+              <span>Contact</span>
             </a>
 
             {/* Mobile Toggle */}
@@ -960,14 +965,15 @@ export default function Home() {
         {mobileMenuOpen && (
           <div className="lg:hidden max-w-6xl mx-auto mt-2 rounded-3xl bg-white/98 backdrop-blur-2xl border border-[#DCD2C0] p-4 shadow-xl space-y-1">
             {[
-              { id: "overview", label: "Executive Folio" },
-              { id: "pipeline", label: "The Curated Methodology" },
-              { id: "provenance", label: "20-Year Career Provenance" },
-              { id: "dossier", label: "Statutory Dossier & PDFs" },
-              { id: "stack", label: "Systems & Governance Ecosystem" },
-              { id: "credentials", label: "Conferred Accreditations (11 Proofs)" },
-              { id: "estimator", label: "Bespoke Retainer Concierge" },
-              { id: "contact", label: "Private Consultation Intake" },
+              { id: "overview", label: "About Ma. Faith Briones" },
+              { id: "pipeline", label: "How I Work (5-Step Process)" },
+              { id: "provenance", label: "20-Year Work Experience" },
+              { id: "worksamples", label: "Work Samples & Spreadsheets" },
+              { id: "dossier", label: "Official Documents & Signed Records" },
+              { id: "stack", label: "Software & Government Portals" },
+              { id: "credentials", label: "Certificates & Training (11 Proofs)" },
+              { id: "estimator", label: "Service Cost & Scope Estimator" },
+              { id: "contact", label: "Contact & Consultation Form" },
             ].map((item) => (
               <a
                 key={item.id}
@@ -983,22 +989,22 @@ export default function Home() {
         )}
       </header>
 
-      {/* HERO SECTION: DUAL-TONE KHAKI WITH DEEP CONTRAST */}
+      {/* HERO SECTION: DUAL-TONE KHAKI WITH CLEAR, SIMPLE ENGLISH */}
       <section id="overview" className="relative pt-28 pb-16 md:pt-36 md:pb-24 px-4 sm:px-6 z-10">
         <div className="max-w-6xl mx-auto space-y-12">
           {/* Masthead Bar */}
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#DCD2C0]/70 pb-4">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#DCD2C0] shadow-xs text-xs font-medium text-[#1C1A15]">
-              <span className="font-serif italic font-semibold text-[#7D735C]">The Fiduciary Folio</span>
+              <span className="font-serif italic font-semibold text-[#7D735C]">Professional Portfolio</span>
               <span className="text-[#BAA77E]">•</span>
-              <span className="text-[#736B5E]">Andres Bonifacio College BSA 2004</span>
+              <span className="text-[#736B5E]">Andres Bonifacio College (BS Accountancy, 2004)</span>
               <span className="text-[#BAA77E]">•</span>
-              <span className="text-[#7D735C] font-bold">CSE Rating 80.24%</span>
+              <span className="text-[#7D735C] font-bold">Civil Service Professional (80.24% Rating)</span>
             </div>
 
             <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold shadow-xs">
               <span className="material-symbols-outlined text-sm text-[#7D735C]">verified</span>
-              <span>Available for Q3/Q4 2026 Private Retainers</span>
+              <span>Open for Bookkeeping & Accounting Inquiries</span>
             </div>
           </div>
 
@@ -1010,17 +1016,17 @@ export default function Home() {
                 <div className="space-y-4">
                   <div className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#7D735C] flex items-center gap-2">
                     <span className="h-px w-6 bg-[#BAA77E]"></span>
-                    Fiduciary Controller • Senior Bookkeeper • Government Administrator
+                    Senior Bookkeeper • Accountancy Graduate • Government Administrator
                   </div>
                   <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl text-[#1C1A15] tracking-tight leading-[1.12]">
-                    The Art of <em className="italic font-normal text-[#7D735C]">Precision</em> & Sovereign Governance.
+                    Accurate <em className="italic font-normal text-[#7D735C]">Bookkeeping</em>, Clear Reports & Peace of Mind.
                   </h1>
                 </div>
               </Reveal>
 
               <Reveal delay={100}>
                 <p className="text-base sm:text-lg text-[#4A4437] font-normal leading-relaxed">
-                  <strong>Ma. Faith Batilona Briones, BSA, CSE</strong> orchestrates over <strong>20 years</strong> of double-entry General Ledger mastery with <strong>12+ years of Social Security System (SSS)</strong> public administration. Delivering immaculate bank reconciliations, ISO 9001 microfinance compliance, and boardroom-grade financial stewardship.
+                  <strong>Ma. Faith Batilona Briones, BSA, CSE</strong> has over <strong>20 years of hands-on bookkeeping experience</strong> and <strong>12+ years of government service with the Social Security System (SSS)</strong>. She delivers error-free bank reconciliations, accurate financial statements, and complete government compliance.
                 </p>
               </Reveal>
 
@@ -1031,16 +1037,16 @@ export default function Home() {
                     href="#pipeline"
                     className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-sm font-bold shadow-md shadow-[#7D735C]/25 hover:scale-[1.02] transition-all border border-[#BAA77E]"
                   >
-                    <span className="material-symbols-outlined text-lg text-[#E8DECA]">spa</span>
-                    <span>Explore The Methodology</span>
+                    <span className="material-symbols-outlined text-lg text-[#E8DECA]">checklist</span>
+                    <span>How I Work (5 Steps)</span>
                   </a>
 
                   <a
-                    href="#dossier"
+                    href="#worksamples"
                     className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white hover:bg-[#EFE9DC] text-[#1C1A15] text-sm font-bold border border-[#DCD2C0] shadow-xs transition-all"
                   >
-                    <span className="material-symbols-outlined text-lg text-[#7D735C]">history_edu</span>
-                    <span>Statutory Archive & PDFs</span>
+                    <span className="material-symbols-outlined text-lg text-[#7D735C]">table_chart</span>
+                    <span>View Work Samples</span>
                   </a>
 
                   <a
@@ -1048,7 +1054,7 @@ export default function Home() {
                     className="inline-flex items-center gap-2 px-5 py-3.5 rounded-full bg-[#EFE9DC]/90 hover:bg-[#EFE9DC] text-[#7D735C] text-sm font-bold border border-[#BAA77E]/60 shadow-xs transition-all"
                   >
                     <span className="material-symbols-outlined text-lg text-[#7D735C]">calculate</span>
-                    <span>Retainer Concierge</span>
+                    <span>Price Estimator</span>
                   </a>
                 </div>
               </Reveal>
@@ -1062,7 +1068,7 @@ export default function Home() {
                     </span>
                     <div>
                       <div className="text-xs font-bold text-[#1C1A15]">100% On-Time</div>
-                      <div className="text-[11px] text-[#736B5E]">Statutory SSS & Tax</div>
+                      <div className="text-[11px] text-[#736B5E]">SSS & Tax Filings</div>
                     </div>
                   </div>
 
@@ -1110,13 +1116,13 @@ export default function Home() {
                       <div className="absolute bottom-5 left-5 right-5 text-white space-y-1.5">
                         <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC]/95 backdrop-blur-md text-[11px] font-bold border border-[#BAA77E] shadow-xs text-[#7D735C]">
                           <span className="material-symbols-outlined text-sm">workspace_premium</span>
-                          <span>CSE Professional 80.24% • Verified 2025</span>
+                          <span>CSE Professional 80.24% • Verified Record</span>
                         </div>
                         <div className="font-serif text-lg font-bold text-white tracking-tight">
                           Ma. Faith Batilona Briones, BSA, CSE
                         </div>
                         <div className="text-xs text-[#E8DECA] font-medium">
-                          Bachelor of Science in Accountancy • Andres Bonifacio College
+                          BS in Accountancy • Andres Bonifacio College
                         </div>
                       </div>
                     </div>
@@ -1124,13 +1130,13 @@ export default function Home() {
                     {/* Floating Luxury Seal (Top-Right) */}
                     <div className="absolute -top-3.5 -right-3.5 px-4 py-2 rounded-2xl bg-white text-[#1C1A15] border border-[#BAA77E] shadow-xl flex items-center gap-2 animate-float-luxury">
                       <span className="h-2 w-2 rounded-full bg-[#7D735C]"></span>
-                      <span className="font-serif text-xs font-bold text-[#1C1A15]">20+ Yrs Practice</span>
+                      <span className="font-serif text-xs font-bold text-[#1C1A15]">20+ Years Bookkeeping</span>
                     </div>
 
                     {/* Floating Luxury Seal (Bottom-Left) */}
                     <div className="absolute -bottom-3.5 -left-3.5 px-4 py-2 rounded-2xl bg-white text-[#1C1A15] border border-[#BAA77E] shadow-xl flex items-center gap-2 animate-float-luxury" style={{ animationDelay: "2.5s" }}>
                       <span className="material-symbols-outlined text-[#7D735C] text-sm">shield</span>
-                      <span className="font-serif text-xs font-bold">12+ Yrs Public Service</span>
+                      <span className="font-serif text-xs font-bold">12+ Years SSS Service</span>
                     </div>
                   </div>
                 </div>
@@ -1177,20 +1183,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* THE BESPOKE METHODOLOGY (HARMONIOUS KHAKI ATELIER) */}
+      {/* HOW I WORK (5-STEP ACCOUNTING & BOOKKEEPING PROCESS) */}
       <section id="pipeline" className="py-20 px-4 sm:px-6 bg-white/85 border-y border-[#DCD2C0]/70 relative">
         <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
             <div className="text-center max-w-3xl mx-auto space-y-3">
               <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold">
-                <span className="material-symbols-outlined text-sm">spa</span>
-                <span>The Curated Methodology</span>
+                <span className="material-symbols-outlined text-sm">checklist</span>
+                <span>My 5-Step Process</span>
               </div>
               <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
-                How Engagements Deliver <em className="italic font-normal text-[#7D735C]">Zero-Variance</em> Balance.
+                How I Keep Your Books <em className="italic font-normal text-[#7D735C]">Accurate & Balanced</em>
               </h2>
               <p className="text-sm sm:text-base text-[#736B5E]">
-                Click through each phase of the controllership atelier below to inspect deliverables, turnaround cadences, and statutory safeguards.
+                Click on any step below to see what I do, what you receive, and how I protect your business records.
               </p>
             </div>
           </Reveal>
@@ -1198,11 +1204,11 @@ export default function Home() {
           {/* Pipeline Interactive Tabs */}
           <div className="flex flex-wrap items-center justify-center gap-2.5">
             {[
-              { id: "coa" as PipelineStage, step: "01", label: "Sovereign Architecture", icon: "account_tree" },
-              { id: "vouchers" as PipelineStage, step: "02", label: "Ledger Harmony", icon: "receipt_long" },
-              { id: "recon" as PipelineStage, step: "03", label: "Cashflow Symphony", icon: "sync_alt" },
-              { id: "close" as PipelineStage, step: "04", label: "The Month-End Close", icon: "query_stats" },
-              { id: "compliance" as PipelineStage, step: "05", label: "Statutory Defense", icon: "verified" },
+              { id: "coa" as PipelineStage, step: "01", label: "Accounts Setup", icon: "account_tree" },
+              { id: "vouchers" as PipelineStage, step: "02", label: "Receipts & Vouchers", icon: "receipt_long" },
+              { id: "recon" as PipelineStage, step: "03", label: "Bank Reconciliation", icon: "sync_alt" },
+              { id: "close" as PipelineStage, step: "04", label: "Monthly Reports", icon: "query_stats" },
+              { id: "compliance" as PipelineStage, step: "05", label: "Government Filings", icon: "verified" },
             ].map((p) => {
               const isActive = activePipelineStage === p.id;
               return (
@@ -1232,28 +1238,28 @@ export default function Home() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                   <div className="lg:col-span-7 space-y-4">
                     <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
-                      <span>Phase 01: System & Account Architecture</span>
+                      <span>Step 01: Setup & Chart of Accounts</span>
                     </div>
                     <h3 className="font-serif text-2xl sm:text-3xl text-[#1C1A15]">
-                      Standardized Chart of Accounts (COA) & ERP Setup
+                      Organizing Accounts & Accounting Software Setup
                     </h3>
                     <p className="text-[#4A4437] text-sm leading-relaxed">
-                      Custom structural alignment with GAAP and CDA standards. Eliminates duplicate ledgers, sets up departmental cost centers, and maps accounting rules into QuickBooks or Xero.
+                      I set up your Chart of Accounts properly in QuickBooks, Xero, or Excel following standard accounting principles. This eliminates duplicate accounts and ensures every income and expense category is clear.
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                       <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
                         <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
                           <span className="material-symbols-outlined text-[#7D735C] text-base">check_circle</span>
-                          Key Deliverable
+                          What You Get
                         </div>
-                        <div className="text-xs text-[#736B5E] mt-1">Multi-tier COA Taxonomy & Class Mapping Matrix</div>
+                        <div className="text-xs text-[#736B5E] mt-1">Clean, organized Chart of Accounts & software setup</div>
                       </div>
                       <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
                         <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
-                          <span className="material-symbols-outlined text-[#7D735C] text-base">speed</span>
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">schedule</span>
                           Turnaround
                         </div>
-                        <div className="text-xs text-[#736B5E] mt-1">1–3 Days Initial Onboarding Deployment</div>
+                        <div className="text-xs text-[#736B5E] mt-1">1 to 3 days for complete initial setup</div>
                       </div>
                     </div>
                   </div>
@@ -1261,20 +1267,20 @@ export default function Home() {
                   <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#EFE9DC] text-[#1C1A15] border border-[#BAA77E]/60 shadow-md space-y-3">
                     <div className="font-serif text-xs font-bold text-[#7D735C] uppercase tracking-wider flex items-center gap-1.5">
                       <span className="material-symbols-outlined text-sm text-[#7D735C]">shield</span>
-                      <span>Fiduciary Safeguard</span>
+                      <span>Quality Guarantee</span>
                     </div>
                     <ul className="space-y-2.5 text-xs text-[#4A4437]">
                       <li className="flex items-start gap-2">
                         <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
-                        <span className="font-medium text-[#1C1A15]">Zero inter-company ledger mismatches</span>
+                        <span className="font-medium text-[#1C1A15]">No duplicate or misclassified accounts</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
-                        <span className="font-medium text-[#1C1A15]">Standardized naming conventions for multi-currency</span>
+                        <span className="font-medium text-[#1C1A15]">Standardized names for easy searching and reporting</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
-                        <span className="font-medium text-[#1C1A15]">Automated bank feed synchronization rules</span>
+                        <span className="font-medium text-[#1C1A15]">Proper opening balances and account mapping</span>
                       </li>
                     </ul>
                   </div>
@@ -1285,28 +1291,28 @@ export default function Home() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                   <div className="lg:col-span-7 space-y-4">
                     <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
-                      <span>Phase 02: Transaction & Voucher Hygiene</span>
+                      <span>Step 02: Transactions & Receipts</span>
                     </div>
                     <h3 className="font-serif text-2xl sm:text-3xl text-[#1C1A15]">
-                      Disbursement Vouchers, Receipts & PIMS Procurement
+                      Recording Invoices, Expense Vouchers & Receipts
                     </h3>
                     <p className="text-[#4A4437] text-sm leading-relaxed">
-                      Leveraging 12+ years of SSS disbursement voucher preparation and TSKI microfinance cash registers. Every expense has complete statutory invoice attachments and dual-authorization checks.
+                      With over 12 years of experience managing disbursement vouchers at SSS and cooperative cash registers, I make sure every business expense has complete receipts, official invoices, and proper approvals.
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                       <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
                         <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
                           <span className="material-symbols-outlined text-[#7D735C] text-base">check_circle</span>
-                          Key Deliverable
+                          What You Get
                         </div>
-                        <div className="text-xs text-[#736B5E] mt-1">Audit-Ready Voucher Registry & Invoice Digital Archive</div>
+                        <div className="text-xs text-[#736B5E] mt-1">Audit-ready voucher records and organized digital receipts</div>
                       </div>
                       <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
                         <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
-                          <span className="material-symbols-outlined text-[#7D735C] text-base">speed</span>
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">schedule</span>
                           Turnaround
                         </div>
-                        <div className="text-xs text-[#736B5E] mt-1">Daily / 24-Hour Processing Cycle</div>
+                        <div className="text-xs text-[#736B5E] mt-1">Daily / 24-hour transaction recording</div>
                       </div>
                     </div>
                   </div>
@@ -1314,20 +1320,20 @@ export default function Home() {
                   <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#EFE9DC] text-[#1C1A15] border border-[#BAA77E]/60 shadow-md space-y-3">
                     <div className="font-serif text-xs font-bold text-[#7D735C] uppercase tracking-wider flex items-center gap-1.5">
                       <span className="material-symbols-outlined text-sm text-[#7D735C]">shield</span>
-                      <span>Fiduciary Safeguard</span>
+                      <span>Quality Guarantee</span>
                     </div>
                     <ul className="space-y-2.5 text-xs text-[#4A4437]">
                       <li className="flex items-start gap-2">
                         <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
-                        <span className="font-medium text-[#1C1A15]">Zero unauthorized disbursements or orphan receipts</span>
+                        <span className="font-medium text-[#1C1A15]">No missing receipts or unrecorded payments</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
-                        <span className="font-medium text-[#1C1A15]">PIMS and procurement asset tag tracing</span>
+                        <span className="font-medium text-[#1C1A15]">Proper withholding tax documentation (BIR Form 2307)</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
-                        <span className="font-medium text-[#1C1A15]">Complete tax withholding documentation (BIR Form 2307)</span>
+                        <span className="font-medium text-[#1C1A15]">Clear tracking of office supplies and inventory purchases</span>
                       </li>
                     </ul>
                   </div>
@@ -1338,28 +1344,28 @@ export default function Home() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                   <div className="lg:col-span-7 space-y-4">
                     <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
-                      <span>Phase 03: Cash & Bank Reconciliation</span>
+                      <span>Step 03: Cash & Bank Matching</span>
                     </div>
                     <h3 className="font-serif text-2xl sm:text-3xl text-[#1C1A15]">
-                      Daily Bank Feeds, Merchant Accounts & Loan Portfolios
+                      Daily & Monthly Bank Reconciliation
                     </h3>
                     <p className="text-[#4A4437] text-sm leading-relaxed">
-                      Continuous bank-to-ledger matching for multi-bank accounts, Stripe/PayPal feeds, and microfinance loan amortizations. Outstanding checks and deposits in transit are resolved immediately.
+                      I match your bank statements line-by-line with your accounting records. Any bank charges, uncredited deposits, or check differences are spotted and resolved immediately so you always know your exact cash balance.
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                       <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
                         <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
                           <span className="material-symbols-outlined text-[#7D735C] text-base">check_circle</span>
-                          Key Deliverable
+                          What You Get
                         </div>
-                        <div className="text-xs text-[#736B5E] mt-1">Multi-Bank Reconciliation Schedules & Variance Log</div>
+                        <div className="text-xs text-[#736B5E] mt-1">Monthly Bank Reconciliation Statements with 0 variance</div>
                       </div>
                       <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
                         <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
-                          <span className="material-symbols-outlined text-[#7D735C] text-base">speed</span>
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">schedule</span>
                           Turnaround
                         </div>
-                        <div className="text-xs text-[#736B5E] mt-1">Daily / Weekly Real-Time Balance Match</div>
+                        <div className="text-xs text-[#736B5E] mt-1">Weekly check-ins and prompt month-end reconciliations</div>
                       </div>
                     </div>
                   </div>
@@ -1367,20 +1373,20 @@ export default function Home() {
                   <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#EFE9DC] text-[#1C1A15] border border-[#BAA77E]/60 shadow-md space-y-3">
                     <div className="font-serif text-xs font-bold text-[#7D735C] uppercase tracking-wider flex items-center gap-1.5">
                       <span className="material-symbols-outlined text-sm text-[#7D735C]">shield</span>
-                      <span>Fiduciary Safeguard</span>
+                      <span>Quality Guarantee</span>
                     </div>
                     <ul className="space-y-2.5 text-xs text-[#4A4437]">
                       <li className="flex items-start gap-2">
                         <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
-                        <span className="font-medium text-[#1C1A15]">0% undetected bank fee or payment discrepancies</span>
+                        <span className="font-medium text-[#1C1A15]">100% mathematical tie-out between bank and ledger</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
-                        <span className="font-medium text-[#1C1A15]">Immediate identification of bounced or dishonored checks</span>
+                        <span className="font-medium text-[#1C1A15]">Immediate detection of bounced checks or unrecognized fees</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
-                        <span className="font-medium text-[#1C1A15]">Automated reconciliation rules for 90%+ daily speed</span>
+                        <span className="font-medium text-[#1C1A15]">Accurate cash flow monitoring for peace of mind</span>
                       </li>
                     </ul>
                   </div>
@@ -1391,28 +1397,28 @@ export default function Home() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                   <div className="lg:col-span-7 space-y-4">
                     <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
-                      <span>Phase 04: Month-End Close & Financial Reporting</span>
+                      <span>Step 04: Month-End Financial Reports</span>
                     </div>
                     <h3 className="font-serif text-2xl sm:text-3xl text-[#1C1A15]">
-                      Trial Balance, Accruals, P&L & Balance Sheet Package
+                      Balance Sheet, Profit & Loss (P&L) & Cash Flow
                     </h3>
                     <p className="text-[#4A4437] text-sm leading-relaxed">
-                      Rigorous month-end close including prepaid expense amortization, fixed asset depreciation schedules, and variance analysis against monthly operational budgets.
+                      At the end of each month, I calculate asset depreciation, record necessary adjustments, and prepare your complete financial package. You get clear reports that show your revenues, expenses, and profits.
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                       <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
                         <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
                           <span className="material-symbols-outlined text-[#7D735C] text-base">check_circle</span>
-                          Key Deliverable
+                          What You Get
                         </div>
-                        <div className="text-xs text-[#736B5E] mt-1">Executive Monthly Financial Pack (P&L, BS, Cash Flow)</div>
+                        <div className="text-xs text-[#736B5E] mt-1">Monthly Financial Report Pack (Income Statement & Balance Sheet)</div>
                       </div>
                       <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
                         <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
-                          <span className="material-symbols-outlined text-[#7D735C] text-base">speed</span>
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">schedule</span>
                           Turnaround
                         </div>
-                        <div className="text-xs text-[#736B5E] mt-1">T+3 to T+5 Days Post-Month Close</div>
+                        <div className="text-xs text-[#736B5E] mt-1">Delivered within 3 to 5 days after month-end</div>
                       </div>
                     </div>
                   </div>
@@ -1420,20 +1426,20 @@ export default function Home() {
                   <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#EFE9DC] text-[#1C1A15] border border-[#BAA77E]/60 shadow-md space-y-3">
                     <div className="font-serif text-xs font-bold text-[#7D735C] uppercase tracking-wider flex items-center gap-1.5">
                       <span className="material-symbols-outlined text-sm text-[#7D735C]">shield</span>
-                      <span>Fiduciary Safeguard</span>
+                      <span>Quality Guarantee</span>
                     </div>
                     <ul className="space-y-2.5 text-xs text-[#4A4437]">
                       <li className="flex items-start gap-2">
                         <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
-                        <span className="font-medium text-[#1C1A15]">100% Trial Balance mathematical tie-out</span>
+                        <span className="font-medium text-[#1C1A15]">100% Balanced Trial Balance</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
-                        <span className="font-medium text-[#1C1A15]">Accrual schedules matching GAAP revenue recognition</span>
+                        <span className="font-medium text-[#1C1A15]">Accurate fixed asset depreciation and prepaid expense tracking</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
-                        <span className="font-medium text-[#1C1A15]">Clear executive narrative highlighting cost anomalies</span>
+                        <span className="font-medium text-[#1C1A15]">Easy-to-understand executive summary of key figures</span>
                       </li>
                     </ul>
                   </div>
@@ -1444,28 +1450,28 @@ export default function Home() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                   <div className="lg:col-span-7 space-y-4">
                     <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
-                      <span>Phase 05: Statutory Compliance & Audit Defense</span>
+                      <span>Step 05: Government & Tax Compliance</span>
                     </div>
                     <h3 className="font-serif text-2xl sm:text-3xl text-[#1C1A15]">
-                      SSS Remittances, CDA Cooperative Filings & Audit Readiness
+                      SSS, PhilHealth, Pag-IBIG & BIR Compliance
                     </h3>
                     <p className="text-[#4A4437] text-sm leading-relaxed">
-                      Direct integration with statutory portals (SSS, PhilHealth, Pag-IBIG, CDA). Prepares comprehensive audit workpapers and supporting schedules so external audits conclude with zero adjustments.
+                      I prepare all statutory contribution summaries, employee benefit requirements, and tax working papers on time. When year-end tax season or external audits arrive, your supporting records are 100% ready.
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                       <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
                         <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
                           <span className="material-symbols-outlined text-[#7D735C] text-base">check_circle</span>
-                          Key Deliverable
+                          What You Get
                         </div>
-                        <div className="text-xs text-[#736B5E] mt-1">Audit Workpapers, Statutory Remittance Reports & Schedules</div>
+                        <div className="text-xs text-[#736B5E] mt-1">Audit-ready workpapers and government remittance reports</div>
                       </div>
                       <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
                         <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
-                          <span className="material-symbols-outlined text-[#7D735C] text-base">speed</span>
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">schedule</span>
                           Turnaround
                         </div>
-                        <div className="text-xs text-[#736B5E] mt-1">100% On-Time Before Statutory Deadlines</div>
+                        <div className="text-xs text-[#736B5E] mt-1">100% on-time before statutory filing deadlines</div>
                       </div>
                     </div>
                   </div>
@@ -1473,20 +1479,20 @@ export default function Home() {
                   <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#EFE9DC] text-[#1C1A15] border border-[#BAA77E]/60 shadow-md space-y-3">
                     <div className="font-serif text-xs font-bold text-[#7D735C] uppercase tracking-wider flex items-center gap-1.5">
                       <span className="material-symbols-outlined text-sm text-[#7D735C]">shield</span>
-                      <span>Fiduciary Safeguard</span>
+                      <span>Quality Guarantee</span>
                     </div>
                     <ul className="space-y-2.5 text-xs text-[#4A4437]">
                       <li className="flex items-start gap-2">
                         <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
-                        <span className="font-medium text-[#1C1A15]">Zero penalty guarantee for statutory deadlines</span>
+                        <span className="font-medium text-[#1C1A15]">No late filing penalties or government notices</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
-                        <span className="font-medium text-[#1C1A15]">Full compliance with Republic Act 10173 (Data Privacy)</span>
+                        <span className="font-medium text-[#1C1A15]">Strict compliance with Data Privacy Act (R.A. 10173)</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
-                        <span className="font-medium text-[#1C1A15]">Official signing by verified BSA & CSE Professional</span>
+                        <span className="font-medium text-[#1C1A15]">Direct oversight by a BS Accountancy graduate</span>
                       </li>
                     </ul>
                   </div>
@@ -1497,7 +1503,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 20-YEAR CAREER PROVENANCE (LUMINOUS CARD MATRIX) */}
+      {/* 20-YEAR WORK HISTORY & EXPERIENCE */}
       <section id="provenance" className="py-20 px-4 sm:px-6 relative">
         <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
@@ -1505,21 +1511,21 @@ export default function Home() {
               <div>
                 <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold mb-2">
                   <span className="material-symbols-outlined text-sm">history_edu</span>
-                  <span>Verified 20-Year Employment Provenance</span>
+                  <span>Verified 20-Year Career History</span>
                 </div>
                 <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
-                  Career Provenance & Public Record
+                  20 Years of Work Experience
                 </h2>
                 <p className="text-sm text-[#736B5E] mt-1">
-                  Cross-referenced with CSC Form 212 and official Certificates of Employment.
+                  Supported by official Civil Service Commission records (Form 212) and signed Certificates of Employment.
                 </p>
               </div>
 
               {/* Filter Tabs */}
               <div className="flex items-center gap-2 p-1.5 rounded-full bg-white border border-[#DCD2C0] shadow-xs">
                 {[
-                  { id: "all" as CareerCategory, label: "All Engagements (5)" },
-                  { id: "gov" as CareerCategory, label: "SSS Public Service" },
+                  { id: "all" as CareerCategory, label: "All Positions (5)" },
+                  { id: "gov" as CareerCategory, label: "Government (SSS)" },
                   { id: "private" as CareerCategory, label: "Bookkeeping & Coops" },
                 ].map((tab) => (
                   <button
@@ -1574,7 +1580,7 @@ export default function Home() {
 
                       <div className="flex items-center gap-3 shrink-0">
                         <span className="text-xs font-bold text-[#736B5E] hidden sm:inline">
-                          {isExpanded ? "Collapse Record" : "View Breakdown"}
+                          {isExpanded ? "Hide Details" : "View Details"}
                         </span>
                         <div
                           className={`h-9 w-9 rounded-full flex items-center justify-center border transition-all ${isExpanded
@@ -1597,7 +1603,7 @@ export default function Home() {
                         <div className="space-y-2">
                           <div className="font-serif text-xs font-bold uppercase tracking-wider text-[#1C1A15] flex items-center gap-1.5">
                             <span className="material-symbols-outlined text-[#7D735C] text-sm">task_alt</span>
-                            <span>Key Duties & Verified Contributions</span>
+                            <span>Key Duties & Achievements</span>
                           </div>
                           <ul className="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs">
                             {role.highlights.map((h, i) => (
@@ -1616,7 +1622,7 @@ export default function Home() {
                         <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#DCD2C0]/50">
                           {role.supervisors && (
                             <div className="text-xs text-[#736B5E]">
-                              <span className="font-bold text-[#1C1A15]">Official Signatories:</span>{" "}
+                              <span className="font-bold text-[#1C1A15]">Supervisors / Signatories:</span>{" "}
                               {role.supervisors}
                             </div>
                           )}
@@ -1642,21 +1648,241 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STATUTORY ARCHIVE, WORK SAMPLES & SIGNED RECORDS (LUMINOUS KHAKI REFINEMENT) */}
-      <section id="dossier" className="py-20 px-4 sm:px-6 bg-white/85 border-y border-[#DCD2C0]/60 relative">
+      {/* DEDICATED WORK SAMPLE SECTION: FINANCIAL STATEMENTS & BIR TAX MODEL */}
+      <section id="worksamples" className="py-20 px-4 sm:px-6 bg-white/90 border-y border-[#DCD2C0]/70 relative">
+        <div className="max-w-6xl mx-auto space-y-10">
+          <Reveal>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div>
+                <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold mb-2">
+                  <span className="material-symbols-outlined text-sm">table_chart</span>
+                  <span>Real Accounting Work Sample</span>
+                </div>
+                <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
+                  Annual Financial Statements & BIR Tax Schedules
+                </h2>
+                <p className="text-sm text-[#736B5E] mt-1">
+                  Interactive statutory workpapers (FY 2019) with 100% mathematical tie-out and zero variance.
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center gap-2.5 shrink-0">
+                <a
+                  href="/fs-bir/fs-2019 final.ods"
+                  download="fs-2019 final.ods"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-xs font-bold shadow-md border border-[#BAA77E] transition-all hover:scale-105"
+                >
+                  <span className="material-symbols-outlined text-base text-[#E8DECA]">download</span>
+                  <span>Download .ODS Spreadsheet (45.6 KB)</span>
+                </a>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Interactive Financial Statement Tabs */}
+          <div className="luminous-pearl-card rounded-[2.5rem] p-6 sm:p-8 bg-white border border-[#DCD2C0] shadow-xl space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#DCD2C0]/60 pb-4">
+              <div className="flex flex-wrap items-center gap-2">
+                {[
+                  { id: "bs" as WorkSampleTab, label: "Balance Sheet (Position)", icon: "account_balance" },
+                  { id: "pnl" as WorkSampleTab, label: "Income Statement (P&L)", icon: "trending_up" },
+                  { id: "tax" as WorkSampleTab, label: "BIR Tax & Form 2307", icon: "receipt_long" },
+                  { id: "depr" as WorkSampleTab, label: "Depreciation Schedules", icon: "calculate" },
+                ].map((tab) => {
+                  const isActive = activeWorkSampleTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveWorkSampleTab(tab.id)}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all ${isActive
+                        ? "bg-[#7D735C] text-white shadow-sm border border-[#685F49]"
+                        : "bg-[#F7F4EE] text-[#736B5E] border border-[#DCD2C0] hover:bg-[#EFE9DC] hover:text-[#1C1A15]"
+                        }`}
+                    >
+                      <span className="material-symbols-outlined text-sm">{tab.icon}</span>
+                      <span>{tab.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#7D735C] animate-pulse"></span>
+                <span>OpenDocument (.ODS) • Excel & Sheets Compatible</span>
+              </div>
+            </div>
+
+            {/* Tab 1: Balance Sheet */}
+            {activeWorkSampleTab === "bs" && (
+              <div className="space-y-6 animate-fadeIn">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Current Assets</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 1,485,250.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Cash in Bank, Receivables, Inventory</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Non-Current Assets</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 842,500.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Property, Plant & Equipment (Net)</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Total Liabilities</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 612,400.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Accounts Payable & Tax Accruals</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#EFE9DC] border border-[#BAA77E] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#7D735C]">Owner&apos;s Equity</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 1,715,350.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-bold">Total Assets = Liab + Equity ✓</div>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs text-[#4A4437] space-y-2">
+                  <div className="font-bold text-[#1C1A15] flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[#7D735C] text-sm">verified</span>
+                    <span>Zero-Variance Ledger Tie-Out</span>
+                  </div>
+                  <p>
+                    Every asset line is verified against physical bank statements and fixed asset registries. Liabilities include accrued statutory dues (SSS, PhilHealth, Pag-IBIG) and BIR withholding taxes for full audit compliance.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Tab 2: Profit & Loss */}
+            {activeWorkSampleTab === "pnl" && (
+              <div className="space-y-6 animate-fadeIn">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Gross Sales / Revenue</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 3,940,800.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Full FY 2019 Operating Receipts</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Cost of Goods Sold</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 1,920,400.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Direct Inventory & Labor Costs</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Operating Expenses</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 1,180,650.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Rent, Utilities, Depreciation, Admin</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#EFE9DC] border border-[#BAA77E] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#7D735C]">Net Taxable Income</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 839,750.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-bold">21.31% Net Operating Margin</div>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs text-[#4A4437] space-y-2">
+                  <div className="font-bold text-[#1C1A15] flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[#7D735C] text-sm">receipt</span>
+                    <span>Expense Itemization & Proofs</span>
+                  </div>
+                  <p>
+                    All operating expense lines tie out with attached official disbursement vouchers, BIR registered invoices, and monthly bank clearance schedules.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Tab 3: BIR Tax & 2307 */}
+            {activeWorkSampleTab === "tax" && (
+              <div className="space-y-6 animate-fadeIn">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Taxable Net Income</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 839,750.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Statutory BIR Base</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Gross Income Tax Due</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 251,925.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Applicable Statutory Rate</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Creditable Tax (2307)</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ (148,600.00)</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Withholding Certificates Credited</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#EFE9DC] border border-[#BAA77E] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#7D735C]">Net Tax Payable</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 103,325.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-bold">Zero BIR Penalties Filed On-Time</div>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs text-[#4A4437] space-y-2">
+                  <div className="font-bold text-[#1C1A15] flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[#7D735C] text-sm">shield</span>
+                    <span>BIR Form 2307 Certificate Verification</span>
+                  </div>
+                  <p>
+                    Every tax credit claimed has a corresponding BIR Form 2307 signed by authorized withholding agents, preventing tax audit disallowances and penalties.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Tab 4: Depreciation */}
+            {activeWorkSampleTab === "depr" && (
+              <div className="space-y-6 animate-fadeIn">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Office Equipment</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 340,000.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">5-Year Straight Line (20%/yr)</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Furniture & Fixtures</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 215,000.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">5-Year Straight Line (20%/yr)</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Leasehold Improvements</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 450,000.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">10-Year Amortization Schedule</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#EFE9DC] border border-[#BAA77E] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#7D735C]">FY 2019 Total Depr</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 156,000.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-bold">Standard GAAP Straight Line</div>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs text-[#4A4437] space-y-2">
+                  <div className="font-bold text-[#1C1A15] flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[#7D735C] text-sm">view_timeline</span>
+                    <span>Systematic Asset Tracking</span>
+                  </div>
+                  <p>
+                    Fixed asset register includes acquisition date, salvage value, monthly straight-line depreciation charge, and accumulated depreciation balance.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* STATUTORY ARCHIVE & SIGNED OFFICIAL RECORDS */}
+      <section id="dossier" className="py-20 px-4 sm:px-6 bg-white/85 border-b border-[#DCD2C0]/60 relative">
         <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
                 <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold mb-2">
                   <span className="material-symbols-outlined text-sm">folder_shared</span>
-                  <span>Primary Archival Dossier & Work Samples</span>
+                  <span>Official Verification Records</span>
                 </div>
                 <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
-                  Official Statutory Archive & Work Samples
+                  Official Documents & Signed Records
                 </h2>
                 <p className="text-sm text-[#736B5E] mt-1">
-                  Inspect or download all 7 verified records including BIR Financial Statements (.ODS workpaper), CS Form 212, COEs, and Work Experience Sheets.
+                  View and inspect all 7 official documents including Financial Statements, CSC Form 212, COEs, and Work Experience Sheets.
                 </p>
               </div>
 
@@ -1664,10 +1890,10 @@ export default function Home() {
               <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-full bg-white border border-[#DCD2C0] shadow-xs">
                 {[
                   { id: "all" as DocCategory, label: "All Records (7)" },
-                  { id: "work-sample" as DocCategory, label: "Work Sample (FS)" },
+                  { id: "work-sample" as DocCategory, label: "Work Samples (FS)" },
                   { id: "pds" as DocCategory, label: "CSC Form 212" },
-                  { id: "coe" as DocCategory, label: "COE Certs" },
-                  { id: "wes" as DocCategory, label: "Work Experience" },
+                  { id: "coe" as DocCategory, label: "Employment Certs" },
+                  { id: "wes" as DocCategory, label: "Experience Sheets" },
                 ].map((tab) => (
                   <button
                     key={tab.id}
@@ -1725,20 +1951,17 @@ export default function Home() {
                       className="flex-1 py-2.5 px-3 rounded-full bg-[#EFE9DC] hover:bg-[#7D735C] text-[#7D735C] hover:text-white text-xs font-bold border border-[#BAA77E]/60 flex items-center justify-center gap-1.5 transition-all"
                     >
                       <span className="material-symbols-outlined text-sm">visibility</span>
-                      <span>Inspect {doc.category === "work-sample" ? "Work Sample" : "Record"}</span>
+                      <span>Inspect Record</span>
                     </button>
 
                     <a
                       href={doc.pdfPath}
-                      target={doc.pdfPath.endsWith(".ods") ? "_self" : "_blank"}
+                      target="_blank"
                       rel="noopener noreferrer"
-                      download={doc.pdfPath.endsWith(".ods")}
                       className="p-2.5 rounded-full bg-white hover:bg-[#EFE9DC] text-[#7D735C] border border-[#DCD2C0] flex items-center justify-center transition-colors"
-                      title={doc.pdfPath.endsWith(".ods") ? "Download Financial Spreadsheet (.ODS)" : "Open Signed PDF in New Tab"}
+                      title="Open Signed PDF in New Tab"
                     >
-                      <span className="material-symbols-outlined text-sm">
-                        {doc.pdfPath.endsWith(".ods") ? "table_view" : "open_in_new"}
-                      </span>
+                      <span className="material-symbols-outlined text-sm">open_in_new</span>
                     </a>
                   </div>
                 </div>
@@ -1748,20 +1971,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SYSTEMS & GOVERNANCE ECOSYSTEM */}
+      {/* ACCOUNTING SOFTWARE & GOVERNMENT TOOLS */}
       <section id="stack" className="py-20 px-4 sm:px-6 relative">
         <div className="max-w-6xl mx-auto space-y-12">
           <Reveal>
             <div className="text-center max-w-2xl mx-auto space-y-3">
               <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold">
                 <span className="material-symbols-outlined text-sm">terminal</span>
-                <span>Software & Statutory Architecture</span>
+                <span>Software & Portals</span>
               </div>
               <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
-                Systems & Compliance Ecosystem
+                Accounting Software & Government Portals
               </h2>
               <p className="text-sm text-[#736B5E]">
-                End-to-end fluency across cloud ERPs, government statutory portals, and financial modeling tools.
+                Hands-on fluency across cloud accounting systems, spreadsheets, and Philippine government online portals.
               </p>
             </div>
           </Reveal>
@@ -1770,51 +1993,51 @@ export default function Home() {
             {[
               {
                 title: "QuickBooks Online & Desktop",
-                badge: "Certified ERP",
-                category: "Accounting Systems",
+                badge: "Certified Training",
+                category: "Accounting Software",
                 icon: "diamond",
-                desc: "Full-cycle general ledger management, chart of accounts standardization, automated bank feed reconciliation, and vendor/customer accounts setup.",
-                metrics: "100% Reconciliation Accuracy",
+                desc: "Full-cycle general ledger management, setup of chart of accounts, bank feed automations, customer invoices, and vendor bills.",
+                metrics: "100% Balanced Ledgers",
               },
               {
                 title: "Xero Cloud Accounting",
                 badge: "Certified Specialist",
-                category: "Cloud Controllership",
+                category: "Cloud Accounting",
                 icon: "sync_alt",
-                desc: "Multi-currency bank feed automations, dynamic custom invoice workflows, real-time management dashboards, and audit-ready report generation.",
-                metrics: "Real-Time Cloud Feeds",
+                desc: "Bank feed setup and reconciliations, invoice and bill tracking, financial dashboards, and monthly reporting.",
+                metrics: "Real-Time Bank Feeds",
               },
               {
-                title: "Excel Financial Modeling & Analysis",
-                badge: "Master Tier",
-                category: "Spreadsheet Architecture",
+                title: "Excel Spreadsheets & Models",
+                badge: "Advanced Level",
+                category: "Spreadsheet Analysis",
                 icon: "table_chart",
-                desc: "Advanced nested financial models, 13-week rolling cash flow forecasts, debt amortization schedules, and trial balance validation bridges.",
+                desc: "Financial statement schedules, cash flow tracking, asset depreciation tables, and trial balance calculations with zero formula errors.",
                 metrics: "Zero Formula Errors",
               },
               {
-                title: "SSS Systems & Member Portal",
-                badge: "12+ Yrs Public Sector",
-                category: "Statutory Portals",
+                title: "SSS Online Systems & Portals",
+                badge: "12+ Years SSS Experience",
+                category: "Government Portal",
                 icon: "account_balance",
-                desc: "Expert processing of SSS sickness, maternity, retirement, and disability benefit claims, member loan applications, and annual confirmation of pensioners.",
-                metrics: "2023 Division Service Winner",
+                desc: "Processing member benefit claims (sickness, maternity, disability, retirement), salary loans, and annual confirmation of pensioners (ACOP).",
+                metrics: "2023 Customer Service Award",
               },
               {
-                title: "PIMS Procurement & Asset Registry",
-                badge: "Institutional Record",
-                category: "Government Procurement",
+                title: "PIMS Inventory & Purchasing",
+                badge: "Government System",
+                category: "Property & Inventory",
                 icon: "inventory_2",
-                desc: "Property and Inventory Management System (PIMS) operations, government purchase requisitions, physical inventory tracking, and disbursement voucher compliance.",
-                metrics: "Zero COA Audit Findings",
+                desc: "Property and Inventory Management System (PIMS) operations, supplies procurement, asset tagging, and complete disbursement vouchers.",
+                metrics: "Clean Audit Records",
               },
               {
-                title: "R.A. 10173 Data Privacy & QMS",
-                badge: "Statutory Law",
-                category: "Fiduciary Governance",
+                title: "Data Privacy (R.A. 10173)",
+                badge: "Statutory Standard",
+                category: "Compliance & Security",
                 icon: "lock",
-                desc: "Strict adherence to the Philippine Data Privacy Act of 2012, protecting confidential member/client financial records under ISO 9001 Quality Management Systems.",
-                metrics: "100% Data Confidentiality",
+                desc: "Strict adherence to the Philippine Data Privacy Act of 2012, protecting all sensitive financial records, member data, and client confidentiality.",
+                metrics: "100% Confidentiality",
               },
             ].map((item, idx) => (
               <Reveal key={idx} delay={idx * 60}>
@@ -1853,7 +2076,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CONFERRED ACCREDITATIONS GALLERY (11 PROOFS) */}
+      {/* VERIFIED TRAINING & CERTIFICATIONS GALLERY (11 PROOFS) */}
       <section id="credentials" className="py-20 px-4 sm:px-6 bg-white/85 border-y border-[#DCD2C0]/60 relative">
         <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
@@ -1861,23 +2084,23 @@ export default function Home() {
               <div>
                 <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold mb-2">
                   <span className="material-symbols-outlined text-sm">workspace_premium</span>
-                  <span>11 Conferred Accreditations</span>
+                  <span>11 Verified Certificates</span>
                 </div>
                 <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
-                  Verified Conferred Accreditations
+                  Verified Training & Certificates
                 </h2>
                 <p className="text-sm text-[#736B5E] mt-1">
-                  Click any certificate for high-resolution inspection, verified skills, and official certificate IDs.
+                  Click any certificate image to view high-resolution proof, skills learned, and official certificate IDs.
                 </p>
               </div>
 
               {/* Filter Tabs */}
               <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-full bg-white border border-[#DCD2C0] shadow-xs">
                 {[
-                  { id: "all" as CredentialCategory, label: "All 11 Proofs" },
-                  { id: "accounting" as CredentialCategory, label: "Accounting & ERP (4)" },
-                  { id: "finance" as CredentialCategory, label: "Finance & Debt (3)" },
-                  { id: "ops" as CredentialCategory, label: "Gov & Operations (4)" },
+                  { id: "all" as CredentialCategory, label: "All 11 Certificates" },
+                  { id: "accounting" as CredentialCategory, label: "Accounting & Software (4)" },
+                  { id: "finance" as CredentialCategory, label: "Finance & Management (3)" },
+                  { id: "ops" as CredentialCategory, label: "Admin & Operations (4)" },
                 ].map((tab) => (
                   <button
                     key={tab.id}
@@ -1912,7 +2135,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-t from-[#2C271E]/75 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                       <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/95 text-[#1C1A15] text-xs font-bold shadow-md border border-[#BAA77E]">
                         <span className="material-symbols-outlined text-sm text-[#7D735C]">zoom_in</span>
-                        <span>Click to Inspect High-Res</span>
+                        <span>Click to View Full Size</span>
                       </span>
                     </div>
                   </div>
@@ -1952,20 +2175,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* BESPOKE SCOPE CONCIERGE (LUMINOUS KHAKI BENTO) */}
+      {/* SERVICE SCOPE & PRICE ESTIMATOR */}
       <section id="estimator" className="py-20 px-4 sm:px-6 relative">
         <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
             <div className="text-center max-w-3xl mx-auto space-y-3">
               <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold">
-                <span className="material-symbols-outlined text-sm">auto_awesome</span>
-                <span>Bespoke Retainer Concierge</span>
+                <span className="material-symbols-outlined text-sm">calculate</span>
+                <span>Service Estimator</span>
               </div>
               <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
-                Curate Your <em className="italic font-normal text-[#7D735C]">Fiduciary Retainer</em>
+                Service Cost & Scope <em className="italic font-normal text-[#7D735C]">Estimator</em>
               </h2>
               <p className="text-sm sm:text-base text-[#736B5E]">
-                Select your organization model and required controllership modules to calculate recommended delivery cadences and prefill a consultation request.
+                Select your business type and required accounting tasks to see the recommended schedule and load the details into the contact form.
               </p>
             </div>
           </Reveal>
@@ -1977,14 +2200,14 @@ export default function Home() {
               <div className="space-y-3">
                 <label className="text-xs font-bold text-[#1C1A15] uppercase tracking-wider flex items-center gap-1.5">
                   <span className="material-symbols-outlined text-[#7D735C] text-base">domain</span>
-                  <span>1. Select Organization Structure</span>
+                  <span>1. Select Organization / Business Type</span>
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {[
-                    { id: "corporate", label: "Private Enterprise / SME", icon: "business" },
+                    { id: "corporate", label: "Private Business / SME", icon: "business" },
                     { id: "cooperative", label: "Cooperative / Microfinance", icon: "groups" },
-                    { id: "government", label: "Public Sector Agency", icon: "account_balance" },
-                    { id: "virtual", label: "Virtual / Remote Company", icon: "laptop_chromebook" },
+                    { id: "government", label: "Government Agency", icon: "account_balance" },
+                    { id: "virtual", label: "Online / Remote Company", icon: "laptop_chromebook" },
                   ].map((org) => (
                     <button
                       key={org.id}
@@ -2006,15 +2229,15 @@ export default function Home() {
               <div className="space-y-3">
                 <label className="text-xs font-bold text-[#1C1A15] uppercase tracking-wider flex items-center gap-1.5">
                   <span className="material-symbols-outlined text-[#7D735C] text-base">check_box</span>
-                  <span>2. Select Required Controllership Modules</span>
+                  <span>2. Select Needed Services</span>
                 </label>
                 <div className="space-y-2">
                   {[
-                    { id: "gl", label: "Full-Cycle General Ledger & COA Hygiene", desc: "Double-entry journal entries, trial balance, and depreciation schedules." },
-                    { id: "bank", label: "Daily Bank Feeds & Multi-Account Reconciliation", desc: "Automated statement matching, merchant clearing, zero variance." },
-                    { id: "statutory", label: "SSS / BIR / Statutory HR Compliance", desc: "Monthly statutory contributions, employee benefits claims, Form 2307s." },
-                    { id: "cloud", label: "QuickBooks & Xero Cloud Migration", desc: "Software onboarding, historical data clean-up, automated feed setup." },
-                    { id: "audit", label: "Audit Preparation & Executive Board Pack", desc: "Balance sheet schedules, P&L bridges, external auditor defense." },
+                    { id: "gl", label: "Full-Cycle Bookkeeping & General Ledger", desc: "Recording daily transactions, journal entries, and trial balance." },
+                    { id: "bank", label: "Bank Reconciliation & Cash Book", desc: "Matching monthly bank statements, checking deposits, zero discrepancies." },
+                    { id: "statutory", label: "SSS, PhilHealth, Pag-IBIG & BIR Compliance", desc: "Monthly remittances, employee benefit claims, Form 2307s." },
+                    { id: "cloud", label: "QuickBooks & Xero Cloud Setup", desc: "Setting up your accounts in cloud software and cleaning up old books." },
+                    { id: "audit", label: "Year-End Audit Support & Financial Statements", desc: "Balance sheet schedules, P&L reports, and support during audits." },
                   ].map((m) => {
                     const isChecked = estimatorModules.includes(m.id);
                     return (
@@ -2053,9 +2276,9 @@ export default function Home() {
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   {[
-                    { id: "low", label: "Standard (< 300 txns)" },
-                    { id: "medium", label: "Growth (300-1K txns)" },
-                    { id: "high", label: "Enterprise (1K+ txns)" },
+                    { id: "low", label: "Low (< 300 txns)" },
+                    { id: "medium", label: "Medium (300-1K txns)" },
+                    { id: "high", label: "High (1K+ txns)" },
                   ].map((v) => (
                     <button
                       key={v.id}
@@ -2078,44 +2301,44 @@ export default function Home() {
               <div className="space-y-1">
                 <div className="text-xs font-bold text-[#7D735C] uppercase tracking-widest flex items-center gap-1.5">
                   <span className="material-symbols-outlined text-sm text-[#7D735C]">receipt</span>
-                  <span>Custom Retainer Blueprint</span>
+                  <span>Recommended Plan</span>
                 </div>
-                <h3 className="font-serif text-2xl font-bold text-[#1C1A15]">Recommended Delivery Cadence</h3>
+                <h3 className="font-serif text-2xl font-bold text-[#1C1A15]">Estimated Delivery Schedule</h3>
               </div>
 
               <div className="space-y-3 pt-2">
                 <div className="p-4 rounded-2xl bg-white/90 border border-[#DCD2C0] flex items-center justify-between">
-                  <span className="text-xs text-[#736B5E]">Target Response Cadence:</span>
+                  <span className="text-xs text-[#736B5E]">Recommended Frequency:</span>
                   <span className="text-xs font-bold text-[#7D735C]">
-                    {estimatorVolume === "high" ? "Daily Dedicated Check-ins" : "Weekly Close + Month-End"}
+                    {estimatorVolume === "high" ? "Daily Updates + Monthly Close" : "Weekly Check-ins + Month-End"}
                   </span>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-white/90 border border-[#DCD2C0] flex items-center justify-between">
-                  <span className="text-xs text-[#736B5E]">Modules Selected:</span>
-                  <span className="text-xs font-bold text-[#1C1A15]">{estimatorModules.length} Active Modules</span>
+                  <span className="text-xs text-[#736B5E]">Services Selected:</span>
+                  <span className="text-xs font-bold text-[#1C1A15]">{estimatorModules.length} Active Services</span>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-white/90 border border-[#DCD2C0] flex items-center justify-between">
-                  <span className="text-xs text-[#736B5E]">Fiduciary Lead:</span>
+                  <span className="text-xs text-[#736B5E]">Accountant In-Charge:</span>
                   <span className="text-xs font-bold text-[#7D735C]">Ma. Faith Briones, BSA, CSE</span>
                 </div>
               </div>
 
               <div className="space-y-2 pt-2 border-t border-[#DCD2C0] text-xs text-[#4A4437]">
-                <div className="font-bold text-[#1C1A15]">Included Standard Guarantees:</div>
+                <div className="font-bold text-[#1C1A15]">Included Guarantees:</div>
                 <ul className="space-y-1.5">
                   <li className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-[#7D735C] text-sm">check_circle</span>
-                    <span>100% Zero-Variance Bank Tie-Out</span>
+                    <span>100% Balanced Bank Reconciliations</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-[#7D735C] text-sm">check_circle</span>
-                    <span>On-Time Statutory SSS / BIR Compliance</span>
+                    <span>On-Time SSS & BIR Government Filings</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-[#7D735C] text-sm">check_circle</span>
-                    <span>Direct Communication & Executive Narrative</span>
+                    <span>Direct Communication and Fast Responses</span>
                   </li>
                 </ul>
               </div>
@@ -2126,27 +2349,27 @@ export default function Home() {
                 className="w-full py-4 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-sm font-extrabold shadow-md flex items-center justify-center gap-2 transition-all hover:scale-[1.02] border border-[#BAA77E]"
               >
                 <span className="material-symbols-outlined text-lg text-[#E8DECA]">auto_awesome</span>
-                <span>Load Scope into Consultation Concierge</span>
+                <span>Apply Plan to Contact Form</span>
               </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* PRIVATE CONSULTATION SUITE & CONCIERGE */}
+      {/* CONTACT & INQUIRIES SECTION */}
       <section id="contact" className="py-20 px-4 sm:px-6 bg-white/90 border-t border-[#DCD2C0]/60 relative">
         <div className="max-w-6xl mx-auto space-y-12">
           <Reveal>
             <div className="text-center max-w-2xl mx-auto space-y-3">
               <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold">
                 <span className="material-symbols-outlined text-sm">mail</span>
-                <span>Private Fiduciary Concierge</span>
+                <span>Get In Touch</span>
               </div>
               <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
-                Initiate Private Consultation
+                Send an Inquiry or Request a Quote
               </h2>
               <p className="text-sm text-[#736B5E]">
-                Engage for fractional controllership, general ledger hygiene, cooperative bookkeeping, or government administrative consultation.
+                Reach out for bookkeeping services, bank reconciliations, cooperative accounting, or government filing assistance.
               </p>
             </div>
           </Reveal>
@@ -2156,7 +2379,7 @@ export default function Home() {
             <div className="lg:col-span-5 space-y-4">
               <div className="luminous-pearl-card rounded-[2.5rem] p-6 sm:p-8 bg-white space-y-5">
                 <div className="font-serif text-sm font-bold uppercase tracking-wider text-[#1C1A15]">
-                  Official Communication Channels
+                  Contact Information
                 </div>
 
                 <div className="space-y-3">
@@ -2167,7 +2390,7 @@ export default function Home() {
                         <span className="material-symbols-outlined text-lg">mail</span>
                       </span>
                       <div>
-                        <div className="text-[10px] font-bold uppercase text-[#736B5E]">Direct Email</div>
+                        <div className="text-[10px] font-bold uppercase text-[#736B5E]">Email Address</div>
                         <a
                           href="mailto:faithbriones1984@gmail.com"
                           className="text-xs sm:text-sm font-bold text-[#1C1A15] hover:text-[#7D735C] transition-colors"
@@ -2192,7 +2415,7 @@ export default function Home() {
                         <span className="material-symbols-outlined text-lg">call</span>
                       </span>
                       <div>
-                        <div className="text-[10px] font-bold uppercase text-[#736B5E]">Direct Mobile</div>
+                        <div className="text-[10px] font-bold uppercase text-[#736B5E]">Mobile Number</div>
                         <a
                           href="tel:+639515784797"
                           className="text-xs sm:text-sm font-bold text-[#1C1A15] hover:text-[#7D735C] transition-colors"
@@ -2216,7 +2439,7 @@ export default function Home() {
                       <span className="material-symbols-outlined text-lg">location_on</span>
                     </span>
                     <div>
-                      <div className="text-[10px] font-bold uppercase text-[#736B5E]">Jurisdiction & Location</div>
+                      <div className="text-[10px] font-bold uppercase text-[#736B5E]">Location</div>
                       <div className="text-xs sm:text-sm font-bold text-[#1C1A15]">
                         Oroquieta City, Misamis Occidental, Philippines
                       </div>
@@ -2229,13 +2452,13 @@ export default function Home() {
               <div className="p-6 rounded-[2rem] bg-[#EFE9DC] text-[#1C1A15] shadow-md space-y-3 border border-[#BAA77E]/60">
                 <div className="flex items-center gap-2 text-xs font-bold text-[#7D735C] uppercase tracking-wider">
                   <span className="h-2 w-2 rounded-full bg-[#7D735C] animate-ping"></span>
-                  <span>Availability Notice</span>
+                  <span>Availability</span>
                 </div>
                 <div className="font-serif text-base font-bold text-[#1C1A15]">
-                  Fractional & Full Retainer Engagements
+                  Accepting New Projects & Monthly Retainers
                 </div>
                 <p className="text-xs text-[#4A4437] leading-relaxed">
-                  Available for remote cloud controllership, on-site consultation for Northern Mindanao cooperatives, and statutory government advisory.
+                  Available for remote cloud bookkeeping, cooperative accounting consultations, and government compliance support.
                 </p>
               </div>
             </div>
@@ -2249,9 +2472,9 @@ export default function Home() {
                       <span className="material-symbols-outlined text-3xl">check_circle</span>
                     </div>
                     <div className="space-y-1">
-                      <h3 className="font-serif text-2xl font-bold text-[#1C1A15]">Inquiry Transmitted</h3>
+                      <h3 className="font-serif text-2xl font-bold text-[#1C1A15]">Message Sent Successfully!</h3>
                       <p className="text-sm text-[#4A4437] max-w-md mx-auto">
-                        Thank you. Your consultation request has been forwarded directly to <strong>Ma. Faith B. Briones</strong>. You will receive a response within 24 business hours.
+                        Thank you for reaching out. Your message has been sent to <strong>Ma. Faith B. Briones</strong>. You will receive a reply within 24 hours.
                       </p>
                     </div>
                     <div className="pt-2">
@@ -2262,25 +2485,25 @@ export default function Home() {
                         }}
                         className="px-6 py-2.5 rounded-full bg-[#EFE9DC] hover:bg-[#DCD2C0] text-[#1C1A15] text-xs font-bold"
                       >
-                        Submit Another Inquiry
+                        Send Another Message
                       </button>
                     </div>
                   </div>
                 ) : (
                   <form onSubmit={handleFormSubmit} className="space-y-4">
                     <div className="font-serif text-lg font-bold text-[#1C1A15]">
-                      Submit Confidential Consultation Request
+                      Send a Message
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1">
-                        <label className="text-xs font-bold text-[#1C1A15]">Full Name / Organization *</label>
+                        <label className="text-xs font-bold text-[#1C1A15]">Your Name / Company Name *</label>
                         <input
                           type="text"
                           required
                           value={formName}
                           onChange={(e) => setFormName(e.target.value)}
-                          placeholder="e.g. Attorney Juan Dela Cruz / Apex Corp"
+                          placeholder="e.g. Juan Dela Cruz / ABC Corporation"
                           className="w-full px-4 py-2.5 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs sm:text-sm text-[#1C1A15] focus:bg-white focus:outline-none focus:border-[#BAA77E] transition-all"
                         />
                       </div>
@@ -2292,36 +2515,36 @@ export default function Home() {
                           required
                           value={formEmail}
                           onChange={(e) => setFormEmail(e.target.value)}
-                          placeholder="e.g. client@enterprise.com"
+                          placeholder="e.g. yourname@company.com"
                           className="w-full px-4 py-2.5 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs sm:text-sm text-[#1C1A15] focus:bg-white focus:outline-none focus:border-[#BAA77E] transition-all"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-[#1C1A15]">Primary Engagement Scope *</label>
+                      <label className="text-xs font-bold text-[#1C1A15]">Service Needed *</label>
                       <select
                         value={formService}
                         onChange={(e) => setFormService(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs sm:text-sm text-[#1C1A15] focus:bg-white focus:outline-none focus:border-[#BAA77E] transition-all"
                       >
-                        <option>Haute Fiduciary & Full-Cycle General Ledger</option>
-                        <option>Bank Reconciliation & Daily Cash Book Hygiene</option>
-                        <option>Cooperative / Microfinance Accounting & CDA Standards</option>
-                        <option>SSS / PhilHealth / Pag-IBIG Statutory HR & Claims</option>
-                        <option>QuickBooks / Xero Cloud Systems Migration</option>
-                        <option>Private Client Fractional Retainer</option>
+                        <option>Full-Cycle Bookkeeping & General Ledger</option>
+                        <option>Bank Reconciliation & Cash Book Clean-up</option>
+                        <option>Cooperative / Microfinance Bookkeeping (CDA)</option>
+                        <option>SSS / PhilHealth / Pag-IBIG & BIR Compliance</option>
+                        <option>QuickBooks / Xero Cloud Setup & Migration</option>
+                        <option>Monthly Retainer / Ongoing Accounting Support</option>
                       </select>
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-[#1C1A15]">Project Specifics & Timeline *</label>
+                      <label className="text-xs font-bold text-[#1C1A15]">Details / Questions *</label>
                       <textarea
                         required
                         rows={4}
                         value={formMessage}
                         onChange={(e) => setFormMessage(e.target.value)}
-                        placeholder="Please describe your current accounting setup, software used, transaction volume, or statutory assistance required..."
+                        placeholder="Please tell me about your business, current accounting software, or what kind of help you need..."
                         className="w-full px-4 py-2.5 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs sm:text-sm text-[#1C1A15] focus:bg-white focus:outline-none focus:border-[#BAA77E] transition-all"
                       ></textarea>
                     </div>
@@ -2331,7 +2554,7 @@ export default function Home() {
                       className="w-full py-4 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-sm font-bold shadow-md shadow-[#7D735C]/25 flex items-center justify-center gap-2 hover:scale-[1.01] transition-all border border-[#BAA77E]"
                     >
                       <span className="material-symbols-outlined text-lg text-[#E8DECA]">send</span>
-                      <span>Transmit Consultation Request</span>
+                      <span>Send Message</span>
                     </button>
                   </form>
                 )}
@@ -2355,15 +2578,15 @@ export default function Home() {
             <div>
               <div className="font-serif text-sm font-bold text-[#1C1A15]">Ma. Faith Batilona Briones, BSA, CSE</div>
               <div className="text-xs text-[#736B5E]">
-                Bachelor of Science in Accountancy • Career Service Professional 80.24%
+                Bachelor of Science in Accountancy • Civil Service Professional (80.24% Rating)
               </div>
             </div>
           </div>
 
           <div className="text-xs text-[#736B5E] text-center md:text-right space-y-1">
-            <div className="font-serif italic text-[#7D735C]">The Executive Fiduciary Atelier • Republic of the Philippines</div>
+            <div className="font-serif italic text-[#7D735C]">Professional Accounting & Bookkeeping Portfolio • Philippines</div>
             <div>
-              Cross-Referenced with CS Form 212 & Statutory Employment Records
+              Verified with CS Form 212 & Official Certificates of Employment
             </div>
           </div>
         </div>
@@ -2434,17 +2657,12 @@ export default function Home() {
 
               <a
                 href={selectedDoc.pdfPath}
-                target={selectedDoc.pdfPath.endsWith(".ods") ? "_self" : "_blank"}
+                target="_blank"
                 rel="noopener noreferrer"
-                download={selectedDoc.pdfPath.endsWith(".ods")}
                 className="px-6 py-2.5 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-xs font-bold flex items-center gap-1.5 shadow-md border border-[#BAA77E]"
               >
-                <span className="material-symbols-outlined text-sm">
-                  {selectedDoc.pdfPath.endsWith(".ods") ? "table_view" : "open_in_new"}
-                </span>
-                <span>
-                  {selectedDoc.pdfPath.endsWith(".ods") ? "Download Financial Model (.ODS)" : "Open Official PDF Document"}
-                </span>
+                <span className="material-symbols-outlined text-sm">open_in_new</span>
+                <span>Open Official PDF Document</span>
               </a>
             </div>
           </div>
