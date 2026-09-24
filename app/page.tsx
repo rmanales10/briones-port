@@ -775,25 +775,25 @@ export default function Home() {
   const currentCert = filteredCertificates[selectedCertificateIndex] || filteredCertificates[0];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F7F4EE] text-[#1C1A15] relative selection:bg-[#25231C] selection:text-[#E8DECA] bg-dualtone-canvas dualtone-subtle-pattern overflow-x-hidden">
+    <div className="flex flex-col min-h-screen bg-[#F7F4EE] text-[#1C1A15] relative selection:bg-[#BAA77E] selection:text-[#1C1A15] bg-dualtone-canvas dualtone-subtle-pattern overflow-x-hidden">
       {/* ANIMATED DUAL-TONE BACKGROUND ENGINE */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         {/* Floating Aurora Orb 1 (Top Khaki Gold) */}
         <div className="absolute -top-[12%] left-[22%] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#BAA77E]/20 via-[#E8DECA]/15 to-transparent blur-[130px] animate-orb-1"></div>
 
-        {/* Floating Aurora Orb 2 (Right Deep Khaki Charcoal) */}
-        <div className="absolute top-[30%] -right-[8%] w-[700px] h-[700px] rounded-full bg-gradient-to-tl from-[#25231C]/14 via-[#3B3628]/10 to-transparent blur-[150px] animate-orb-2"></div>
+        {/* Floating Aurora Orb 2 (Right Warm Linen Khaki) */}
+        <div className="absolute top-[30%] -right-[8%] w-[700px] h-[700px] rounded-full bg-gradient-to-tl from-[#BAA77E]/16 via-[#DCD2C0]/25 to-transparent blur-[150px] animate-orb-2"></div>
 
         {/* Floating Aurora Orb 3 (Left Olive Sand Khaki) */}
         <div className="absolute top-[55%] -left-[10%] w-[550px] h-[550px] rounded-full bg-gradient-to-tr from-[#7D735C]/16 via-[#BAA77E]/12 to-transparent blur-[130px] animate-orb-3"></div>
 
-        {/* Floating Aurora Orb 4 (Bottom Khaki Noir) */}
-        <div className="absolute -bottom-[8%] left-[28%] w-[650px] h-[650px] rounded-full bg-gradient-to-t from-[#25231C]/16 via-[#4A4335]/12 to-transparent blur-[140px] animate-orb-1"></div>
+        {/* Floating Aurora Orb 4 (Bottom Soft Champagne Gold) */}
+        <div className="absolute -bottom-[8%] left-[28%] w-[650px] h-[650px] rounded-full bg-gradient-to-t from-[#DCD2C0]/30 via-[#BAA77E]/15 to-transparent blur-[140px] animate-orb-1"></div>
 
         {/* Constellation Starlight Dust Particles */}
         <div className="absolute top-[12%] left-[15%] h-1.5 w-1.5 rounded-full bg-[#BAA77E] shadow-[0_0_8px_#BAA77E] animate-particle" style={{ animationDelay: "0s" }}></div>
         <div className="absolute top-[22%] right-[18%] h-2 w-2 rounded-full bg-[#7D735C] shadow-[0_0_10px_#7D735C] animate-particle" style={{ animationDelay: "1.5s" }}></div>
-        <div className="absolute top-[45%] left-[8%] h-1.5 w-1.5 rounded-full bg-[#25231C] shadow-[0_0_6px_#25231C] animate-particle" style={{ animationDelay: "3s" }}></div>
+        <div className="absolute top-[45%] left-[8%] h-1.5 w-1.5 rounded-full bg-[#BAA77E] shadow-[0_0_6px_#BAA77E] animate-particle" style={{ animationDelay: "3s" }}></div>
         <div className="absolute top-[58%] right-[12%] h-2 w-2 rounded-full bg-[#BAA77E] shadow-[0_0_12px_#BAA77E] animate-particle" style={{ animationDelay: "0.8s" }}></div>
         <div className="absolute top-[75%] left-[22%] h-1 w-1 rounded-full bg-[#7D735C] shadow-[0_0_6px_#7D735C] animate-particle" style={{ animationDelay: "2.2s" }}></div>
         <div className="absolute top-[88%] right-[25%] h-1.5 w-1.5 rounded-full bg-[#BAA77E] shadow-[0_0_8px_#BAA77E] animate-particle" style={{ animationDelay: "4s" }}></div>
@@ -808,7 +808,7 @@ export default function Home() {
               transform: "translate(-50%, -50%)",
               width: "600px",
               height: "600px",
-              background: "radial-gradient(circle, rgba(186, 167, 126, 0.16) 0%, rgba(37, 35, 28, 0.05) 50%, transparent 70%)",
+              background: "radial-gradient(circle, rgba(186, 167, 126, 0.16) 0%, rgba(125, 115, 92, 0.05) 50%, transparent 70%)",
               filter: "blur(35px)",
             }}
           />
@@ -830,19 +830,19 @@ export default function Home() {
             <div
               className={`rounded-full border transition-all duration-200 ease-out flex items-center justify-center ${
                 isHoveringInteractive
-                  ? "w-12 h-12 border-[#25231C] bg-[#25231C]/10 shadow-[0_0_20px_rgba(37,35,28,0.3)] scale-110"
+                  ? "w-12 h-12 border-[#7D735C] bg-[#7D735C]/10 shadow-[0_0_20px_rgba(125,115,92,0.25)] scale-110"
                   : "w-8 h-8 border-[#BAA77E] bg-[#BAA77E]/15 shadow-[0_0_10px_rgba(186,167,126,0.35)]"
               }`}
             >
               {isHoveringInteractive && (
-                <span className="h-1 w-1 rounded-full bg-[#25231C] animate-ping"></span>
+                <span className="h-1 w-1 rounded-full bg-[#7D735C] animate-ping"></span>
               )}
             </div>
           </div>
 
           {/* Precision Core Spark Dot */}
           <div
-            className="fixed pointer-events-none z-[9999] hidden md:block w-1.5 h-1.5 rounded-full bg-[#25231C] shadow-[0_0_6px_#25231C] will-change-transform"
+            className="fixed pointer-events-none z-[9999] hidden md:block w-1.5 h-1.5 rounded-full bg-[#7D735C] shadow-[0_0_6px_#7D735C] will-change-transform"
             style={{
               left: `${mousePos.x}px`,
               top: `${mousePos.y}px`,
@@ -854,8 +854,8 @@ export default function Home() {
 
       {/* Toast Notification Alert */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-[100] px-5 py-3.5 rounded-2xl bg-[#1C1A15] text-white font-medium text-xs sm:text-sm shadow-2xl border border-[#BAA77E] flex items-center gap-3 animate-float-luxury">
-          <span className="material-symbols-outlined text-[#E8DECA] text-base sm:text-lg">auto_awesome</span>
+        <div className="fixed bottom-6 right-6 z-[100] px-5 py-3.5 rounded-2xl bg-[#EFE9DC] text-[#1C1A15] font-medium text-xs sm:text-sm shadow-2xl border border-[#BAA77E] flex items-center gap-3 animate-float-luxury">
+          <span className="material-symbols-outlined text-[#7D735C] text-base sm:text-lg">auto_awesome</span>
           <span>{toastMessage}</span>
         </div>
       )}
@@ -863,7 +863,7 @@ export default function Home() {
       {/* Luxury Khaki Gold Progress Line */}
       <div className="fixed top-0 left-0 right-0 h-1 bg-[#DCD2C0]/60 z-[60] pointer-events-none">
         <div
-          className="h-full bg-gradient-to-r from-[#25231C] via-[#BAA77E] to-[#7D735C] shadow-sm transition-all duration-75"
+          className="h-full bg-gradient-to-r from-[#7D735C] via-[#BAA77E] to-[#C9B27C] shadow-sm transition-all duration-75"
           style={{ width: `${scrollProgress}%` }}
         />
       </div>
@@ -908,7 +908,7 @@ export default function Home() {
                 href={`#${item.id}`}
                 className={`px-3.5 py-1.5 rounded-full transition-all duration-300 ${
                   activeSection === item.id
-                    ? "bg-[#25231C] text-[#E8DECA] font-bold shadow-xs border border-[#BAA77E]/50"
+                    ? "bg-[#7D735C] text-white font-bold shadow-xs border border-[#685F49]"
                     : "hover:text-[#1C1A15] hover:bg-[#EFE9DC]/80"
                 }`}
               >
@@ -921,7 +921,7 @@ export default function Home() {
           <div className="flex items-center gap-2.5 shrink-0">
             <a
               href="#contact"
-              className="hidden sm:inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#25231C] hover:bg-[#3B3628] text-[#E8DECA] text-xs font-bold shadow-md shadow-[#25231C]/20 hover:scale-105 transition-all border border-[#BAA77E]/60"
+              className="hidden sm:inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-xs font-bold shadow-md shadow-[#7D735C]/20 hover:scale-105 transition-all border border-[#BAA77E]/60"
             >
               <span className="material-symbols-outlined text-sm text-[#E8DECA]">auto_awesome</span>
               <span>Private Retainer</span>
@@ -930,7 +930,7 @@ export default function Home() {
             {/* Mobile Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-full bg-[#EFE9DC] text-[#25231C] hover:text-[#7D735C] border border-[#DCD2C0]"
+              className="lg:hidden p-2 rounded-full bg-[#EFE9DC] text-[#7D735C] hover:text-[#1C1A15] border border-[#DCD2C0]"
               aria-label="Toggle navigation"
             >
               <span className="material-symbols-outlined text-xl">
@@ -977,7 +977,7 @@ export default function Home() {
               <span className="text-[#BAA77E]">•</span>
               <span className="text-[#736B5E]">Andres Bonifacio College BSA 2004</span>
               <span className="text-[#BAA77E]">•</span>
-              <span className="text-[#25231C] font-bold">CSE Rating 80.24%</span>
+              <span className="text-[#7D735C] font-bold">CSE Rating 80.24%</span>
             </div>
 
             <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold shadow-xs">
@@ -1013,7 +1013,7 @@ export default function Home() {
                 <div className="flex flex-wrap items-center gap-3.5 pt-2">
                   <a
                     href="#pipeline"
-                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#25231C] hover:bg-[#181712] text-[#E8DECA] text-sm font-bold shadow-lg shadow-[#25231C]/25 hover:scale-[1.02] transition-all border border-[#BAA77E]/70"
+                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-sm font-bold shadow-md shadow-[#7D735C]/25 hover:scale-[1.02] transition-all border border-[#BAA77E]"
                   >
                     <span className="material-symbols-outlined text-lg text-[#E8DECA]">spa</span>
                     <span>Explore The Methodology</span>
@@ -1088,27 +1088,27 @@ export default function Home() {
                       />
 
                       {/* Top & Bottom Gradient Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#181712]/90 via-transparent to-transparent pointer-events-none"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#2C271E]/75 via-transparent to-transparent pointer-events-none"></div>
 
                       {/* Floating Trust Pills Inside Image */}
                       <div className="absolute bottom-5 left-5 right-5 text-white space-y-1.5">
-                        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#25231C]/90 backdrop-blur-md text-[11px] font-bold border border-[#BAA77E]/70 shadow-xs text-[#E8DECA]">
+                        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC]/95 backdrop-blur-md text-[11px] font-bold border border-[#BAA77E] shadow-xs text-[#7D735C]">
                           <span className="material-symbols-outlined text-sm">workspace_premium</span>
                           <span>CSE Professional 80.24% • Verified 2025</span>
                         </div>
                         <div className="font-serif text-lg font-bold text-white tracking-tight">
                           Ma. Faith Batilona Briones, BSA, CSE
                         </div>
-                        <div className="text-xs text-[#D8CEBC] font-medium">
+                        <div className="text-xs text-[#E8DECA] font-medium">
                           Bachelor of Science in Accountancy • Andres Bonifacio College
                         </div>
                       </div>
                     </div>
 
                     {/* Floating Luxury Seal (Top-Right) */}
-                    <div className="absolute -top-3.5 -right-3.5 px-4 py-2 rounded-2xl bg-[#181712] text-[#E8DECA] border border-[#BAA77E] shadow-xl flex items-center gap-2 animate-float-luxury">
-                      <span className="h-2 w-2 rounded-full bg-[#E8DECA]"></span>
-                      <span className="font-serif text-xs font-bold">20+ Yrs Practice</span>
+                    <div className="absolute -top-3.5 -right-3.5 px-4 py-2 rounded-2xl bg-white text-[#1C1A15] border border-[#BAA77E] shadow-xl flex items-center gap-2 animate-float-luxury">
+                      <span className="h-2 w-2 rounded-full bg-[#7D735C]"></span>
+                      <span className="font-serif text-xs font-bold text-[#1C1A15]">20+ Yrs Practice</span>
                     </div>
 
                     {/* Floating Luxury Seal (Bottom-Left) */}
@@ -1195,12 +1195,12 @@ export default function Home() {
                   onClick={() => setActivePipelineStage(p.id)}
                   className={`flex items-center gap-2.5 px-5 py-3 rounded-full text-xs sm:text-sm font-bold transition-all ${
                     isActive
-                      ? "bg-[#25231C] text-[#E8DECA] shadow-lg shadow-[#25231C]/20 scale-105 border border-[#BAA77E]"
+                      ? "bg-[#7D735C] text-white shadow-md shadow-[#7D735C]/20 scale-105 border border-[#685F49]"
                       : "bg-white text-[#736B5E] border border-[#DCD2C0] hover:bg-[#EFE9DC] hover:text-[#1C1A15]"
                   }`}
                 >
                   <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
-                    isActive ? "bg-[#BAA77E] text-[#1C1A15]" : "bg-[#EFE9DC] text-[#7D735C]"
+                    isActive ? "bg-white text-[#7D735C]" : "bg-[#EFE9DC] text-[#7D735C]"
                   }`}>
                     {p.step}
                   </span>
@@ -1244,23 +1244,23 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#25231C] text-white border border-[#BAA77E]/50 shadow-xl space-y-3">
-                    <div className="font-serif text-xs font-bold text-[#E8DECA] uppercase tracking-wider flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-sm text-[#BAA77E]">shield</span>
+                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#EFE9DC] text-[#1C1A15] border border-[#BAA77E]/60 shadow-md space-y-3">
+                    <div className="font-serif text-xs font-bold text-[#7D735C] uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-[#7D735C]">shield</span>
                       <span>Fiduciary Safeguard</span>
                     </div>
-                    <ul className="space-y-2.5 text-xs text-[#D8CEBC]">
+                    <ul className="space-y-2.5 text-xs text-[#4A4437]">
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
-                        <span>Zero inter-company ledger mismatches</span>
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Zero inter-company ledger mismatches</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
-                        <span>Standardized naming conventions for multi-currency</span>
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Standardized naming conventions for multi-currency</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
-                        <span>Automated bank feed synchronization rules</span>
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Automated bank feed synchronization rules</span>
                       </li>
                     </ul>
                   </div>
@@ -1297,23 +1297,23 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#25231C] text-white border border-[#BAA77E]/50 shadow-xl space-y-3">
-                    <div className="font-serif text-xs font-bold text-[#E8DECA] uppercase tracking-wider flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-sm text-[#BAA77E]">shield</span>
+                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#EFE9DC] text-[#1C1A15] border border-[#BAA77E]/60 shadow-md space-y-3">
+                    <div className="font-serif text-xs font-bold text-[#7D735C] uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-[#7D735C]">shield</span>
                       <span>Fiduciary Safeguard</span>
                     </div>
-                    <ul className="space-y-2.5 text-xs text-[#D8CEBC]">
+                    <ul className="space-y-2.5 text-xs text-[#4A4437]">
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
-                        <span>Zero unauthorized disbursements or orphan receipts</span>
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Zero unauthorized disbursements or orphan receipts</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
-                        <span>PIMS and procurement asset tag tracing</span>
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">PIMS and procurement asset tag tracing</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
-                        <span>Complete tax withholding documentation (BIR Form 2307)</span>
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Complete tax withholding documentation (BIR Form 2307)</span>
                       </li>
                     </ul>
                   </div>
@@ -1350,23 +1350,23 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#25231C] text-white border border-[#BAA77E]/50 shadow-xl space-y-3">
-                    <div className="font-serif text-xs font-bold text-[#E8DECA] uppercase tracking-wider flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-sm text-[#BAA77E]">shield</span>
+                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#EFE9DC] text-[#1C1A15] border border-[#BAA77E]/60 shadow-md space-y-3">
+                    <div className="font-serif text-xs font-bold text-[#7D735C] uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-[#7D735C]">shield</span>
                       <span>Fiduciary Safeguard</span>
                     </div>
-                    <ul className="space-y-2.5 text-xs text-[#D8CEBC]">
+                    <ul className="space-y-2.5 text-xs text-[#4A4437]">
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
-                        <span>0% undetected bank fee or payment discrepancies</span>
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">0% undetected bank fee or payment discrepancies</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
-                        <span>Immediate identification of bounced or dishonored checks</span>
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Immediate identification of bounced or dishonored checks</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
-                        <span>Automated reconciliation rules for 90%+ daily speed</span>
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Automated reconciliation rules for 90%+ daily speed</span>
                       </li>
                     </ul>
                   </div>
@@ -1403,23 +1403,23 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#25231C] text-white border border-[#BAA77E]/50 shadow-xl space-y-3">
-                    <div className="font-serif text-xs font-bold text-[#E8DECA] uppercase tracking-wider flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-sm text-[#BAA77E]">shield</span>
+                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#EFE9DC] text-[#1C1A15] border border-[#BAA77E]/60 shadow-md space-y-3">
+                    <div className="font-serif text-xs font-bold text-[#7D735C] uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-[#7D735C]">shield</span>
                       <span>Fiduciary Safeguard</span>
                     </div>
-                    <ul className="space-y-2.5 text-xs text-[#D8CEBC]">
+                    <ul className="space-y-2.5 text-xs text-[#4A4437]">
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
-                        <span>100% Trial Balance mathematical tie-out</span>
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">100% Trial Balance mathematical tie-out</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
-                        <span>Accrual schedules matching GAAP revenue recognition</span>
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Accrual schedules matching GAAP revenue recognition</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
-                        <span>Clear executive narrative highlighting cost anomalies</span>
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Clear executive narrative highlighting cost anomalies</span>
                       </li>
                     </ul>
                   </div>
@@ -1456,23 +1456,23 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#25231C] text-white border border-[#BAA77E]/50 shadow-xl space-y-3">
-                    <div className="font-serif text-xs font-bold text-[#E8DECA] uppercase tracking-wider flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-sm text-[#BAA77E]">shield</span>
+                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#EFE9DC] text-[#1C1A15] border border-[#BAA77E]/60 shadow-md space-y-3">
+                    <div className="font-serif text-xs font-bold text-[#7D735C] uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-[#7D735C]">shield</span>
                       <span>Fiduciary Safeguard</span>
                     </div>
-                    <ul className="space-y-2.5 text-xs text-[#D8CEBC]">
+                    <ul className="space-y-2.5 text-xs text-[#4A4437]">
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
-                        <span>Zero penalty guarantee for statutory deadlines</span>
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Zero penalty guarantee for statutory deadlines</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
-                        <span>Full compliance with Republic Act 10173 (Data Privacy)</span>
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Full compliance with Republic Act 10173 (Data Privacy)</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
-                        <span>Official signing by verified BSA & CSE Professional</span>
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Official signing by verified BSA & CSE Professional</span>
                       </li>
                     </ul>
                   </div>
@@ -1513,7 +1513,7 @@ export default function Home() {
                     onClick={() => setSelectedCareerCategory(tab.id)}
                     className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
                       selectedCareerCategory === tab.id
-                        ? "bg-[#25231C] text-[#E8DECA] shadow-xs font-bold"
+                        ? "bg-[#7D735C] text-white shadow-xs font-bold"
                         : "text-[#736B5E] hover:text-[#1C1A15] hover:bg-[#EFE9DC]"
                     }`}
                   >
@@ -1567,8 +1567,8 @@ export default function Home() {
                         <div
                           className={`h-9 w-9 rounded-full flex items-center justify-center border transition-all ${
                             isExpanded
-                              ? "bg-[#25231C] text-[#E8DECA] border-[#25231C] rotate-180"
-                              : "bg-[#EFE9DC] text-[#25231C] border-[#DCD2C0]"
+                              ? "bg-[#7D735C] text-white border-[#7D735C] rotate-180"
+                              : "bg-[#EFE9DC] text-[#7D735C] border-[#DCD2C0]"
                           }`}
                         >
                           <span className="material-symbols-outlined text-lg">expand_more</span>
@@ -1662,7 +1662,7 @@ export default function Home() {
                     onClick={() => setSelectedDocCategory(tab.id)}
                     className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
                       selectedDocCategory === tab.id
-                        ? "bg-[#25231C] text-[#E8DECA] shadow-xs font-bold"
+                        ? "bg-[#7D735C] text-white shadow-xs font-bold"
                         : "text-[#736B5E] hover:text-[#1C1A15] hover:bg-[#EFE9DC]"
                     }`}
                   >
@@ -1698,7 +1698,7 @@ export default function Home() {
                       <h3 className="font-serif text-base sm:text-lg font-bold text-[#1C1A15] group-hover:text-[#7D735C] transition-colors mt-0.5">
                         {doc.title}
                       </h3>
-                      <div className="text-xs text-[#25231C] font-semibold mt-1">{doc.issuer}</div>
+                      <div className="text-xs text-[#1C1A15] font-semibold mt-1">{doc.issuer}</div>
                       <div className="text-[11px] text-[#736B5E] font-medium">{doc.dateOrDuration}</div>
                     </div>
 
@@ -1711,7 +1711,7 @@ export default function Home() {
                   <div className="pt-4 border-t border-[#EFE9DC] flex items-center gap-2">
                     <button
                       onClick={() => openDocViewer(doc)}
-                      className="flex-1 py-2.5 px-3 rounded-full bg-[#EFE9DC] hover:bg-[#25231C] text-[#25231C] hover:text-[#E8DECA] text-xs font-bold border border-[#BAA77E]/60 flex items-center justify-center gap-1.5 transition-all"
+                      className="flex-1 py-2.5 px-3 rounded-full bg-[#EFE9DC] hover:bg-[#7D735C] text-[#7D735C] hover:text-white text-xs font-bold border border-[#BAA77E]/60 flex items-center justify-center gap-1.5 transition-all"
                     >
                       <span className="material-symbols-outlined text-sm">visibility</span>
                       <span>Inspect Record</span>
@@ -1721,7 +1721,7 @@ export default function Home() {
                       href={doc.pdfPath}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2.5 rounded-full bg-white hover:bg-[#EFE9DC] text-[#25231C] border border-[#DCD2C0] flex items-center justify-center transition-colors"
+                      className="p-2.5 rounded-full bg-white hover:bg-[#EFE9DC] text-[#7D735C] border border-[#DCD2C0] flex items-center justify-center transition-colors"
                       title="Open Signed PDF in New Tab"
                     >
                       <span className="material-symbols-outlined text-sm">open_in_new</span>
@@ -1870,7 +1870,7 @@ export default function Home() {
                     onClick={() => setSelectedCertCategory(tab.id)}
                     className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
                       selectedCertCategory === tab.id
-                        ? "bg-[#25231C] text-[#E8DECA] shadow-xs font-bold"
+                        ? "bg-[#7D735C] text-white shadow-xs font-bold"
                         : "text-[#736B5E] hover:text-[#1C1A15] hover:bg-[#EFE9DC]"
                     }`}
                   >
@@ -1896,7 +1896,7 @@ export default function Home() {
                       alt={cert.title}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#181712]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#2C271E]/75 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                       <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/95 text-[#1C1A15] text-xs font-bold shadow-md border border-[#BAA77E]">
                         <span className="material-symbols-outlined text-sm text-[#7D735C]">zoom_in</span>
                         <span>Click to Inspect High-Res</span>
@@ -1939,7 +1939,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* BESPOKE SCOPE CONCIERGE (DEEP LUXURY STATEMENT BREAK) */}
+      {/* BESPOKE SCOPE CONCIERGE (LUMINOUS KHAKI BENTO) */}
       <section id="estimator" className="py-20 px-4 sm:px-6 relative">
         <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
@@ -1979,7 +1979,7 @@ export default function Home() {
                       onClick={() => setEstimatorOrg(org.id)}
                       className={`flex items-center gap-2.5 p-3 rounded-2xl text-xs font-bold border transition-all text-left ${
                         estimatorOrg === org.id
-                          ? "bg-[#25231C] text-[#E8DECA] border-[#BAA77E] shadow-sm font-extrabold"
+                          ? "bg-[#7D735C] text-white border-[#7D735C] shadow-sm font-extrabold"
                           : "bg-[#F7F4EE] text-[#4A4437] border-[#DCD2C0] hover:bg-[#EFE9DC]"
                       }`}
                     >
@@ -2018,7 +2018,7 @@ export default function Home() {
                       >
                         <div
                           className={`h-5 w-5 rounded-md flex items-center justify-center mt-0.5 shrink-0 transition-colors ${
-                            isChecked ? "bg-[#25231C] text-[#E8DECA]" : "border border-[#DCD2C0] bg-white"
+                            isChecked ? "bg-[#7D735C] text-white" : "border border-[#DCD2C0] bg-white"
                           }`}
                         >
                           {isChecked && <span className="material-symbols-outlined text-xs">check</span>}
@@ -2053,7 +2053,7 @@ export default function Home() {
                       onClick={() => setEstimatorVolume(v.id)}
                       className={`p-2.5 rounded-2xl text-xs font-bold border transition-all text-center ${
                         estimatorVolume === v.id
-                          ? "bg-[#25231C] text-[#E8DECA] border-[#BAA77E] shadow-xs font-bold"
+                          ? "bg-[#7D735C] text-white border-[#7D735C] shadow-xs font-bold"
                           : "bg-[#F7F4EE] text-[#4A4437] border-[#DCD2C0] hover:bg-[#EFE9DC]"
                       }`}
                     >
@@ -2064,48 +2064,48 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Step 2: Dynamic Summary Card (5 cols - Deep Khaki Luxury Bento) */}
-            <div className="lg:col-span-5 rounded-[2.5rem] p-6 sm:p-8 text-white space-y-6 bg-[#25231C] border border-[#BAA77E]/50 shadow-xl">
+            {/* Step 2: Dynamic Summary Card (5 cols - Warm Khaki Linen Bento) */}
+            <div className="lg:col-span-5 luminous-pearl-card rounded-[2.5rem] p-6 sm:p-8 text-[#1C1A15] space-y-6 bg-[#EFE9DC] border border-[#BAA77E]/60 shadow-xl">
               <div className="space-y-1">
-                <div className="text-xs font-bold text-[#E8DECA] uppercase tracking-widest flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-sm text-[#BAA77E]">receipt</span>
+                <div className="text-xs font-bold text-[#7D735C] uppercase tracking-widest flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-sm text-[#7D735C]">receipt</span>
                   <span>Custom Retainer Blueprint</span>
                 </div>
-                <h3 className="font-serif text-2xl font-bold text-white">Recommended Delivery Cadence</h3>
+                <h3 className="font-serif text-2xl font-bold text-[#1C1A15]">Recommended Delivery Cadence</h3>
               </div>
 
               <div className="space-y-3 pt-2">
-                <div className="p-4 rounded-2xl bg-white/5 border border-[#BAA77E]/30 flex items-center justify-between">
-                  <span className="text-xs text-[#D8CEBC]">Target Response Cadence:</span>
-                  <span className="text-xs font-bold text-[#E8DECA]">
+                <div className="p-4 rounded-2xl bg-white/90 border border-[#DCD2C0] flex items-center justify-between">
+                  <span className="text-xs text-[#736B5E]">Target Response Cadence:</span>
+                  <span className="text-xs font-bold text-[#7D735C]">
                     {estimatorVolume === "high" ? "Daily Dedicated Check-ins" : "Weekly Close + Month-End"}
                   </span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-white/5 border border-[#BAA77E]/30 flex items-center justify-between">
-                  <span className="text-xs text-[#D8CEBC]">Modules Selected:</span>
-                  <span className="text-xs font-bold text-white">{estimatorModules.length} Active Modules</span>
+                <div className="p-4 rounded-2xl bg-white/90 border border-[#DCD2C0] flex items-center justify-between">
+                  <span className="text-xs text-[#736B5E]">Modules Selected:</span>
+                  <span className="text-xs font-bold text-[#1C1A15]">{estimatorModules.length} Active Modules</span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-white/5 border border-[#BAA77E]/30 flex items-center justify-between">
-                  <span className="text-xs text-[#D8CEBC]">Fiduciary Lead:</span>
-                  <span className="text-xs font-bold text-[#E8DECA]">Ma. Faith Briones, BSA, CSE</span>
+                <div className="p-4 rounded-2xl bg-white/90 border border-[#DCD2C0] flex items-center justify-between">
+                  <span className="text-xs text-[#736B5E]">Fiduciary Lead:</span>
+                  <span className="text-xs font-bold text-[#7D735C]">Ma. Faith Briones, BSA, CSE</span>
                 </div>
               </div>
 
-              <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-[#D8CEBC]">
-                <div className="font-bold text-[#E8DECA]">Included Standard Guarantees:</div>
+              <div className="space-y-2 pt-2 border-t border-[#DCD2C0] text-xs text-[#4A4437]">
+                <div className="font-bold text-[#1C1A15]">Included Standard Guarantees:</div>
                 <ul className="space-y-1.5">
                   <li className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#E8DECA] text-sm">check_circle</span>
+                    <span className="material-symbols-outlined text-[#7D735C] text-sm">check_circle</span>
                     <span>100% Zero-Variance Bank Tie-Out</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#E8DECA] text-sm">check_circle</span>
+                    <span className="material-symbols-outlined text-[#7D735C] text-sm">check_circle</span>
                     <span>On-Time Statutory SSS / BIR Compliance</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#E8DECA] text-sm">check_circle</span>
+                    <span className="material-symbols-outlined text-[#7D735C] text-sm">check_circle</span>
                     <span>Direct Communication & Executive Narrative</span>
                   </li>
                 </ul>
@@ -2114,9 +2114,9 @@ export default function Home() {
               <button
                 type="button"
                 onClick={handleApplyEstimatorToContact}
-                className="w-full py-4 rounded-full bg-gradient-to-r from-[#BAA77E] via-[#E8DECA] to-[#BAA77E] hover:from-[#E8DECA] hover:to-[#BAA77E] text-[#1C1A15] text-sm font-extrabold shadow-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
+                className="w-full py-4 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-sm font-extrabold shadow-md flex items-center justify-center gap-2 transition-all hover:scale-[1.02] border border-[#BAA77E]"
               >
-                <span className="material-symbols-outlined text-lg">auto_awesome</span>
+                <span className="material-symbols-outlined text-lg text-[#E8DECA]">auto_awesome</span>
                 <span>Load Scope into Consultation Concierge</span>
               </button>
             </div>
@@ -2154,7 +2154,7 @@ export default function Home() {
                   {/* Email Box */}
                   <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <span className="h-10 w-10 rounded-xl bg-[#25231C] text-[#E8DECA] flex items-center justify-center shrink-0 border border-[#BAA77E]">
+                      <span className="h-10 w-10 rounded-xl bg-[#EFE9DC] text-[#7D735C] flex items-center justify-center shrink-0 border border-[#BAA77E]/60">
                         <span className="material-symbols-outlined text-lg">mail</span>
                       </span>
                       <div>
@@ -2179,7 +2179,7 @@ export default function Home() {
                   {/* Phone Box */}
                   <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <span className="h-10 w-10 rounded-xl bg-[#3B3628] text-[#E8DECA] flex items-center justify-center shrink-0 border border-[#BAA77E]">
+                      <span className="h-10 w-10 rounded-xl bg-[#EFE9DC] text-[#7D735C] flex items-center justify-center shrink-0 border border-[#BAA77E]/60">
                         <span className="material-symbols-outlined text-lg">call</span>
                       </span>
                       <div>
@@ -2203,7 +2203,7 @@ export default function Home() {
 
                   {/* Location Box */}
                   <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] flex items-center gap-3">
-                    <span className="h-10 w-10 rounded-xl bg-[#7D735C] text-[#E8DECA] flex items-center justify-center shrink-0 border border-[#BAA77E]">
+                    <span className="h-10 w-10 rounded-xl bg-[#EFE9DC] text-[#7D735C] flex items-center justify-center shrink-0 border border-[#BAA77E]/60">
                       <span className="material-symbols-outlined text-lg">location_on</span>
                     </span>
                     <div>
@@ -2217,15 +2217,15 @@ export default function Home() {
               </div>
 
               {/* Engagement Status Card */}
-              <div className="p-6 rounded-[2rem] bg-[#25231C] text-white shadow-lg space-y-3 border border-[#BAA77E]/50">
-                <div className="flex items-center gap-2 text-xs font-bold text-[#E8DECA] uppercase tracking-wider">
-                  <span className="h-2 w-2 rounded-full bg-[#E8DECA] animate-ping"></span>
+              <div className="p-6 rounded-[2rem] bg-[#EFE9DC] text-[#1C1A15] shadow-md space-y-3 border border-[#BAA77E]/60">
+                <div className="flex items-center gap-2 text-xs font-bold text-[#7D735C] uppercase tracking-wider">
+                  <span className="h-2 w-2 rounded-full bg-[#7D735C] animate-ping"></span>
                   <span>Availability Notice</span>
                 </div>
-                <div className="font-serif text-base font-bold text-white">
+                <div className="font-serif text-base font-bold text-[#1C1A15]">
                   Fractional & Full Retainer Engagements
                 </div>
-                <p className="text-xs text-[#D8CEBC] leading-relaxed">
+                <p className="text-xs text-[#4A4437] leading-relaxed">
                   Available for remote cloud controllership, on-site consultation for Northern Mindanao cooperatives, and statutory government advisory.
                 </p>
               </div>
@@ -2319,7 +2319,7 @@ export default function Home() {
 
                     <button
                       type="submit"
-                      className="w-full py-4 rounded-full bg-[#25231C] hover:bg-[#181712] text-[#E8DECA] text-sm font-bold shadow-lg shadow-[#25231C]/25 flex items-center justify-center gap-2 hover:scale-[1.01] transition-all border border-[#BAA77E]/70"
+                      className="w-full py-4 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-sm font-bold shadow-md shadow-[#7D735C]/25 flex items-center justify-center gap-2 hover:scale-[1.01] transition-all border border-[#BAA77E]"
                     >
                       <span className="material-symbols-outlined text-lg text-[#E8DECA]">send</span>
                       <span>Transmit Consultation Request</span>
@@ -2333,7 +2333,7 @@ export default function Home() {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-12 px-4 sm:px-6 bg-[#14130F] text-white border-t border-[#BAA77E]/30">
+      <footer className="py-12 px-4 sm:px-6 bg-[#EFE9DC] text-[#1C1A15] border-t border-[#DCD2C0]">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
             <div className="h-11 w-11 rounded-full overflow-hidden border-2 border-[#BAA77E]">
@@ -2344,16 +2344,16 @@ export default function Home() {
               />
             </div>
             <div>
-              <div className="font-serif text-sm font-bold text-white">Ma. Faith Batilona Briones, BSA, CSE</div>
-              <div className="text-xs text-[#D8CEBC]">
+              <div className="font-serif text-sm font-bold text-[#1C1A15]">Ma. Faith Batilona Briones, BSA, CSE</div>
+              <div className="text-xs text-[#736B5E]">
                 Bachelor of Science in Accountancy • Career Service Professional 80.24%
               </div>
             </div>
           </div>
 
-          <div className="text-xs text-[#D8CEBC] text-center md:text-right space-y-1">
-            <div className="font-serif italic text-[#E8DECA]">The Executive Fiduciary Atelier • Republic of the Philippines</div>
-            <div className="text-[#736B5E]">
+          <div className="text-xs text-[#736B5E] text-center md:text-right space-y-1">
+            <div className="font-serif italic text-[#7D735C]">The Executive Fiduciary Atelier • Republic of the Philippines</div>
+            <div>
               Cross-Referenced with CS Form 212 & Statutory Employment Records
             </div>
           </div>
@@ -2373,7 +2373,7 @@ export default function Home() {
 
       {/* MODAL 1: STATUTORY DOSSIER INSPECTOR */}
       {activeModal === "doc-viewer" && selectedDoc && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-md animate-fadeIn">
           <div className="relative w-full max-w-2xl rounded-[2.5rem] bg-white border border-[#BAA77E] shadow-2xl p-6 sm:p-8 space-y-5 max-h-[90vh] overflow-y-auto text-[#1C1A15]">
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-1">
@@ -2427,7 +2427,7 @@ export default function Home() {
                 href={selectedDoc.pdfPath}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-2.5 rounded-full bg-[#25231C] hover:bg-[#181712] text-[#E8DECA] text-xs font-bold flex items-center gap-1.5 shadow-md border border-[#BAA77E]/70"
+                className="px-6 py-2.5 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-xs font-bold flex items-center gap-1.5 shadow-md border border-[#BAA77E]"
               >
                 <span className="material-symbols-outlined text-sm">open_in_new</span>
                 <span>Open Official PDF Document</span>
@@ -2439,7 +2439,7 @@ export default function Home() {
 
       {/* MODAL 2: CERTIFICATE LIGHTBOX CAROUSEL */}
       {activeModal === "certificate-lightbox" && currentCert && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-md animate-fadeIn">
           <div className="relative w-full max-w-4xl rounded-[2.5rem] bg-white border border-[#BAA77E] shadow-2xl p-6 sm:p-8 space-y-6 max-h-[95vh] overflow-y-auto text-[#1C1A15]">
             {/* Top Bar */}
             <div className="flex items-start justify-between gap-4">
@@ -2465,7 +2465,7 @@ export default function Home() {
             </div>
 
             {/* High-Resolution Certificate Image Preview */}
-            <div className="relative aspect-[16/10] w-full rounded-[2rem] overflow-hidden bg-[#181712] border border-[#BAA77E]/50 flex items-center justify-center group shadow-inner">
+            <div className="relative aspect-[16/10] w-full rounded-[2rem] overflow-hidden bg-[#F5F1E9] border border-[#DCD2C0] flex items-center justify-center group shadow-inner">
               <img
                 src={currentCert.imageSrc}
                 alt={currentCert.title}
@@ -2527,7 +2527,7 @@ export default function Home() {
                     href={currentCert.pdfPath}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-5 py-2 rounded-full bg-[#25231C] hover:bg-[#181712] text-[#E8DECA] text-xs font-bold flex items-center gap-1 border border-[#BAA77E]/70"
+                    className="px-5 py-2 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-xs font-bold flex items-center gap-1 border border-[#BAA77E]"
                   >
                     <span className="material-symbols-outlined text-sm">picture_as_pdf</span>
                     <span>Open Conferred PDF</span>

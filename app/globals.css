@@ -12,9 +12,7 @@
   --color-khaki-gold: #C9B27C;
   --color-khaki-olive: #7D735C;
   --color-khaki-dark: #4A4335;
-  --color-khaki-obsidian: #181712;
-  --color-khaki-charcoal: #25231C;
-  --color-khaki-card: #2F2C23;
+  --color-khaki-espresso: #2C271E;
   --color-khaki-slate: #6E6657;
 }
 
@@ -22,20 +20,20 @@
   .bg-dualtone-canvas {
     background-color: #F7F4EE;
     background-image: 
-      radial-gradient(at 15% 10%, rgba(186, 167, 126, 0.12) 0px, transparent 45%),
-      radial-gradient(at 85% 15%, rgba(74, 67, 53, 0.07) 0px, transparent 40%),
-      radial-gradient(at 50% 60%, rgba(201, 178, 124, 0.08) 0px, transparent 50%),
-      radial-gradient(at 80% 85%, rgba(37, 35, 28, 0.07) 0px, transparent 45%);
+      radial-gradient(at 15% 10%, rgba(186, 167, 126, 0.15) 0px, transparent 45%),
+      radial-gradient(at 85% 15%, rgba(201, 178, 124, 0.12) 0px, transparent 40%),
+      radial-gradient(at 50% 60%, rgba(186, 167, 126, 0.10) 0px, transparent 50%),
+      radial-gradient(at 80% 85%, rgba(125, 115, 92, 0.10) 0px, transparent 45%);
   }
 
   .luminous-pearl-card {
-    background: rgba(255, 255, 255, 0.94);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(220, 210, 192, 0.7);
+    border: 1px solid rgba(220, 210, 192, 0.85);
     box-shadow: 
-      0 4px 20px -2px rgba(37, 35, 28, 0.04),
-      0 12px 32px -8px rgba(186, 167, 126, 0.1),
+      0 4px 20px -2px rgba(125, 115, 92, 0.05),
+      0 12px 32px -8px rgba(186, 167, 126, 0.12),
       0 0 0 1px rgba(255, 255, 255, 0.9) inset;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -43,31 +41,28 @@
   .luminous-pearl-card:hover {
     border-color: #BAA77E;
     box-shadow: 
-      0 20px 40px -10px rgba(37, 35, 28, 0.08),
-      0 0 25px -4px rgba(201, 178, 124, 0.35),
+      0 20px 40px -10px rgba(125, 115, 92, 0.08),
+      0 0 25px -4px rgba(201, 178, 124, 0.3),
       0 0 0 1px rgba(186, 167, 126, 0.3) inset;
     transform: translateY(-4px);
   }
 
-  .dark-luxury-card {
-    background: rgba(30, 28, 22, 0.96);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(186, 167, 126, 0.35);
+  .warm-khaki-card {
+    background: rgba(239, 233, 220, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(186, 167, 126, 0.6);
     box-shadow: 
-      0 15px 35px -10px rgba(0, 0, 0, 0.45),
-      0 0 25px -5px rgba(186, 167, 126, 0.1),
-      0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+      0 10px 30px -8px rgba(125, 115, 92, 0.08),
+      0 0 20px -5px rgba(186, 167, 126, 0.15);
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .dark-luxury-card:hover {
-    border-color: rgba(201, 178, 124, 0.75);
-    background: rgba(37, 35, 28, 0.98);
+  .warm-khaki-card:hover {
+    border-color: #7D735C;
     box-shadow: 
-      0 25px 50px -10px rgba(0, 0, 0, 0.65),
-      0 0 35px -2px rgba(201, 178, 124, 0.35),
-      0 0 0 1px rgba(201, 178, 124, 0.35) inset;
+      0 18px 36px -10px rgba(125, 115, 92, 0.14),
+      0 0 25px -2px rgba(201, 178, 124, 0.25);
     transform: translateY(-4px);
   }
 
@@ -78,7 +73,7 @@
   }
 
   .navy-editorial-text {
-    background: linear-gradient(135deg, #181712 0%, #2F2C23 50%, #4A4335 100%);
+    background: linear-gradient(135deg, #2C271E 0%, #4A4335 50%, #7D735C 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -86,8 +81,8 @@
   .dualtone-subtle-pattern {
     background-size: 36px 36px;
     background-image: 
-      linear-gradient(to right, rgba(74, 67, 53, 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(74, 67, 53, 0.04) 1px, transparent 1px);
+      linear-gradient(to right, rgba(125, 115, 92, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(125, 115, 92, 0.04) 1px, transparent 1px);
   }
 }
 
