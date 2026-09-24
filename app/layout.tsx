@@ -13,6 +13,7 @@ const playfairDisplay = Playfair_Display({
   variable: "--font-serif",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -20,13 +21,14 @@ const cormorantGaramond = Cormorant_Garamond({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Ma. Faith B. Briones, BSA, CSE | Fiduciary Advisory, Senior Bookkeeper & Government Administrator",
+  title: "Ma. Faith B. Briones, BSA, CSE | Executive Fiduciary & Senior Controllership Atelier",
   description:
-    "Official portfolio of Ma. Faith B. Briones, BSA, CSE. Over 20 years of fiduciary excellence, double-entry general ledger precision, and Social Security System (SSS) public administration.",
+    "Official luxury executive portfolio of Ma. Faith B. Briones, BSA, CSE. Over 20 years of bespoke double-entry ledger mastery, SSS public governance, and financial stewardship.",
 };
 
 export default function RootLayout({
@@ -47,11 +49,11 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Italiana&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="bg-[#ECF0F1] text-[#2C3E50] font-sans antialiased min-h-screen selection:bg-[#34495E] selection:text-white">
+      <body className="bg-[#F6F8F9] text-[#2C3E50] font-sans antialiased min-h-screen selection:bg-[#C5A880] selection:text-[#2C3E50]">
         {children}
       </body>
     </html>

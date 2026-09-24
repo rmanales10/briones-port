@@ -10,96 +10,78 @@
   --color-palette-slate: #7F8C8D;
   --color-palette-silver: #BDC3C7;
   --color-palette-clouds: #ECF0F1;
+  --color-gold-light: #E5C590;
+  --color-gold-rich: #C5A880;
+  --color-gold-dark: #9A7B56;
 }
 
 @layer utilities {
-  .bg-palette-clouds {
-    background-color: #ECF0F1;
-  }
-  .bg-palette-primary {
-    background-color: #2C3E50;
-  }
-  .bg-palette-secondary {
-    background-color: #34495E;
-  }
-  .bg-palette-slate {
-    background-color: #7F8C8D;
-  }
-  .bg-palette-silver {
-    background-color: #BDC3C7;
-  }
-
-  .text-palette-primary {
-    color: #2C3E50;
-  }
-  .text-palette-secondary {
-    color: #34495E;
-  }
-  .text-palette-slate {
-    color: #7F8C8D;
-  }
-  .text-palette-silver {
-    color: #BDC3C7;
-  }
-
-  .border-palette-primary {
-    border-color: #2C3E50;
-  }
-  .border-palette-secondary {
-    border-color: #34495E;
-  }
-  .border-palette-slate {
-    border-color: #7F8C8D;
-  }
-  .border-palette-silver {
-    border-color: #BDC3C7;
-  }
-
-  .bg-luminous-radial {
-    background: radial-gradient(circle at 50% 0%, rgba(52, 73, 94, 0.12) 0%, rgba(127, 140, 141, 0.08) 40%, rgba(236, 240, 241, 0) 70%);
-  }
-
-  .bg-mesh-clouds {
-    background-color: #ECF0F1;
+  .bg-pearl-canvas {
+    background-color: #F6F8F9;
     background-image: 
-      radial-gradient(at 15% 15%, rgba(52, 73, 94, 0.08) 0px, transparent 50%),
-      radial-gradient(at 85% 20%, rgba(127, 140, 141, 0.09) 0px, transparent 50%),
-      radial-gradient(at 50% 80%, rgba(44, 62, 80, 0.06) 0px, transparent 50%);
+      radial-gradient(at 10% 10%, rgba(229, 197, 144, 0.08) 0px, transparent 45%),
+      radial-gradient(at 90% 15%, rgba(52, 73, 94, 0.06) 0px, transparent 40%),
+      radial-gradient(at 50% 60%, rgba(197, 168, 128, 0.05) 0px, transparent 50%),
+      radial-gradient(at 80% 85%, rgba(44, 62, 80, 0.05) 0px, transparent 45%);
   }
 
-  .clouds-card {
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(189, 195, 199, 0.65);
-    box-shadow: 0 4px 20px -2px rgba(44, 62, 80, 0.04), 0 0 0 1px rgba(44, 62, 80, 0.02);
-    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  .luxury-glass-card {
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(213, 194, 165, 0.45);
+    box-shadow: 
+      0 4px 20px -2px rgba(44, 62, 80, 0.03),
+      0 12px 32px -8px rgba(197, 168, 128, 0.08),
+      0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .clouds-card:hover {
-    border-color: #34495E;
-    box-shadow: 0 20px 35px -10px rgba(44, 62, 80, 0.12), 0 0 0 1px rgba(52, 73, 94, 0.18);
-    transform: translateY(-4px);
+  .luxury-glass-card:hover {
+    border-color: #C5A880;
+    box-shadow: 
+      0 20px 40px -12px rgba(44, 62, 80, 0.1),
+      0 0 25px -4px rgba(229, 197, 144, 0.25),
+      0 0 0 1px rgba(197, 168, 128, 0.3) inset;
+    transform: translateY(-5px);
   }
 
-  .navy-gradient-text {
-    background: linear-gradient(135deg, #2C3E50 0%, #34495E 50%, #7F8C8D 100%);
+  .luxury-dark-card {
+    background: linear-gradient(145deg, #2C3E50 0%, #1E2B37 100%);
+    border: 1px solid rgba(229, 197, 144, 0.35);
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+  }
+
+  .gold-editorial-text {
+    background: linear-gradient(135deg, #9A7B56 0%, #C5A880 50%, #E5C590 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
-  .silver-gradient-text {
-    background: linear-gradient(135deg, #34495E 0%, #7F8C8D 60%, #BDC3C7 100%);
+  .navy-luxury-text {
+    background: linear-gradient(135deg, #2C3E50 0%, #34495E 60%, #5D6D7E 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
-  .clouds-grid-pattern {
-    background-size: 32px 32px;
-    background-image: 
-      linear-gradient(to right, rgba(44, 62, 80, 0.035) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(44, 62, 80, 0.035) 1px, transparent 1px);
+  .pearl-hairline {
+    border-image: linear-gradient(to right, transparent, rgba(197, 168, 128, 0.5), transparent) 1;
   }
+
+  .luxury-subtle-pattern {
+    background-size: 40px 40px;
+    background-image: 
+      linear-gradient(to right, rgba(197, 168, 128, 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(197, 168, 128, 0.035) 1px, transparent 1px);
+  }
+}
+
+.font-italiana {
+  font-family: 'Italiana', 'Cormorant Garamond', Georgia, serif;
+}
+
+.font-cinzel {
+  font-family: 'Cinzel', Georgia, serif;
 }
 
 .material-symbols-outlined {
@@ -125,41 +107,56 @@
   height: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #ECF0F1;
+  background: #F6F8F9;
 }
 ::-webkit-scrollbar-thumb {
-  background: #BDC3C7;
+  background: #C5A880;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #7F8C8D;
+  background: #9A7B56;
 }
 
 /* Smooth Interactive Animations */
 @keyframes floatSmooth {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translateY(0px) rotate(0deg);
   }
   50% {
-    transform: translateY(-8px);
+    transform: translateY(-8px) rotate(0.5deg);
   }
 }
 
-@keyframes pulseSubtle {
+@keyframes pulseGlow {
   0%, 100% {
-    opacity: 0.6;
-    transform: scale(1);
+    opacity: 0.5;
+    box-shadow: 0 0 15px rgba(229, 197, 144, 0.2);
   }
   50% {
     opacity: 1;
-    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(229, 197, 144, 0.5);
   }
 }
 
-.animate-float-smooth {
-  animation: floatSmooth 5s ease-in-out infinite;
+@keyframes shimmerGold {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
-.animate-pulse-subtle {
-  animation: pulseSubtle 3s ease-in-out infinite;
+.animate-float-luxury {
+  animation: floatSmooth 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+.gold-shimmer-badge {
+  background: linear-gradient(90deg, rgba(229,197,144,0) 0%, rgba(229,197,144,0.4) 50%, rgba(229,197,144,0) 100%);
+  background-size: 200% 100%;
+  animation: shimmerGold 4s infinite;
 }
