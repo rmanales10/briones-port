@@ -545,29 +545,29 @@ function AnimatedMetric({
   return (
     <div ref={metricRef} className="luminous-pearl-card rounded-[2rem] p-6 space-y-3.5 group bg-white">
       <div className="flex items-center justify-between">
-        <span className="font-serif text-3xl sm:text-4xl font-semibold text-[#0F172A] tracking-tight">
+        <span className="font-serif text-3xl sm:text-4xl font-semibold text-[#1C1A15] tracking-tight">
           {count.toLocaleString("en-US", {
             minimumFractionDigits: decimals,
             maximumFractionDigits: decimals,
           })}
-          <span className="font-sans text-xl font-bold text-[#9A7B56] ml-1">{suffix}</span>
+          <span className="font-sans text-xl font-bold text-[#7D735C] ml-1">{suffix}</span>
         </span>
-        <span className="h-11 w-11 rounded-2xl bg-[#F5EBE1] text-[#9A7B56] flex items-center justify-center border border-[#C5A880]/40 shadow-xs group-hover:scale-110 transition-transform">
+        <span className="h-11 w-11 rounded-2xl bg-[#EFE9DC] text-[#7D735C] flex items-center justify-center border border-[#BAA77E]/50 shadow-xs group-hover:scale-110 transition-transform">
           <span className="material-symbols-outlined text-xl">{icon}</span>
         </span>
       </div>
 
       <div>
-        <div className="text-sm font-bold text-[#0F172A] group-hover:text-[#9A7B56] transition-colors">
+        <div className="text-sm font-bold text-[#1C1A15] group-hover:text-[#7D735C] transition-colors">
           {label}
         </div>
-        <div className="text-xs text-[#64748B] mt-0.5 font-medium">{sublabel}</div>
+        <div className="text-xs text-[#736B5E] mt-0.5 font-medium">{sublabel}</div>
       </div>
 
-      {/* Gold Progress Track */}
-      <div className="w-full h-1.5 rounded-full bg-[#E2E8F0] overflow-hidden">
+      {/* Khaki Gold Progress Track */}
+      <div className="w-full h-1.5 rounded-full bg-[#EFE9DC] overflow-hidden">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-[#9A7B56] via-[#C5A880] to-[#E5C590] shadow-xs transition-all duration-150 ease-out"
+          className="h-full rounded-full bg-gradient-to-r from-[#7D735C] via-[#BAA77E] to-[#E8DECA] shadow-xs transition-all duration-150 ease-out"
           style={{ width: `${barWidth}%` }}
         />
       </div>
@@ -775,28 +775,28 @@ export default function Home() {
   const currentCert = filteredCertificates[selectedCertificateIndex] || filteredCertificates[0];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F8FAFC] text-[#0F172A] relative selection:bg-[#2C3E50] selection:text-[#E5C590] bg-dualtone-canvas dualtone-subtle-pattern overflow-x-hidden">
+    <div className="flex flex-col min-h-screen bg-[#F7F4EE] text-[#1C1A15] relative selection:bg-[#25231C] selection:text-[#E8DECA] bg-dualtone-canvas dualtone-subtle-pattern overflow-x-hidden">
       {/* ANIMATED DUAL-TONE BACKGROUND ENGINE */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        {/* Floating Aurora Orb 1 (Top Champagne Gold) */}
-        <div className="absolute -top-[12%] left-[22%] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#C5A880]/18 via-[#E5C590]/12 to-transparent blur-[130px] animate-orb-1"></div>
+        {/* Floating Aurora Orb 1 (Top Khaki Gold) */}
+        <div className="absolute -top-[12%] left-[22%] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#BAA77E]/20 via-[#E8DECA]/15 to-transparent blur-[130px] animate-orb-1"></div>
 
-        {/* Floating Aurora Orb 2 (Right Deep Slate Navy) */}
-        <div className="absolute top-[30%] -right-[8%] w-[700px] h-[700px] rounded-full bg-gradient-to-tl from-[#2C3E50]/12 via-[#34495E]/8 to-transparent blur-[150px] animate-orb-2"></div>
+        {/* Floating Aurora Orb 2 (Right Deep Khaki Charcoal) */}
+        <div className="absolute top-[30%] -right-[8%] w-[700px] h-[700px] rounded-full bg-gradient-to-tl from-[#25231C]/14 via-[#3B3628]/10 to-transparent blur-[150px] animate-orb-2"></div>
 
-        {/* Floating Aurora Orb 3 (Left Amber Rose Gilt) */}
-        <div className="absolute top-[55%] -left-[10%] w-[550px] h-[550px] rounded-full bg-gradient-to-tr from-[#9A7B56]/14 via-[#C5A880]/10 to-transparent blur-[130px] animate-orb-3"></div>
+        {/* Floating Aurora Orb 3 (Left Olive Sand Khaki) */}
+        <div className="absolute top-[55%] -left-[10%] w-[550px] h-[550px] rounded-full bg-gradient-to-tr from-[#7D735C]/16 via-[#BAA77E]/12 to-transparent blur-[130px] animate-orb-3"></div>
 
-        {/* Floating Aurora Orb 4 (Bottom Sapphire) */}
-        <div className="absolute -bottom-[8%] left-[28%] w-[650px] h-[650px] rounded-full bg-gradient-to-t from-[#2C3E50]/15 via-[#1E3A5F]/10 to-transparent blur-[140px] animate-orb-1"></div>
+        {/* Floating Aurora Orb 4 (Bottom Khaki Noir) */}
+        <div className="absolute -bottom-[8%] left-[28%] w-[650px] h-[650px] rounded-full bg-gradient-to-t from-[#25231C]/16 via-[#4A4335]/12 to-transparent blur-[140px] animate-orb-1"></div>
 
         {/* Constellation Starlight Dust Particles */}
-        <div className="absolute top-[12%] left-[15%] h-1.5 w-1.5 rounded-full bg-[#C5A880] shadow-[0_0_8px_#C5A880] animate-particle" style={{ animationDelay: "0s" }}></div>
-        <div className="absolute top-[22%] right-[18%] h-2 w-2 rounded-full bg-[#9A7B56] shadow-[0_0_10px_#9A7B56] animate-particle" style={{ animationDelay: "1.5s" }}></div>
-        <div className="absolute top-[45%] left-[8%] h-1.5 w-1.5 rounded-full bg-[#2C3E50] shadow-[0_0_6px_#2C3E50] animate-particle" style={{ animationDelay: "3s" }}></div>
-        <div className="absolute top-[58%] right-[12%] h-2 w-2 rounded-full bg-[#C5A880] shadow-[0_0_12px_#C5A880] animate-particle" style={{ animationDelay: "0.8s" }}></div>
-        <div className="absolute top-[75%] left-[22%] h-1 w-1 rounded-full bg-[#9A7B56] shadow-[0_0_6px_#9A7B56] animate-particle" style={{ animationDelay: "2.2s" }}></div>
-        <div className="absolute top-[88%] right-[25%] h-1.5 w-1.5 rounded-full bg-[#C5A880] shadow-[0_0_8px_#C5A880] animate-particle" style={{ animationDelay: "4s" }}></div>
+        <div className="absolute top-[12%] left-[15%] h-1.5 w-1.5 rounded-full bg-[#BAA77E] shadow-[0_0_8px_#BAA77E] animate-particle" style={{ animationDelay: "0s" }}></div>
+        <div className="absolute top-[22%] right-[18%] h-2 w-2 rounded-full bg-[#7D735C] shadow-[0_0_10px_#7D735C] animate-particle" style={{ animationDelay: "1.5s" }}></div>
+        <div className="absolute top-[45%] left-[8%] h-1.5 w-1.5 rounded-full bg-[#25231C] shadow-[0_0_6px_#25231C] animate-particle" style={{ animationDelay: "3s" }}></div>
+        <div className="absolute top-[58%] right-[12%] h-2 w-2 rounded-full bg-[#BAA77E] shadow-[0_0_12px_#BAA77E] animate-particle" style={{ animationDelay: "0.8s" }}></div>
+        <div className="absolute top-[75%] left-[22%] h-1 w-1 rounded-full bg-[#7D735C] shadow-[0_0_6px_#7D735C] animate-particle" style={{ animationDelay: "2.2s" }}></div>
+        <div className="absolute top-[88%] right-[25%] h-1.5 w-1.5 rounded-full bg-[#BAA77E] shadow-[0_0_8px_#BAA77E] animate-particle" style={{ animationDelay: "4s" }}></div>
 
         {/* Dynamic Interactive Mouse Torch Spotlight */}
         {cursorVisible && (
@@ -808,7 +808,7 @@ export default function Home() {
               transform: "translate(-50%, -50%)",
               width: "600px",
               height: "600px",
-              background: "radial-gradient(circle, rgba(197, 168, 128, 0.14) 0%, rgba(44, 62, 80, 0.04) 50%, transparent 70%)",
+              background: "radial-gradient(circle, rgba(186, 167, 126, 0.16) 0%, rgba(37, 35, 28, 0.05) 50%, transparent 70%)",
               filter: "blur(35px)",
             }}
           />
@@ -830,19 +830,19 @@ export default function Home() {
             <div
               className={`rounded-full border transition-all duration-200 ease-out flex items-center justify-center ${
                 isHoveringInteractive
-                  ? "w-12 h-12 border-[#2C3E50] bg-[#2C3E50]/10 shadow-[0_0_20px_rgba(44,62,80,0.3)] scale-110"
-                  : "w-8 h-8 border-[#C5A880] bg-[#C5A880]/10 shadow-[0_0_10px_rgba(197,168,128,0.3)]"
+                  ? "w-12 h-12 border-[#25231C] bg-[#25231C]/10 shadow-[0_0_20px_rgba(37,35,28,0.3)] scale-110"
+                  : "w-8 h-8 border-[#BAA77E] bg-[#BAA77E]/15 shadow-[0_0_10px_rgba(186,167,126,0.35)]"
               }`}
             >
               {isHoveringInteractive && (
-                <span className="h-1 w-1 rounded-full bg-[#2C3E50] animate-ping"></span>
+                <span className="h-1 w-1 rounded-full bg-[#25231C] animate-ping"></span>
               )}
             </div>
           </div>
 
           {/* Precision Core Spark Dot */}
           <div
-            className="fixed pointer-events-none z-[9999] hidden md:block w-1.5 h-1.5 rounded-full bg-[#2C3E50] shadow-[0_0_6px_#2C3E50] will-change-transform"
+            className="fixed pointer-events-none z-[9999] hidden md:block w-1.5 h-1.5 rounded-full bg-[#25231C] shadow-[0_0_6px_#25231C] will-change-transform"
             style={{
               left: `${mousePos.x}px`,
               top: `${mousePos.y}px`,
@@ -854,26 +854,26 @@ export default function Home() {
 
       {/* Toast Notification Alert */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-[100] px-5 py-3.5 rounded-2xl bg-[#0F172A] text-white font-medium text-xs sm:text-sm shadow-2xl border border-[#C5A880] flex items-center gap-3 animate-float-luxury">
-          <span className="material-symbols-outlined text-[#E5C590] text-base sm:text-lg">auto_awesome</span>
+        <div className="fixed bottom-6 right-6 z-[100] px-5 py-3.5 rounded-2xl bg-[#1C1A15] text-white font-medium text-xs sm:text-sm shadow-2xl border border-[#BAA77E] flex items-center gap-3 animate-float-luxury">
+          <span className="material-symbols-outlined text-[#E8DECA] text-base sm:text-lg">auto_awesome</span>
           <span>{toastMessage}</span>
         </div>
       )}
 
-      {/* Luxury Gold Progress Line */}
-      <div className="fixed top-0 left-0 right-0 h-1 bg-slate-200/80 z-[60] pointer-events-none">
+      {/* Luxury Khaki Gold Progress Line */}
+      <div className="fixed top-0 left-0 right-0 h-1 bg-[#DCD2C0]/60 z-[60] pointer-events-none">
         <div
-          className="h-full bg-gradient-to-r from-[#2C3E50] via-[#C5A880] to-[#9A7B56] shadow-sm transition-all duration-75"
+          className="h-full bg-gradient-to-r from-[#25231C] via-[#BAA77E] to-[#7D735C] shadow-sm transition-all duration-75"
           style={{ width: `${scrollProgress}%` }}
         />
       </div>
 
       {/* FLOATING CRYSTAL ISLAND HEADER */}
       <header className="fixed top-4 left-0 right-0 z-50 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto h-16 rounded-full bg-white/95 backdrop-blur-2xl border border-[#D5C2A5]/70 shadow-[0_10px_35px_rgba(44,62,80,0.06)] px-4 sm:px-6 flex items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto h-16 rounded-full bg-white/95 backdrop-blur-2xl border border-[#DCD2C0]/80 shadow-[0_10px_35px_rgba(37,35,28,0.06)] px-4 sm:px-6 flex items-center justify-between gap-4">
           {/* Identity Pill */}
           <a href="#overview" className="flex items-center gap-3 shrink-0 group">
-            <div className="relative h-10 w-10 shrink-0 rounded-full overflow-hidden border-2 border-[#C5A880] shadow-xs group-hover:scale-105 transition-transform">
+            <div className="relative h-10 w-10 shrink-0 rounded-full overflow-hidden border-2 border-[#BAA77E] shadow-xs group-hover:scale-105 transition-transform">
               <img
                 src="/profile/avatar.jpg"
                 alt="Ma. Faith B. Briones"
@@ -881,18 +881,18 @@ export default function Home() {
               />
             </div>
             <div className="flex flex-col">
-              <span className="font-serif text-sm font-bold text-[#0F172A] tracking-tight group-hover:text-[#9A7B56] transition-colors">
+              <span className="font-serif text-sm font-bold text-[#1C1A15] tracking-tight group-hover:text-[#7D735C] transition-colors">
                 Ma. Faith B. Briones
               </span>
-              <span className="text-[10px] text-[#9A7B56] font-bold tracking-widest uppercase flex items-center gap-1">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#C5A880] inline-block animate-ping"></span>
+              <span className="text-[10px] text-[#7D735C] font-bold tracking-widest uppercase flex items-center gap-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#BAA77E] inline-block animate-ping"></span>
                 BSA • CSE 80.24% • Fiduciary Atelier
               </span>
             </div>
           </a>
 
           {/* Nav Items */}
-          <nav className="hidden lg:flex items-center gap-1 text-xs font-semibold text-[#64748B]">
+          <nav className="hidden lg:flex items-center gap-1 text-xs font-semibold text-[#736B5E]">
             {[
               { id: "overview", label: "Folio" },
               { id: "pipeline", label: "Methodology" },
@@ -908,8 +908,8 @@ export default function Home() {
                 href={`#${item.id}`}
                 className={`px-3.5 py-1.5 rounded-full transition-all duration-300 ${
                   activeSection === item.id
-                    ? "bg-[#2C3E50] text-[#E5C590] font-bold shadow-xs border border-[#C5A880]/40"
-                    : "hover:text-[#0F172A] hover:bg-[#F5EBE1]/70"
+                    ? "bg-[#25231C] text-[#E8DECA] font-bold shadow-xs border border-[#BAA77E]/50"
+                    : "hover:text-[#1C1A15] hover:bg-[#EFE9DC]/80"
                 }`}
               >
                 {item.label}
@@ -921,16 +921,16 @@ export default function Home() {
           <div className="flex items-center gap-2.5 shrink-0">
             <a
               href="#contact"
-              className="hidden sm:inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#2C3E50] hover:bg-[#34495E] text-[#E5C590] text-xs font-bold shadow-md shadow-[#2C3E50]/20 hover:scale-105 transition-all border border-[#C5A880]/50"
+              className="hidden sm:inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#25231C] hover:bg-[#3B3628] text-[#E8DECA] text-xs font-bold shadow-md shadow-[#25231C]/20 hover:scale-105 transition-all border border-[#BAA77E]/60"
             >
-              <span className="material-symbols-outlined text-sm text-[#E5C590]">auto_awesome</span>
+              <span className="material-symbols-outlined text-sm text-[#E8DECA]">auto_awesome</span>
               <span>Private Retainer</span>
             </a>
 
             {/* Mobile Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-full bg-[#F5EBE1] text-[#2C3E50] hover:text-[#9A7B56] border border-[#D5C2A5]"
+              className="lg:hidden p-2 rounded-full bg-[#EFE9DC] text-[#25231C] hover:text-[#7D735C] border border-[#DCD2C0]"
               aria-label="Toggle navigation"
             >
               <span className="material-symbols-outlined text-xl">
@@ -942,7 +942,7 @@ export default function Home() {
 
         {/* Mobile Dropdown */}
         {mobileMenuOpen && (
-          <div className="lg:hidden max-w-6xl mx-auto mt-2 rounded-3xl bg-white/98 backdrop-blur-2xl border border-[#D5C2A5] p-4 shadow-xl space-y-1">
+          <div className="lg:hidden max-w-6xl mx-auto mt-2 rounded-3xl bg-white/98 backdrop-blur-2xl border border-[#DCD2C0] p-4 shadow-xl space-y-1">
             {[
               { id: "overview", label: "Executive Folio" },
               { id: "pipeline", label: "The Curated Methodology" },
@@ -957,31 +957,31 @@ export default function Home() {
                 key={item.id}
                 href={`#${item.id}`}
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-between px-4 py-2.5 rounded-2xl text-xs font-bold text-[#0F172A] hover:bg-[#F5EBE1] hover:text-[#9A7B56] transition-colors"
+                className="flex items-center justify-between px-4 py-2.5 rounded-2xl text-xs font-bold text-[#1C1A15] hover:bg-[#EFE9DC] hover:text-[#7D735C] transition-colors"
               >
                 <span>{item.label}</span>
-                <span className="material-symbols-outlined text-sm text-[#C5A880]">chevron_right</span>
+                <span className="material-symbols-outlined text-sm text-[#BAA77E]">chevron_right</span>
               </a>
             ))}
           </div>
         )}
       </header>
 
-      {/* HERO SECTION: DUAL-TONE LIGHT WITH DEEP LUXURY CONTRAST */}
+      {/* HERO SECTION: DUAL-TONE KHAKI WITH DEEP CONTRAST */}
       <section id="overview" className="relative pt-28 pb-16 md:pt-36 md:pb-24 px-4 sm:px-6 z-10">
         <div className="max-w-6xl mx-auto space-y-12">
           {/* Masthead Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#D5C2A5]/50 pb-4">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#D5C2A5]/70 shadow-xs text-xs font-medium text-[#0F172A]">
-              <span className="font-serif italic font-semibold text-[#9A7B56]">The Fiduciary Folio</span>
-              <span className="text-[#C5A880]">•</span>
-              <span className="text-[#64748B]">Andres Bonifacio College BSA 2004</span>
-              <span className="text-[#C5A880]">•</span>
-              <span className="text-[#2C3E50] font-bold">CSE Rating 80.24%</span>
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#DCD2C0]/70 pb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#DCD2C0] shadow-xs text-xs font-medium text-[#1C1A15]">
+              <span className="font-serif italic font-semibold text-[#7D735C]">The Fiduciary Folio</span>
+              <span className="text-[#BAA77E]">•</span>
+              <span className="text-[#736B5E]">Andres Bonifacio College BSA 2004</span>
+              <span className="text-[#BAA77E]">•</span>
+              <span className="text-[#25231C] font-bold">CSE Rating 80.24%</span>
             </div>
 
-            <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F5EBE1] text-[#9A7B56] border border-[#C5A880]/50 text-xs font-bold shadow-xs">
-              <span className="material-symbols-outlined text-sm text-[#9A7B56]">verified</span>
+            <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold shadow-xs">
+              <span className="material-symbols-outlined text-sm text-[#7D735C]">verified</span>
               <span>Available for Q3/Q4 2026 Private Retainers</span>
             </div>
           </div>
@@ -992,18 +992,18 @@ export default function Home() {
             <div className="lg:col-span-7 space-y-6">
               <Reveal>
                 <div className="space-y-4">
-                  <div className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#9A7B56] flex items-center gap-2">
-                    <span className="h-px w-6 bg-[#C5A880]"></span>
+                  <div className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#7D735C] flex items-center gap-2">
+                    <span className="h-px w-6 bg-[#BAA77E]"></span>
                     Fiduciary Controller • Senior Bookkeeper • Government Administrator
                   </div>
-                  <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl text-[#0F172A] tracking-tight leading-[1.12]">
-                    The Art of <em className="italic font-normal text-[#9A7B56]">Precision</em> & Sovereign Governance.
+                  <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl text-[#1C1A15] tracking-tight leading-[1.12]">
+                    The Art of <em className="italic font-normal text-[#7D735C]">Precision</em> & Sovereign Governance.
                   </h1>
                 </div>
               </Reveal>
 
               <Reveal delay={100}>
-                <p className="text-base sm:text-lg text-[#334155] font-normal leading-relaxed">
+                <p className="text-base sm:text-lg text-[#4A4437] font-normal leading-relaxed">
                   <strong>Ma. Faith Batilona Briones, BSA, CSE</strong> orchestrates over <strong>20 years</strong> of double-entry General Ledger mastery with <strong>12+ years of Social Security System (SSS)</strong> public administration. Delivering immaculate bank reconciliations, ISO 9001 microfinance compliance, and boardroom-grade financial stewardship.
                 </p>
               </Reveal>
@@ -1013,25 +1013,25 @@ export default function Home() {
                 <div className="flex flex-wrap items-center gap-3.5 pt-2">
                   <a
                     href="#pipeline"
-                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#2C3E50] hover:bg-[#1E293B] text-[#E5C590] text-sm font-bold shadow-lg shadow-[#2C3E50]/20 hover:scale-[1.02] transition-all border border-[#C5A880]/60"
+                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#25231C] hover:bg-[#181712] text-[#E8DECA] text-sm font-bold shadow-lg shadow-[#25231C]/25 hover:scale-[1.02] transition-all border border-[#BAA77E]/70"
                   >
-                    <span className="material-symbols-outlined text-lg text-[#E5C590]">spa</span>
+                    <span className="material-symbols-outlined text-lg text-[#E8DECA]">spa</span>
                     <span>Explore The Methodology</span>
                   </a>
 
                   <a
                     href="#dossier"
-                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white hover:bg-[#F5EBE1] text-[#0F172A] text-sm font-bold border border-[#D5C2A5] shadow-xs transition-all"
+                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white hover:bg-[#EFE9DC] text-[#1C1A15] text-sm font-bold border border-[#DCD2C0] shadow-xs transition-all"
                   >
-                    <span className="material-symbols-outlined text-lg text-[#9A7B56]">history_edu</span>
+                    <span className="material-symbols-outlined text-lg text-[#7D735C]">history_edu</span>
                     <span>Statutory Archive & PDFs</span>
                   </a>
 
                   <a
                     href="#estimator"
-                    className="inline-flex items-center gap-2 px-5 py-3.5 rounded-full bg-[#F5EBE1]/80 hover:bg-[#F5EBE1] text-[#9A7B56] text-sm font-bold border border-[#C5A880]/60 shadow-xs transition-all"
+                    className="inline-flex items-center gap-2 px-5 py-3.5 rounded-full bg-[#EFE9DC]/90 hover:bg-[#EFE9DC] text-[#7D735C] text-sm font-bold border border-[#BAA77E]/60 shadow-xs transition-all"
                   >
-                    <span className="material-symbols-outlined text-lg text-[#9A7B56]">calculate</span>
+                    <span className="material-symbols-outlined text-lg text-[#7D735C]">calculate</span>
                     <span>Retainer Concierge</span>
                   </a>
                 </div>
@@ -1039,34 +1039,34 @@ export default function Home() {
 
               {/* Trust Badges */}
               <Reveal delay={300}>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-5 border-t border-[#D5C2A5]/50">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-5 border-t border-[#DCD2C0]/70">
                   <div className="flex items-center gap-2.5">
-                    <span className="h-8 w-8 rounded-full bg-[#F5EBE1] text-[#9A7B56] flex items-center justify-center border border-[#C5A880]/40">
+                    <span className="h-8 w-8 rounded-full bg-[#EFE9DC] text-[#7D735C] flex items-center justify-center border border-[#BAA77E]/50">
                       <span className="material-symbols-outlined text-base">verified</span>
                     </span>
                     <div>
-                      <div className="text-xs font-bold text-[#0F172A]">100% On-Time</div>
-                      <div className="text-[11px] text-[#64748B]">Statutory SSS & Tax</div>
+                      <div className="text-xs font-bold text-[#1C1A15]">100% On-Time</div>
+                      <div className="text-[11px] text-[#736B5E]">Statutory SSS & Tax</div>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2.5">
-                    <span className="h-8 w-8 rounded-full bg-[#F5EBE1] text-[#9A7B56] flex items-center justify-center border border-[#C5A880]/40">
+                    <span className="h-8 w-8 rounded-full bg-[#EFE9DC] text-[#7D735C] flex items-center justify-center border border-[#BAA77E]/50">
                       <span className="material-symbols-outlined text-base">account_balance</span>
                     </span>
                     <div>
-                      <div className="text-xs font-bold text-[#0F172A]">ISO 9001 Tested</div>
-                      <div className="text-[11px] text-[#64748B]">TSKI Microfinance</div>
+                      <div className="text-xs font-bold text-[#1C1A15]">ISO 9001 Tested</div>
+                      <div className="text-[11px] text-[#736B5E]">TSKI Microfinance</div>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2.5 col-span-2 sm:col-span-1">
-                    <span className="h-8 w-8 rounded-full bg-[#F5EBE1] text-[#9A7B56] flex items-center justify-center border border-[#C5A880]/40">
+                    <span className="h-8 w-8 rounded-full bg-[#EFE9DC] text-[#7D735C] flex items-center justify-center border border-[#BAA77E]/50">
                       <span className="material-symbols-outlined text-base">military_tech</span>
                     </span>
                     <div>
-                      <div className="text-xs font-bold text-[#0F172A]">2023 Awardee</div>
-                      <div className="text-[11px] text-[#64748B]">Best Customer Service</div>
+                      <div className="text-xs font-bold text-[#1C1A15]">2023 Awardee</div>
+                      <div className="text-[11px] text-[#736B5E]">Best Customer Service</div>
                     </div>
                   </div>
                 </div>
@@ -1078,9 +1078,9 @@ export default function Home() {
               <Reveal direction="scale" delay={150}>
                 <div className="relative mx-auto max-w-sm lg:max-w-none">
                   {/* Outer Frame with Gold Leaf Border */}
-                  <div className="relative rounded-[2.5rem] p-3.5 bg-white border border-[#C5A880]/70 shadow-[0_25px_60px_rgba(44,62,80,0.1)]">
+                  <div className="relative rounded-[2.5rem] p-3.5 bg-white border border-[#BAA77E]/80 shadow-[0_25px_60px_rgba(37,35,28,0.1)]">
                     {/* Natural 3:4 Portrait Image Container */}
-                    <div className="relative aspect-[3/4] w-full rounded-[2rem] overflow-hidden bg-slate-100 shadow-inner">
+                    <div className="relative aspect-[3/4] w-full rounded-[2rem] overflow-hidden bg-[#EFE9DC] shadow-inner">
                       <img
                         src="/profile/profile.jpg"
                         alt="Ma. Faith Batilona Briones, BSA, CSE"
@@ -1088,32 +1088,32 @@ export default function Home() {
                       />
 
                       {/* Top & Bottom Gradient Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/90 via-transparent to-transparent pointer-events-none"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#181712]/90 via-transparent to-transparent pointer-events-none"></div>
 
                       {/* Floating Trust Pills Inside Image */}
                       <div className="absolute bottom-5 left-5 right-5 text-white space-y-1.5">
-                        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#2C3E50]/90 backdrop-blur-md text-[11px] font-bold border border-[#C5A880]/60 shadow-xs text-[#E5C590]">
+                        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#25231C]/90 backdrop-blur-md text-[11px] font-bold border border-[#BAA77E]/70 shadow-xs text-[#E8DECA]">
                           <span className="material-symbols-outlined text-sm">workspace_premium</span>
                           <span>CSE Professional 80.24% • Verified 2025</span>
                         </div>
                         <div className="font-serif text-lg font-bold text-white tracking-tight">
                           Ma. Faith Batilona Briones, BSA, CSE
                         </div>
-                        <div className="text-xs text-[#CBD5E1] font-medium">
+                        <div className="text-xs text-[#D8CEBC] font-medium">
                           Bachelor of Science in Accountancy • Andres Bonifacio College
                         </div>
                       </div>
                     </div>
 
                     {/* Floating Luxury Seal (Top-Right) */}
-                    <div className="absolute -top-3.5 -right-3.5 px-4 py-2 rounded-2xl bg-[#0F172A] text-[#E5C590] border border-[#C5A880] shadow-xl flex items-center gap-2 animate-float-luxury">
-                      <span className="h-2 w-2 rounded-full bg-[#E5C590]"></span>
+                    <div className="absolute -top-3.5 -right-3.5 px-4 py-2 rounded-2xl bg-[#181712] text-[#E8DECA] border border-[#BAA77E] shadow-xl flex items-center gap-2 animate-float-luxury">
+                      <span className="h-2 w-2 rounded-full bg-[#E8DECA]"></span>
                       <span className="font-serif text-xs font-bold">20+ Yrs Practice</span>
                     </div>
 
                     {/* Floating Luxury Seal (Bottom-Left) */}
-                    <div className="absolute -bottom-3.5 -left-3.5 px-4 py-2 rounded-2xl bg-white text-[#0F172A] border border-[#C5A880] shadow-xl flex items-center gap-2 animate-float-luxury" style={{ animationDelay: "2.5s" }}>
-                      <span className="material-symbols-outlined text-[#9A7B56] text-sm">shield</span>
+                    <div className="absolute -bottom-3.5 -left-3.5 px-4 py-2 rounded-2xl bg-white text-[#1C1A15] border border-[#BAA77E] shadow-xl flex items-center gap-2 animate-float-luxury" style={{ animationDelay: "2.5s" }}>
+                      <span className="material-symbols-outlined text-[#7D735C] text-sm">shield</span>
                       <span className="font-serif text-xs font-bold">12+ Yrs Public Service</span>
                     </div>
                   </div>
@@ -1161,19 +1161,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* THE BESPOKE METHODOLOGY (DEEP LUXURY ATELIER STATEMENT BREAK) */}
-      <section id="pipeline" className="py-24 px-4 sm:px-6 bg-gradient-to-b from-[#131D28] via-[#0E1620] to-[#131D28] text-white border-y border-[#C5A880]/30 relative shadow-2xl">
+      {/* THE BESPOKE METHODOLOGY (HARMONIOUS KHAKI ATELIER) */}
+      <section id="pipeline" className="py-20 px-4 sm:px-6 bg-white/85 border-y border-[#DCD2C0]/70 relative">
         <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
             <div className="text-center max-w-3xl mx-auto space-y-3">
-              <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#16222F] text-[#E5C590] border border-[#C5A880]/40 text-xs font-bold">
+              <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold">
                 <span className="material-symbols-outlined text-sm">spa</span>
                 <span>The Curated Methodology</span>
               </div>
-              <h2 className="font-serif text-3xl sm:text-4xl text-white tracking-tight">
-                How Engagements Deliver <em className="italic font-normal text-[#E5C590]">Zero-Variance</em> Balance.
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
+                How Engagements Deliver <em className="italic font-normal text-[#7D735C]">Zero-Variance</em> Balance.
               </h2>
-              <p className="text-sm sm:text-base text-[#94A3B8]">
+              <p className="text-sm sm:text-base text-[#736B5E]">
                 Click through each phase of the controllership atelier below to inspect deliverables, turnaround cadences, and statutory safeguards.
               </p>
             </div>
@@ -1187,73 +1187,79 @@ export default function Home() {
               { id: "recon" as PipelineStage, step: "03", label: "Cashflow Symphony", icon: "sync_alt" },
               { id: "close" as PipelineStage, step: "04", label: "The Month-End Close", icon: "query_stats" },
               { id: "compliance" as PipelineStage, step: "05", label: "Statutory Defense", icon: "verified" },
-            ].map((p) => (
-              <button
-                key={p.id}
-                onClick={() => setActivePipelineStage(p.id)}
-                className={`flex items-center gap-2.5 px-5 py-3 rounded-full text-xs sm:text-sm font-bold transition-all ${
-                  activePipelineStage === p.id
-                    ? "bg-gradient-to-r from-[#C5A880] to-[#E5C590] text-[#0B1118] shadow-lg shadow-[#C5A880]/20 scale-105 border border-[#E5C590]"
-                    : "bg-[#1A2634] text-[#CBD5E1] border border-[#C5A880]/30 hover:bg-[#223344] hover:text-white"
-                }`}
-              >
-                <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
-                  activePipelineStage === p.id ? "bg-[#0B1118] text-[#E5C590]" : "bg-[#131D28] text-[#94A3B8]"
-                }`}>
-                  {p.step}
-                </span>
-                <span className="material-symbols-outlined text-base">{p.icon}</span>
-                <span>{p.label}</span>
-              </button>
-            ))}
+            ].map((p) => {
+              const isActive = activePipelineStage === p.id;
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => setActivePipelineStage(p.id)}
+                  className={`flex items-center gap-2.5 px-5 py-3 rounded-full text-xs sm:text-sm font-bold transition-all ${
+                    isActive
+                      ? "bg-[#25231C] text-[#E8DECA] shadow-lg shadow-[#25231C]/20 scale-105 border border-[#BAA77E]"
+                      : "bg-white text-[#736B5E] border border-[#DCD2C0] hover:bg-[#EFE9DC] hover:text-[#1C1A15]"
+                  }`}
+                >
+                  <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
+                    isActive ? "bg-[#BAA77E] text-[#1C1A15]" : "bg-[#EFE9DC] text-[#7D735C]"
+                  }`}>
+                    {p.step}
+                  </span>
+                  <span className="material-symbols-outlined text-base">{p.icon}</span>
+                  <span>{p.label}</span>
+                </button>
+              );
+            })}
           </div>
 
           {/* Dynamic Pipeline Content Display */}
           <Reveal key={activePipelineStage} direction="scale">
-            <div className="dark-luxury-card rounded-[2.5rem] p-6 sm:p-10 bg-[#16222F]">
+            <div className="luminous-pearl-card rounded-[2.5rem] p-6 sm:p-10 bg-white border border-[#DCD2C0] shadow-xl">
               {activePipelineStage === "coa" && (
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                   <div className="lg:col-span-7 space-y-4">
-                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#1A2634] text-[#E5C590] text-xs font-bold border border-[#C5A880]/40">
+                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
                       <span>Phase 01: System & Account Architecture</span>
                     </div>
-                    <h3 className="font-serif text-2xl sm:text-3xl text-white">
+                    <h3 className="font-serif text-2xl sm:text-3xl text-[#1C1A15]">
                       Standardized Chart of Accounts (COA) & ERP Setup
                     </h3>
-                    <p className="text-[#CBD5E1] text-sm leading-relaxed">
+                    <p className="text-[#4A4437] text-sm leading-relaxed">
                       Custom structural alignment with GAAP and CDA standards. Eliminates duplicate ledgers, sets up departmental cost centers, and maps accounting rules into QuickBooks or Xero.
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                      <div className="p-4 rounded-2xl bg-[#1A2634] border border-[#C5A880]/30">
-                        <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                          <span className="material-symbols-outlined text-[#E5C590] text-base">check_circle</span>
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">check_circle</span>
                           Key Deliverable
                         </div>
-                        <div className="text-xs text-[#CBD5E1] mt-1">Multi-tier COA Taxonomy & Class Mapping Matrix</div>
+                        <div className="text-xs text-[#736B5E] mt-1">Multi-tier COA Taxonomy & Class Mapping Matrix</div>
                       </div>
-                      <div className="p-4 rounded-2xl bg-[#1A2634] border border-[#C5A880]/30">
-                        <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                          <span className="material-symbols-outlined text-[#E5C590] text-base">speed</span>
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">speed</span>
                           Turnaround
                         </div>
-                        <div className="text-xs text-[#CBD5E1] mt-1">1–3 Days Initial Onboarding Deployment</div>
+                        <div className="text-xs text-[#736B5E] mt-1">1–3 Days Initial Onboarding Deployment</div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="lg:col-span-5 p-6 rounded-3xl bg-[#131D28] border border-[#C5A880]/40 space-y-3">
-                    <div className="font-serif text-xs font-bold text-[#E5C590] uppercase tracking-wider">Fiduciary Safeguard</div>
-                    <ul className="space-y-2.5 text-xs text-[#CBD5E1]">
+                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#25231C] text-white border border-[#BAA77E]/50 shadow-xl space-y-3">
+                    <div className="font-serif text-xs font-bold text-[#E8DECA] uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-[#BAA77E]">shield</span>
+                      <span>Fiduciary Safeguard</span>
+                    </div>
+                    <ul className="space-y-2.5 text-xs text-[#D8CEBC]">
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E5C590] text-sm shrink-0">task_alt</span>
+                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
                         <span>Zero inter-company ledger mismatches</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E5C590] text-sm shrink-0">task_alt</span>
+                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
                         <span>Standardized naming conventions for multi-currency</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E5C590] text-sm shrink-0">task_alt</span>
+                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
                         <span>Automated bank feed synchronization rules</span>
                       </li>
                     </ul>
@@ -1264,46 +1270,49 @@ export default function Home() {
               {activePipelineStage === "vouchers" && (
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                   <div className="lg:col-span-7 space-y-4">
-                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#1A2634] text-[#E5C590] text-xs font-bold border border-[#C5A880]/40">
+                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
                       <span>Phase 02: Transaction & Voucher Hygiene</span>
                     </div>
-                    <h3 className="font-serif text-2xl sm:text-3xl text-white">
+                    <h3 className="font-serif text-2xl sm:text-3xl text-[#1C1A15]">
                       Disbursement Vouchers, Receipts & PIMS Procurement
                     </h3>
-                    <p className="text-[#CBD5E1] text-sm leading-relaxed">
+                    <p className="text-[#4A4437] text-sm leading-relaxed">
                       Leveraging 12+ years of SSS disbursement voucher preparation and TSKI microfinance cash registers. Every expense has complete statutory invoice attachments and dual-authorization checks.
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                      <div className="p-4 rounded-2xl bg-[#1A2634] border border-[#C5A880]/30">
-                        <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                          <span className="material-symbols-outlined text-[#E5C590] text-base">check_circle</span>
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">check_circle</span>
                           Key Deliverable
                         </div>
-                        <div className="text-xs text-[#CBD5E1] mt-1">Audit-Ready Voucher Registry & Invoice Digital Archive</div>
+                        <div className="text-xs text-[#736B5E] mt-1">Audit-Ready Voucher Registry & Invoice Digital Archive</div>
                       </div>
-                      <div className="p-4 rounded-2xl bg-[#1A2634] border border-[#C5A880]/30">
-                        <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                          <span className="material-symbols-outlined text-[#E5C590] text-base">speed</span>
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">speed</span>
                           Turnaround
                         </div>
-                        <div className="text-xs text-[#CBD5E1] mt-1">Daily / 24-Hour Processing Cycle</div>
+                        <div className="text-xs text-[#736B5E] mt-1">Daily / 24-Hour Processing Cycle</div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="lg:col-span-5 p-6 rounded-3xl bg-[#131D28] border border-[#C5A880]/40 space-y-3">
-                    <div className="font-serif text-xs font-bold text-[#E5C590] uppercase tracking-wider">Fiduciary Safeguard</div>
-                    <ul className="space-y-2.5 text-xs text-[#CBD5E1]">
+                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#25231C] text-white border border-[#BAA77E]/50 shadow-xl space-y-3">
+                    <div className="font-serif text-xs font-bold text-[#E8DECA] uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-[#BAA77E]">shield</span>
+                      <span>Fiduciary Safeguard</span>
+                    </div>
+                    <ul className="space-y-2.5 text-xs text-[#D8CEBC]">
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E5C590] text-sm shrink-0">task_alt</span>
+                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
                         <span>Zero unauthorized disbursements or orphan receipts</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E5C590] text-sm shrink-0">task_alt</span>
+                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
                         <span>PIMS and procurement asset tag tracing</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E5C590] text-sm shrink-0">task_alt</span>
+                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
                         <span>Complete tax withholding documentation (BIR Form 2307)</span>
                       </li>
                     </ul>
@@ -1314,46 +1323,49 @@ export default function Home() {
               {activePipelineStage === "recon" && (
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                   <div className="lg:col-span-7 space-y-4">
-                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#1A2634] text-[#E5C590] text-xs font-bold border border-[#C5A880]/40">
+                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
                       <span>Phase 03: Cash & Bank Reconciliation</span>
                     </div>
-                    <h3 className="font-serif text-2xl sm:text-3xl text-white">
+                    <h3 className="font-serif text-2xl sm:text-3xl text-[#1C1A15]">
                       Daily Bank Feeds, Merchant Accounts & Loan Portfolios
                     </h3>
-                    <p className="text-[#CBD5E1] text-sm leading-relaxed">
+                    <p className="text-[#4A4437] text-sm leading-relaxed">
                       Continuous bank-to-ledger matching for multi-bank accounts, Stripe/PayPal feeds, and microfinance loan amortizations. Outstanding checks and deposits in transit are resolved immediately.
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                      <div className="p-4 rounded-2xl bg-[#1A2634] border border-[#C5A880]/30">
-                        <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                          <span className="material-symbols-outlined text-[#E5C590] text-base">check_circle</span>
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">check_circle</span>
                           Key Deliverable
                         </div>
-                        <div className="text-xs text-[#CBD5E1] mt-1">Multi-Bank Reconciliation Schedules & Variance Log</div>
+                        <div className="text-xs text-[#736B5E] mt-1">Multi-Bank Reconciliation Schedules & Variance Log</div>
                       </div>
-                      <div className="p-4 rounded-2xl bg-[#1A2634] border border-[#C5A880]/30">
-                        <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                          <span className="material-symbols-outlined text-[#E5C590] text-base">speed</span>
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">speed</span>
                           Turnaround
                         </div>
-                        <div className="text-xs text-[#CBD5E1] mt-1">Daily / Weekly Real-Time Balance Match</div>
+                        <div className="text-xs text-[#736B5E] mt-1">Daily / Weekly Real-Time Balance Match</div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="lg:col-span-5 p-6 rounded-3xl bg-[#131D28] border border-[#C5A880]/40 space-y-3">
-                    <div className="font-serif text-xs font-bold text-[#E5C590] uppercase tracking-wider">Fiduciary Safeguard</div>
-                    <ul className="space-y-2.5 text-xs text-[#CBD5E1]">
+                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#25231C] text-white border border-[#BAA77E]/50 shadow-xl space-y-3">
+                    <div className="font-serif text-xs font-bold text-[#E8DECA] uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-[#BAA77E]">shield</span>
+                      <span>Fiduciary Safeguard</span>
+                    </div>
+                    <ul className="space-y-2.5 text-xs text-[#D8CEBC]">
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E5C590] text-sm shrink-0">task_alt</span>
+                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
                         <span>0% undetected bank fee or payment discrepancies</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E5C590] text-sm shrink-0">task_alt</span>
+                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
                         <span>Immediate identification of bounced or dishonored checks</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E5C590] text-sm shrink-0">task_alt</span>
+                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
                         <span>Automated reconciliation rules for 90%+ daily speed</span>
                       </li>
                     </ul>
@@ -1364,46 +1376,49 @@ export default function Home() {
               {activePipelineStage === "close" && (
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                   <div className="lg:col-span-7 space-y-4">
-                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#1A2634] text-[#E5C590] text-xs font-bold border border-[#C5A880]/40">
+                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
                       <span>Phase 04: Month-End Close & Financial Reporting</span>
                     </div>
-                    <h3 className="font-serif text-2xl sm:text-3xl text-white">
+                    <h3 className="font-serif text-2xl sm:text-3xl text-[#1C1A15]">
                       Trial Balance, Accruals, P&L & Balance Sheet Package
                     </h3>
-                    <p className="text-[#CBD5E1] text-sm leading-relaxed">
+                    <p className="text-[#4A4437] text-sm leading-relaxed">
                       Rigorous month-end close including prepaid expense amortization, fixed asset depreciation schedules, and variance analysis against monthly operational budgets.
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                      <div className="p-4 rounded-2xl bg-[#1A2634] border border-[#C5A880]/30">
-                        <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                          <span className="material-symbols-outlined text-[#E5C590] text-base">check_circle</span>
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">check_circle</span>
                           Key Deliverable
                         </div>
-                        <div className="text-xs text-[#CBD5E1] mt-1">Executive Monthly Financial Pack (P&L, BS, Cash Flow)</div>
+                        <div className="text-xs text-[#736B5E] mt-1">Executive Monthly Financial Pack (P&L, BS, Cash Flow)</div>
                       </div>
-                      <div className="p-4 rounded-2xl bg-[#1A2634] border border-[#C5A880]/30">
-                        <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                          <span className="material-symbols-outlined text-[#E5C590] text-base">speed</span>
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">speed</span>
                           Turnaround
                         </div>
-                        <div className="text-xs text-[#CBD5E1] mt-1">T+3 to T+5 Days Post-Month Close</div>
+                        <div className="text-xs text-[#736B5E] mt-1">T+3 to T+5 Days Post-Month Close</div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="lg:col-span-5 p-6 rounded-3xl bg-[#131D28] border border-[#C5A880]/40 space-y-3">
-                    <div className="font-serif text-xs font-bold text-[#E5C590] uppercase tracking-wider">Fiduciary Safeguard</div>
-                    <ul className="space-y-2.5 text-xs text-[#CBD5E1]">
+                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#25231C] text-white border border-[#BAA77E]/50 shadow-xl space-y-3">
+                    <div className="font-serif text-xs font-bold text-[#E8DECA] uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-[#BAA77E]">shield</span>
+                      <span>Fiduciary Safeguard</span>
+                    </div>
+                    <ul className="space-y-2.5 text-xs text-[#D8CEBC]">
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E5C590] text-sm shrink-0">task_alt</span>
+                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
                         <span>100% Trial Balance mathematical tie-out</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E5C590] text-sm shrink-0">task_alt</span>
+                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
                         <span>Accrual schedules matching GAAP revenue recognition</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E5C590] text-sm shrink-0">task_alt</span>
+                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
                         <span>Clear executive narrative highlighting cost anomalies</span>
                       </li>
                     </ul>
@@ -1414,46 +1429,49 @@ export default function Home() {
               {activePipelineStage === "compliance" && (
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                   <div className="lg:col-span-7 space-y-4">
-                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#1A2634] text-[#E5C590] text-xs font-bold border border-[#C5A880]/40">
+                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
                       <span>Phase 05: Statutory Compliance & Audit Defense</span>
                     </div>
-                    <h3 className="font-serif text-2xl sm:text-3xl text-white">
+                    <h3 className="font-serif text-2xl sm:text-3xl text-[#1C1A15]">
                       SSS Remittances, CDA Cooperative Filings & Audit Readiness
                     </h3>
-                    <p className="text-[#CBD5E1] text-sm leading-relaxed">
+                    <p className="text-[#4A4437] text-sm leading-relaxed">
                       Direct integration with statutory portals (SSS, PhilHealth, Pag-IBIG, CDA). Prepares comprehensive audit workpapers and supporting schedules so external audits conclude with zero adjustments.
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                      <div className="p-4 rounded-2xl bg-[#1A2634] border border-[#C5A880]/30">
-                        <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                          <span className="material-symbols-outlined text-[#E5C590] text-base">check_circle</span>
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">check_circle</span>
                           Key Deliverable
                         </div>
-                        <div className="text-xs text-[#CBD5E1] mt-1">Audit Workpapers, Statutory Remittance Reports & Schedules</div>
+                        <div className="text-xs text-[#736B5E] mt-1">Audit Workpapers, Statutory Remittance Reports & Schedules</div>
                       </div>
-                      <div className="p-4 rounded-2xl bg-[#1A2634] border border-[#C5A880]/30">
-                        <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                          <span className="material-symbols-outlined text-[#E5C590] text-base">speed</span>
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">speed</span>
                           Turnaround
                         </div>
-                        <div className="text-xs text-[#CBD5E1] mt-1">100% On-Time Before Statutory Deadlines</div>
+                        <div className="text-xs text-[#736B5E] mt-1">100% On-Time Before Statutory Deadlines</div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="lg:col-span-5 p-6 rounded-3xl bg-[#131D28] border border-[#C5A880]/40 space-y-3">
-                    <div className="font-serif text-xs font-bold text-[#E5C590] uppercase tracking-wider">Fiduciary Safeguard</div>
-                    <ul className="space-y-2.5 text-xs text-[#CBD5E1]">
+                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#25231C] text-white border border-[#BAA77E]/50 shadow-xl space-y-3">
+                    <div className="font-serif text-xs font-bold text-[#E8DECA] uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-[#BAA77E]">shield</span>
+                      <span>Fiduciary Safeguard</span>
+                    </div>
+                    <ul className="space-y-2.5 text-xs text-[#D8CEBC]">
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E5C590] text-sm shrink-0">task_alt</span>
+                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
                         <span>Zero penalty guarantee for statutory deadlines</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E5C590] text-sm shrink-0">task_alt</span>
+                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
                         <span>Full compliance with Republic Act 10173 (Data Privacy)</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="material-symbols-outlined text-[#E5C590] text-sm shrink-0">task_alt</span>
+                        <span className="material-symbols-outlined text-[#E8DECA] text-sm shrink-0">task_alt</span>
                         <span>Official signing by verified BSA & CSE Professional</span>
                       </li>
                     </ul>
@@ -1471,20 +1489,20 @@ export default function Home() {
           <Reveal>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#F5EBE1] text-[#9A7B56] border border-[#C5A880]/50 text-xs font-bold mb-2">
+                <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold mb-2">
                   <span className="material-symbols-outlined text-sm">history_edu</span>
                   <span>Verified 20-Year Employment Provenance</span>
                 </div>
-                <h2 className="font-serif text-3xl sm:text-4xl text-[#0F172A] tracking-tight">
+                <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
                   Career Provenance & Public Record
                 </h2>
-                <p className="text-sm text-[#64748B] mt-1">
+                <p className="text-sm text-[#736B5E] mt-1">
                   Cross-referenced with CSC Form 212 and official Certificates of Employment.
                 </p>
               </div>
 
               {/* Filter Tabs */}
-              <div className="flex items-center gap-2 p-1.5 rounded-full bg-white border border-[#D5C2A5] shadow-xs">
+              <div className="flex items-center gap-2 p-1.5 rounded-full bg-white border border-[#DCD2C0] shadow-xs">
                 {[
                   { id: "all" as CareerCategory, label: "All Engagements (5)" },
                   { id: "gov" as CareerCategory, label: "SSS Public Service" },
@@ -1495,8 +1513,8 @@ export default function Home() {
                     onClick={() => setSelectedCareerCategory(tab.id)}
                     className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
                       selectedCareerCategory === tab.id
-                        ? "bg-[#2C3E50] text-[#E5C590] shadow-xs"
-                        : "text-[#64748B] hover:text-[#0F172A] hover:bg-[#F5EBE1]"
+                        ? "bg-[#25231C] text-[#E8DECA] shadow-xs font-bold"
+                        : "text-[#736B5E] hover:text-[#1C1A15] hover:bg-[#EFE9DC]"
                     }`}
                   >
                     {tab.label}
@@ -1515,8 +1533,8 @@ export default function Home() {
                   <div
                     className={`rounded-[2rem] border transition-all duration-300 bg-white ${
                       isExpanded
-                        ? "border-[#C5A880] shadow-md ring-2 ring-[#C5A880]/20"
-                        : "border-[#D5C2A5]/70 hover:border-[#C5A880] shadow-xs"
+                        ? "border-[#BAA77E] shadow-md ring-2 ring-[#BAA77E]/25"
+                        : "border-[#DCD2C0]/80 hover:border-[#BAA77E] shadow-xs"
                     }`}
                   >
                     {/* Header Row */}
@@ -1527,14 +1545,14 @@ export default function Home() {
                       <div className="space-y-1.5">
                         <div className="flex flex-wrap items-center gap-2">
                           <span
-                            className="px-3 py-0.5 rounded-full text-[11px] font-extrabold border bg-[#F5EBE1] text-[#9A7B56] border-[#C5A880]/50"
+                            className="px-3 py-0.5 rounded-full text-[11px] font-extrabold border bg-[#EFE9DC] text-[#7D735C] border-[#BAA77E]/60"
                           >
                             {role.badge}
                           </span>
-                          <span className="text-xs text-[#64748B] font-semibold">{role.period}</span>
+                          <span className="text-xs text-[#736B5E] font-semibold">{role.period}</span>
                         </div>
-                        <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0F172A]">{role.role}</h3>
-                        <div className="text-xs text-[#9A7B56] font-bold flex items-center gap-1">
+                        <h3 className="font-serif text-lg sm:text-xl font-bold text-[#1C1A15]">{role.role}</h3>
+                        <div className="text-xs text-[#7D735C] font-bold flex items-center gap-1">
                           <span className="material-symbols-outlined text-sm">location_on</span>
                           <span>
                             {role.organization} • {role.location}
@@ -1543,14 +1561,14 @@ export default function Home() {
                       </div>
 
                       <div className="flex items-center gap-3 shrink-0">
-                        <span className="text-xs font-bold text-[#64748B] hidden sm:inline">
+                        <span className="text-xs font-bold text-[#736B5E] hidden sm:inline">
                           {isExpanded ? "Collapse Record" : "View Breakdown"}
                         </span>
                         <div
                           className={`h-9 w-9 rounded-full flex items-center justify-center border transition-all ${
                             isExpanded
-                              ? "bg-[#2C3E50] text-[#E5C590] border-[#2C3E50] rotate-180"
-                              : "bg-[#F5EBE1] text-[#2C3E50] border-[#D5C2A5]"
+                              ? "bg-[#25231C] text-[#E8DECA] border-[#25231C] rotate-180"
+                              : "bg-[#EFE9DC] text-[#25231C] border-[#DCD2C0]"
                           }`}
                         >
                           <span className="material-symbols-outlined text-lg">expand_more</span>
@@ -1560,34 +1578,34 @@ export default function Home() {
 
                     {/* Expandable Body */}
                     {isExpanded && (
-                      <div className="px-6 pb-6 pt-2 border-t border-[#F5EBE1] space-y-4 text-sm text-[#334155] animate-fadeIn">
-                        <p className="leading-relaxed bg-[#F8FAFC] p-4 rounded-2xl border border-[#D5C2A5]/50 text-[#0F172A]">
+                      <div className="px-6 pb-6 pt-2 border-t border-[#EFE9DC] space-y-4 text-sm text-[#4A4437] animate-fadeIn">
+                        <p className="leading-relaxed bg-[#F7F4EE] p-4 rounded-2xl border border-[#DCD2C0]/60 text-[#1C1A15]">
                           {role.summary}
                         </p>
 
                         <div className="space-y-2">
-                          <div className="font-serif text-xs font-bold uppercase tracking-wider text-[#0F172A] flex items-center gap-1.5">
-                            <span className="material-symbols-outlined text-[#9A7B56] text-sm">task_alt</span>
+                          <div className="font-serif text-xs font-bold uppercase tracking-wider text-[#1C1A15] flex items-center gap-1.5">
+                            <span className="material-symbols-outlined text-[#7D735C] text-sm">task_alt</span>
                             <span>Key Duties & Verified Contributions</span>
                           </div>
                           <ul className="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs">
                             {role.highlights.map((h, i) => (
                               <li
                                 key={i}
-                                className="flex items-start gap-2 p-3 rounded-xl bg-[#F8FAFC] border border-[#D5C2A5]/40"
+                                className="flex items-start gap-2 p-3 rounded-xl bg-[#F7F4EE] border border-[#DCD2C0]/50"
                               >
-                                <span className="h-1.5 w-1.5 rounded-full bg-[#C5A880] mt-1.5 shrink-0"></span>
-                                <span className="text-[#334155]">{h}</span>
+                                <span className="h-1.5 w-1.5 rounded-full bg-[#BAA77E] mt-1.5 shrink-0"></span>
+                                <span className="text-[#4A4437]">{h}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
 
                         {/* Supervisory Verification & Tags */}
-                        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#D5C2A5]/40">
+                        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#DCD2C0]/50">
                           {role.supervisors && (
-                            <div className="text-xs text-[#64748B]">
-                              <span className="font-bold text-[#0F172A]">Official Signatories:</span>{" "}
+                            <div className="text-xs text-[#736B5E]">
+                              <span className="font-bold text-[#1C1A15]">Official Signatories:</span>{" "}
                               {role.supervisors}
                             </div>
                           )}
@@ -1596,7 +1614,7 @@ export default function Home() {
                             {role.tags.map((t, idx) => (
                               <span
                                 key={idx}
-                                className="px-3 py-1 rounded-full bg-[#F5EBE1] text-[#9A7B56] font-semibold text-[11px] border border-[#C5A880]/40"
+                                className="px-3 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] font-semibold text-[11px] border border-[#BAA77E]/50"
                               >
                                 {t}
                               </span>
@@ -1613,26 +1631,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STATUTORY ARCHIVE & SIGNED PDFS (LUMINOUS WITH GOLD REFINEMENT) */}
-      <section id="dossier" className="py-20 px-4 sm:px-6 bg-white/85 border-y border-[#D5C2A5]/50 relative">
+      {/* STATUTORY ARCHIVE & SIGNED PDFS (LUMINOUS KHAKI REFINEMENT) */}
+      <section id="dossier" className="py-20 px-4 sm:px-6 bg-white/85 border-y border-[#DCD2C0]/60 relative">
         <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#F5EBE1] text-[#9A7B56] border border-[#C5A880]/50 text-xs font-bold mb-2">
+                <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold mb-2">
                   <span className="material-symbols-outlined text-sm">folder_shared</span>
                   <span>Primary Archival Dossier</span>
                 </div>
-                <h2 className="font-serif text-3xl sm:text-4xl text-[#0F172A] tracking-tight">
+                <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
                   Official Statutory Archive & Signed PDFs
                 </h2>
-                <p className="text-sm text-[#64748B] mt-1">
+                <p className="text-sm text-[#736B5E] mt-1">
                   Inspect or download all 6 official signed records including CS Form 212, COEs, and Work Experience Sheets.
                 </p>
               </div>
 
               {/* Category Filter */}
-              <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-full bg-white border border-[#D5C2A5] shadow-xs">
+              <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-full bg-white border border-[#DCD2C0] shadow-xs">
                 {[
                   { id: "all" as DocCategory, label: "All Dossiers (6)" },
                   { id: "pds" as DocCategory, label: "CSC Form 212" },
@@ -1644,8 +1662,8 @@ export default function Home() {
                     onClick={() => setSelectedDocCategory(tab.id)}
                     className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
                       selectedDocCategory === tab.id
-                        ? "bg-[#2C3E50] text-[#E5C590] shadow-xs"
-                        : "text-[#64748B] hover:text-[#0F172A] hover:bg-[#F5EBE1]"
+                        ? "bg-[#25231C] text-[#E8DECA] shadow-xs font-bold"
+                        : "text-[#736B5E] hover:text-[#1C1A15] hover:bg-[#EFE9DC]"
                     }`}
                   >
                     {tab.label}
@@ -1664,36 +1682,36 @@ export default function Home() {
                     {/* Card Top Icon & Badge */}
                     <div className="flex items-center justify-between">
                       <span
-                        className="h-11 w-11 rounded-2xl flex items-center justify-center border bg-[#F5EBE1] text-[#9A7B56] border-[#C5A880]/50"
+                        className="h-11 w-11 rounded-2xl flex items-center justify-center border bg-[#EFE9DC] text-[#7D735C] border-[#BAA77E]/60"
                       >
                         <span className="material-symbols-outlined text-xl">{doc.icon}</span>
                       </span>
-                      <span className="px-3 py-1 rounded-full bg-[#F5EBE1] text-[#9A7B56] text-[11px] font-extrabold border border-[#C5A880]/40">
+                      <span className="px-3 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-[11px] font-extrabold border border-[#BAA77E]/50">
                         {doc.badge}
                       </span>
                     </div>
 
                     <div>
-                      <div className="text-[11px] font-extrabold uppercase tracking-widest text-[#9A7B56]">
+                      <div className="text-[11px] font-extrabold uppercase tracking-widest text-[#7D735C]">
                         {doc.categoryLabel}
                       </div>
-                      <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A] group-hover:text-[#9A7B56] transition-colors mt-0.5">
+                      <h3 className="font-serif text-base sm:text-lg font-bold text-[#1C1A15] group-hover:text-[#7D735C] transition-colors mt-0.5">
                         {doc.title}
                       </h3>
-                      <div className="text-xs text-[#2C3E50] font-semibold mt-1">{doc.issuer}</div>
-                      <div className="text-[11px] text-[#64748B] font-medium">{doc.dateOrDuration}</div>
+                      <div className="text-xs text-[#25231C] font-semibold mt-1">{doc.issuer}</div>
+                      <div className="text-[11px] text-[#736B5E] font-medium">{doc.dateOrDuration}</div>
                     </div>
 
-                    <p className="text-xs text-[#334155] line-clamp-3 leading-relaxed">
+                    <p className="text-xs text-[#4A4437] line-clamp-3 leading-relaxed">
                       {doc.summary}
                     </p>
                   </div>
 
                   {/* Actions */}
-                  <div className="pt-4 border-t border-[#F5EBE1] flex items-center gap-2">
+                  <div className="pt-4 border-t border-[#EFE9DC] flex items-center gap-2">
                     <button
                       onClick={() => openDocViewer(doc)}
-                      className="flex-1 py-2.5 px-3 rounded-full bg-[#F5EBE1] hover:bg-[#2C3E50] text-[#2C3E50] hover:text-[#E5C590] text-xs font-bold border border-[#C5A880]/50 flex items-center justify-center gap-1.5 transition-all"
+                      className="flex-1 py-2.5 px-3 rounded-full bg-[#EFE9DC] hover:bg-[#25231C] text-[#25231C] hover:text-[#E8DECA] text-xs font-bold border border-[#BAA77E]/60 flex items-center justify-center gap-1.5 transition-all"
                     >
                       <span className="material-symbols-outlined text-sm">visibility</span>
                       <span>Inspect Record</span>
@@ -1703,7 +1721,7 @@ export default function Home() {
                       href={doc.pdfPath}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2.5 rounded-full bg-white hover:bg-[#F5EBE1] text-[#2C3E50] border border-[#D5C2A5] flex items-center justify-center transition-colors"
+                      className="p-2.5 rounded-full bg-white hover:bg-[#EFE9DC] text-[#25231C] border border-[#DCD2C0] flex items-center justify-center transition-colors"
                       title="Open Signed PDF in New Tab"
                     >
                       <span className="material-symbols-outlined text-sm">open_in_new</span>
@@ -1721,14 +1739,14 @@ export default function Home() {
         <div className="max-w-6xl mx-auto space-y-12">
           <Reveal>
             <div className="text-center max-w-2xl mx-auto space-y-3">
-              <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#F5EBE1] text-[#9A7B56] border border-[#C5A880]/50 text-xs font-bold">
+              <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold">
                 <span className="material-symbols-outlined text-sm">terminal</span>
                 <span>Software & Statutory Architecture</span>
               </div>
-              <h2 className="font-serif text-3xl sm:text-4xl text-[#0F172A] tracking-tight">
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
                 Systems & Compliance Ecosystem
               </h2>
-              <p className="text-sm text-[#64748B]">
+              <p className="text-sm text-[#736B5E]">
                 End-to-end fluency across cloud ERPs, government statutory portals, and financial modeling tools.
               </p>
             </div>
@@ -1789,28 +1807,28 @@ export default function Home() {
                 <div className="luminous-pearl-card rounded-[2rem] p-6 bg-white space-y-4">
                   <div className="flex items-center justify-between">
                     <span
-                      className="h-11 w-11 rounded-2xl flex items-center justify-center border bg-[#F5EBE1] text-[#9A7B56] border-[#C5A880]/50"
+                      className="h-11 w-11 rounded-2xl flex items-center justify-center border bg-[#EFE9DC] text-[#7D735C] border-[#BAA77E]/60"
                     >
                       <span className="material-symbols-outlined text-xl">{item.icon}</span>
                     </span>
-                    <span className="px-3 py-1 rounded-full bg-[#F5EBE1] text-[#9A7B56] text-[11px] font-bold border border-[#C5A880]/40">
+                    <span className="px-3 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-[11px] font-bold border border-[#BAA77E]/50">
                       {item.badge}
                     </span>
                   </div>
 
                   <div>
-                    <div className="text-[11px] font-extrabold uppercase tracking-widest text-[#9A7B56]">
+                    <div className="text-[11px] font-extrabold uppercase tracking-widest text-[#7D735C]">
                       {item.category}
                     </div>
-                    <h3 className="font-serif text-base sm:text-lg font-bold text-[#0F172A] mt-0.5">{item.title}</h3>
+                    <h3 className="font-serif text-base sm:text-lg font-bold text-[#1C1A15] mt-0.5">{item.title}</h3>
                   </div>
 
-                  <p className="text-xs text-[#334155] leading-relaxed">{item.desc}</p>
+                  <p className="text-xs text-[#4A4437] leading-relaxed">{item.desc}</p>
 
-                  <div className="pt-3 border-t border-[#F5EBE1] flex items-center justify-between text-xs">
-                    <span className="text-[#64748B] font-medium">Standard:</span>
-                    <span className="font-bold text-[#0F172A] flex items-center gap-1.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#C5A880]"></span>
+                  <div className="pt-3 border-t border-[#EFE9DC] flex items-center justify-between text-xs">
+                    <span className="text-[#736B5E] font-medium">Standard:</span>
+                    <span className="font-bold text-[#1C1A15] flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#BAA77E]"></span>
                       {item.metrics}
                     </span>
                   </div>
@@ -1822,25 +1840,25 @@ export default function Home() {
       </section>
 
       {/* CONFERRED ACCREDITATIONS GALLERY (11 PROOFS) */}
-      <section id="credentials" className="py-20 px-4 sm:px-6 bg-white/85 border-y border-[#D5C2A5]/50 relative">
+      <section id="credentials" className="py-20 px-4 sm:px-6 bg-white/85 border-y border-[#DCD2C0]/60 relative">
         <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#F5EBE1] text-[#9A7B56] border border-[#C5A880]/50 text-xs font-bold mb-2">
+                <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold mb-2">
                   <span className="material-symbols-outlined text-sm">workspace_premium</span>
                   <span>11 Conferred Accreditations</span>
                 </div>
-                <h2 className="font-serif text-3xl sm:text-4xl text-[#0F172A] tracking-tight">
+                <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
                   Verified Conferred Accreditations
                 </h2>
-                <p className="text-sm text-[#64748B] mt-1">
+                <p className="text-sm text-[#736B5E] mt-1">
                   Click any certificate for high-resolution inspection, verified skills, and official certificate IDs.
                 </p>
               </div>
 
               {/* Filter Tabs */}
-              <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-full bg-white border border-[#D5C2A5] shadow-xs">
+              <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-full bg-white border border-[#DCD2C0] shadow-xs">
                 {[
                   { id: "all" as CredentialCategory, label: "All 11 Proofs" },
                   { id: "accounting" as CredentialCategory, label: "Accounting & ERP (4)" },
@@ -1852,8 +1870,8 @@ export default function Home() {
                     onClick={() => setSelectedCertCategory(tab.id)}
                     className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
                       selectedCertCategory === tab.id
-                        ? "bg-[#2C3E50] text-[#E5C590] shadow-xs"
-                        : "text-[#64748B] hover:text-[#0F172A] hover:bg-[#F5EBE1]"
+                        ? "bg-[#25231C] text-[#E8DECA] shadow-xs font-bold"
+                        : "text-[#736B5E] hover:text-[#1C1A15] hover:bg-[#EFE9DC]"
                     }`}
                   >
                     {tab.label}
@@ -1872,15 +1890,15 @@ export default function Home() {
                   className="luminous-pearl-card rounded-[2rem] p-5 bg-white cursor-pointer group flex flex-col justify-between space-y-4 hover:shadow-2xl transition-all"
                 >
                   {/* Visual Preview Container */}
-                  <div className="relative aspect-[4/3] rounded-[1.5rem] overflow-hidden bg-slate-100 border border-[#D5C2A5]/70 shadow-inner group-hover:scale-[1.02] transition-transform duration-500">
+                  <div className="relative aspect-[4/3] rounded-[1.5rem] overflow-hidden bg-[#EFE9DC] border border-[#DCD2C0] shadow-inner group-hover:scale-[1.02] transition-transform duration-500">
                     <img
                       src={cert.imageSrc}
                       alt={cert.title}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/95 text-[#0F172A] text-xs font-bold shadow-md border border-[#C5A880]">
-                        <span className="material-symbols-outlined text-sm text-[#9A7B56]">zoom_in</span>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#181712]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/95 text-[#1C1A15] text-xs font-bold shadow-md border border-[#BAA77E]">
+                        <span className="material-symbols-outlined text-sm text-[#7D735C]">zoom_in</span>
                         <span>Click to Inspect High-Res</span>
                       </span>
                     </div>
@@ -1889,25 +1907,25 @@ export default function Home() {
                   {/* Text Details */}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#9A7B56] bg-[#F5EBE1] px-2.5 py-0.5 rounded-full border border-[#C5A880]/40">
+                      <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#7D735C] bg-[#EFE9DC] px-2.5 py-0.5 rounded-full border border-[#BAA77E]/50">
                         {cert.categoryLabel}
                       </span>
-                      <span className="text-[11px] font-mono text-[#64748B] font-bold">
+                      <span className="text-[11px] font-mono text-[#736B5E] font-bold">
                         {cert.idNumber}
                       </span>
                     </div>
 
-                    <h3 className="font-serif text-sm font-bold text-[#0F172A] group-hover:text-[#9A7B56] transition-colors line-clamp-2">
+                    <h3 className="font-serif text-sm font-bold text-[#1C1A15] group-hover:text-[#7D735C] transition-colors line-clamp-2">
                       {cert.title}
                     </h3>
-                    <div className="text-xs text-[#64748B] line-clamp-1">{cert.issuer}</div>
+                    <div className="text-xs text-[#736B5E] line-clamp-1">{cert.issuer}</div>
 
                     {/* Skill Tags */}
                     <div className="flex flex-wrap gap-1.5 pt-1">
                       {cert.skills.slice(0, 3).map((s, i) => (
                         <span
                           key={i}
-                          className="px-2.5 py-0.5 rounded-full bg-[#F5EBE1]/60 text-[#334155] text-[10px] font-semibold border border-[#D5C2A5]/50"
+                          className="px-2.5 py-0.5 rounded-full bg-[#EFE9DC]/70 text-[#4A4437] text-[10px] font-semibold border border-[#DCD2C0]/60"
                         >
                           {s}
                         </span>
@@ -1926,14 +1944,14 @@ export default function Home() {
         <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
             <div className="text-center max-w-3xl mx-auto space-y-3">
-              <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#F5EBE1] text-[#9A7B56] border border-[#C5A880]/50 text-xs font-bold">
+              <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold">
                 <span className="material-symbols-outlined text-sm">auto_awesome</span>
                 <span>Bespoke Retainer Concierge</span>
               </div>
-              <h2 className="font-serif text-3xl sm:text-4xl text-[#0F172A] tracking-tight">
-                Curate Your <em className="italic font-normal text-[#9A7B56]">Fiduciary Retainer</em>
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
+                Curate Your <em className="italic font-normal text-[#7D735C]">Fiduciary Retainer</em>
               </h2>
-              <p className="text-sm sm:text-base text-[#64748B]">
+              <p className="text-sm sm:text-base text-[#736B5E]">
                 Select your organization model and required controllership modules to calculate recommended delivery cadences and prefill a consultation request.
               </p>
             </div>
@@ -1944,8 +1962,8 @@ export default function Home() {
             <div className="lg:col-span-7 luminous-pearl-card rounded-[2.5rem] p-6 sm:p-8 bg-white space-y-6">
               {/* Org Type Picker */}
               <div className="space-y-3">
-                <label className="text-xs font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[#9A7B56] text-base">domain</span>
+                <label className="text-xs font-bold text-[#1C1A15] uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[#7D735C] text-base">domain</span>
                   <span>1. Select Organization Structure</span>
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -1961,8 +1979,8 @@ export default function Home() {
                       onClick={() => setEstimatorOrg(org.id)}
                       className={`flex items-center gap-2.5 p-3 rounded-2xl text-xs font-bold border transition-all text-left ${
                         estimatorOrg === org.id
-                          ? "bg-[#2C3E50] text-[#E5C590] border-[#C5A880] shadow-sm font-extrabold"
-                          : "bg-[#F8FAFC] text-[#334155] border-[#D5C2A5]/70 hover:bg-[#F5EBE1]"
+                          ? "bg-[#25231C] text-[#E8DECA] border-[#BAA77E] shadow-sm font-extrabold"
+                          : "bg-[#F7F4EE] text-[#4A4437] border-[#DCD2C0] hover:bg-[#EFE9DC]"
                       }`}
                     >
                       <span className="material-symbols-outlined text-base">{org.icon}</span>
@@ -1974,8 +1992,8 @@ export default function Home() {
 
               {/* Modules Selector */}
               <div className="space-y-3">
-                <label className="text-xs font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[#9A7B56] text-base">check_box</span>
+                <label className="text-xs font-bold text-[#1C1A15] uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[#7D735C] text-base">check_box</span>
                   <span>2. Select Required Controllership Modules</span>
                 </label>
                 <div className="space-y-2">
@@ -1994,22 +2012,22 @@ export default function Home() {
                         onClick={() => toggleModule(m.id)}
                         className={`w-full p-3.5 rounded-2xl border text-left flex items-start gap-3 transition-all ${
                           isChecked
-                            ? "bg-[#F5EBE1] border-[#C5A880] shadow-xs"
-                            : "bg-white border-[#D5C2A5]/60 hover:bg-[#F8FAFC]"
+                            ? "bg-[#EFE9DC] border-[#BAA77E] shadow-xs"
+                            : "bg-white border-[#DCD2C0]/70 hover:bg-[#F7F4EE]"
                         }`}
                       >
                         <div
                           className={`h-5 w-5 rounded-md flex items-center justify-center mt-0.5 shrink-0 transition-colors ${
-                            isChecked ? "bg-[#2C3E50] text-[#E5C590]" : "border border-[#D5C2A5] bg-white"
+                            isChecked ? "bg-[#25231C] text-[#E8DECA]" : "border border-[#DCD2C0] bg-white"
                           }`}
                         >
                           {isChecked && <span className="material-symbols-outlined text-xs">check</span>}
                         </div>
                         <div>
-                          <div className={`text-xs font-bold ${isChecked ? "text-[#0F172A]" : "text-[#334155]"}`}>
+                          <div className={`text-xs font-bold ${isChecked ? "text-[#1C1A15]" : "text-[#4A4437]"}`}>
                             {m.label}
                           </div>
-                          <div className="text-[11px] text-[#64748B] mt-0.5">{m.desc}</div>
+                          <div className="text-[11px] text-[#736B5E] mt-0.5">{m.desc}</div>
                         </div>
                       </button>
                     );
@@ -2019,8 +2037,8 @@ export default function Home() {
 
               {/* Volume Range */}
               <div className="space-y-3">
-                <label className="text-xs font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[#9A7B56] text-base">swap_calls</span>
+                <label className="text-xs font-bold text-[#1C1A15] uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[#7D735C] text-base">swap_calls</span>
                   <span>3. Monthly Transaction Volume</span>
                 </label>
                 <div className="grid grid-cols-3 gap-2">
@@ -2035,8 +2053,8 @@ export default function Home() {
                       onClick={() => setEstimatorVolume(v.id)}
                       className={`p-2.5 rounded-2xl text-xs font-bold border transition-all text-center ${
                         estimatorVolume === v.id
-                          ? "bg-[#2C3E50] text-[#E5C590] border-[#C5A880] shadow-xs font-bold"
-                          : "bg-[#F8FAFC] text-[#334155] border-[#D5C2A5]/70 hover:bg-[#F5EBE1]"
+                          ? "bg-[#25231C] text-[#E8DECA] border-[#BAA77E] shadow-xs font-bold"
+                          : "bg-[#F7F4EE] text-[#4A4437] border-[#DCD2C0] hover:bg-[#EFE9DC]"
                       }`}
                     >
                       {v.label}
@@ -2046,48 +2064,48 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Step 2: Dynamic Summary Card (5 cols - Deep Obsidian Luxury) */}
-            <div className="lg:col-span-5 dark-luxury-card rounded-[2.5rem] p-6 sm:p-8 text-white space-y-6 bg-gradient-to-b from-[#16222F] to-[#0E1620]">
+            {/* Step 2: Dynamic Summary Card (5 cols - Deep Khaki Luxury Bento) */}
+            <div className="lg:col-span-5 rounded-[2.5rem] p-6 sm:p-8 text-white space-y-6 bg-[#25231C] border border-[#BAA77E]/50 shadow-xl">
               <div className="space-y-1">
-                <div className="text-xs font-bold text-[#E5C590] uppercase tracking-widest flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-sm">receipt</span>
+                <div className="text-xs font-bold text-[#E8DECA] uppercase tracking-widest flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-sm text-[#BAA77E]">receipt</span>
                   <span>Custom Retainer Blueprint</span>
                 </div>
                 <h3 className="font-serif text-2xl font-bold text-white">Recommended Delivery Cadence</h3>
               </div>
 
               <div className="space-y-3 pt-2">
-                <div className="p-4 rounded-2xl bg-white/5 border border-[#C5A880]/30 flex items-center justify-between">
-                  <span className="text-xs text-[#CBD5E1]">Target Response Cadence:</span>
-                  <span className="text-xs font-bold text-[#E5C590]">
+                <div className="p-4 rounded-2xl bg-white/5 border border-[#BAA77E]/30 flex items-center justify-between">
+                  <span className="text-xs text-[#D8CEBC]">Target Response Cadence:</span>
+                  <span className="text-xs font-bold text-[#E8DECA]">
                     {estimatorVolume === "high" ? "Daily Dedicated Check-ins" : "Weekly Close + Month-End"}
                   </span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-white/5 border border-[#C5A880]/30 flex items-center justify-between">
-                  <span className="text-xs text-[#CBD5E1]">Modules Selected:</span>
+                <div className="p-4 rounded-2xl bg-white/5 border border-[#BAA77E]/30 flex items-center justify-between">
+                  <span className="text-xs text-[#D8CEBC]">Modules Selected:</span>
                   <span className="text-xs font-bold text-white">{estimatorModules.length} Active Modules</span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-white/5 border border-[#C5A880]/30 flex items-center justify-between">
-                  <span className="text-xs text-[#CBD5E1]">Fiduciary Lead:</span>
-                  <span className="text-xs font-bold text-[#E5C590]">Ma. Faith Briones, BSA, CSE</span>
+                <div className="p-4 rounded-2xl bg-white/5 border border-[#BAA77E]/30 flex items-center justify-between">
+                  <span className="text-xs text-[#D8CEBC]">Fiduciary Lead:</span>
+                  <span className="text-xs font-bold text-[#E8DECA]">Ma. Faith Briones, BSA, CSE</span>
                 </div>
               </div>
 
-              <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-[#CBD5E1]">
-                <div className="font-bold text-[#E5C590]">Included Standard Guarantees:</div>
+              <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-[#D8CEBC]">
+                <div className="font-bold text-[#E8DECA]">Included Standard Guarantees:</div>
                 <ul className="space-y-1.5">
                   <li className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#E5C590] text-sm">check_circle</span>
+                    <span className="material-symbols-outlined text-[#E8DECA] text-sm">check_circle</span>
                     <span>100% Zero-Variance Bank Tie-Out</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#E5C590] text-sm">check_circle</span>
+                    <span className="material-symbols-outlined text-[#E8DECA] text-sm">check_circle</span>
                     <span>On-Time Statutory SSS / BIR Compliance</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#E5C590] text-sm">check_circle</span>
+                    <span className="material-symbols-outlined text-[#E8DECA] text-sm">check_circle</span>
                     <span>Direct Communication & Executive Narrative</span>
                   </li>
                 </ul>
@@ -2096,7 +2114,7 @@ export default function Home() {
               <button
                 type="button"
                 onClick={handleApplyEstimatorToContact}
-                className="w-full py-4 rounded-full bg-gradient-to-r from-[#C5A880] via-[#E5C590] to-[#C5A880] hover:from-[#E5C590] hover:to-[#C5A880] text-[#0B1118] text-sm font-extrabold shadow-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
+                className="w-full py-4 rounded-full bg-gradient-to-r from-[#BAA77E] via-[#E8DECA] to-[#BAA77E] hover:from-[#E8DECA] hover:to-[#BAA77E] text-[#1C1A15] text-sm font-extrabold shadow-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
               >
                 <span className="material-symbols-outlined text-lg">auto_awesome</span>
                 <span>Load Scope into Consultation Concierge</span>
@@ -2107,18 +2125,18 @@ export default function Home() {
       </section>
 
       {/* PRIVATE CONSULTATION SUITE & CONCIERGE */}
-      <section id="contact" className="py-20 px-4 sm:px-6 bg-white/90 border-t border-[#D5C2A5]/50 relative">
+      <section id="contact" className="py-20 px-4 sm:px-6 bg-white/90 border-t border-[#DCD2C0]/60 relative">
         <div className="max-w-6xl mx-auto space-y-12">
           <Reveal>
             <div className="text-center max-w-2xl mx-auto space-y-3">
-              <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#F5EBE1] text-[#9A7B56] border border-[#C5A880]/50 text-xs font-bold">
+              <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold">
                 <span className="material-symbols-outlined text-sm">mail</span>
                 <span>Private Fiduciary Concierge</span>
               </div>
-              <h2 className="font-serif text-3xl sm:text-4xl text-[#0F172A] tracking-tight">
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
                 Initiate Private Consultation
               </h2>
-              <p className="text-sm text-[#64748B]">
+              <p className="text-sm text-[#736B5E]">
                 Engage for fractional controllership, general ledger hygiene, cooperative bookkeeping, or government administrative consultation.
               </p>
             </div>
@@ -2128,22 +2146,22 @@ export default function Home() {
             {/* Contact Details (5 cols) */}
             <div className="lg:col-span-5 space-y-4">
               <div className="luminous-pearl-card rounded-[2.5rem] p-6 sm:p-8 bg-white space-y-5">
-                <div className="font-serif text-sm font-bold uppercase tracking-wider text-[#0F172A]">
+                <div className="font-serif text-sm font-bold uppercase tracking-wider text-[#1C1A15]">
                   Official Communication Channels
                 </div>
 
                 <div className="space-y-3">
                   {/* Email Box */}
-                  <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-[#D5C2A5]/60 flex items-center justify-between gap-3">
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <span className="h-10 w-10 rounded-xl bg-[#2C3E50] text-[#E5C590] flex items-center justify-center shrink-0 border border-[#C5A880]">
+                      <span className="h-10 w-10 rounded-xl bg-[#25231C] text-[#E8DECA] flex items-center justify-center shrink-0 border border-[#BAA77E]">
                         <span className="material-symbols-outlined text-lg">mail</span>
                       </span>
                       <div>
-                        <div className="text-[10px] font-bold uppercase text-[#64748B]">Direct Email</div>
+                        <div className="text-[10px] font-bold uppercase text-[#736B5E]">Direct Email</div>
                         <a
                           href="mailto:faithbriones22@gmail.com"
-                          className="text-xs sm:text-sm font-bold text-[#0F172A] hover:text-[#9A7B56] transition-colors"
+                          className="text-xs sm:text-sm font-bold text-[#1C1A15] hover:text-[#7D735C] transition-colors"
                         >
                           faithbriones22@gmail.com
                         </a>
@@ -2151,7 +2169,7 @@ export default function Home() {
                     </div>
                     <button
                       onClick={() => copyToClipboard("faithbriones22@gmail.com", "Email")}
-                      className="p-2 rounded-xl bg-white hover:bg-[#F5EBE1] text-[#0F172A] border border-[#D5C2A5] text-xs font-bold"
+                      className="p-2 rounded-xl bg-white hover:bg-[#EFE9DC] text-[#1C1A15] border border-[#DCD2C0] text-xs font-bold"
                       title="Copy Email"
                     >
                       <span className="material-symbols-outlined text-sm">content_copy</span>
@@ -2159,16 +2177,16 @@ export default function Home() {
                   </div>
 
                   {/* Phone Box */}
-                  <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-[#D5C2A5]/60 flex items-center justify-between gap-3">
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <span className="h-10 w-10 rounded-xl bg-[#34495E] text-[#E5C590] flex items-center justify-center shrink-0 border border-[#C5A880]">
+                      <span className="h-10 w-10 rounded-xl bg-[#3B3628] text-[#E8DECA] flex items-center justify-center shrink-0 border border-[#BAA77E]">
                         <span className="material-symbols-outlined text-lg">call</span>
                       </span>
                       <div>
-                        <div className="text-[10px] font-bold uppercase text-[#64748B]">Direct Mobile</div>
+                        <div className="text-[10px] font-bold uppercase text-[#736B5E]">Direct Mobile</div>
                         <a
                           href="tel:+639482454704"
-                          className="text-xs sm:text-sm font-bold text-[#0F172A] hover:text-[#9A7B56] transition-colors"
+                          className="text-xs sm:text-sm font-bold text-[#1C1A15] hover:text-[#7D735C] transition-colors"
                         >
                           +63 948 245 4704
                         </a>
@@ -2176,7 +2194,7 @@ export default function Home() {
                     </div>
                     <button
                       onClick={() => copyToClipboard("+63 948 245 4704", "Mobile Number")}
-                      className="p-2 rounded-xl bg-white hover:bg-[#F5EBE1] text-[#0F172A] border border-[#D5C2A5] text-xs font-bold"
+                      className="p-2 rounded-xl bg-white hover:bg-[#EFE9DC] text-[#1C1A15] border border-[#DCD2C0] text-xs font-bold"
                       title="Copy Mobile"
                     >
                       <span className="material-symbols-outlined text-sm">content_copy</span>
@@ -2184,13 +2202,13 @@ export default function Home() {
                   </div>
 
                   {/* Location Box */}
-                  <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-[#D5C2A5]/60 flex items-center gap-3">
-                    <span className="h-10 w-10 rounded-xl bg-[#9A7B56] text-[#ECF0F1] flex items-center justify-center shrink-0 border border-[#C5A880]">
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] flex items-center gap-3">
+                    <span className="h-10 w-10 rounded-xl bg-[#7D735C] text-[#E8DECA] flex items-center justify-center shrink-0 border border-[#BAA77E]">
                       <span className="material-symbols-outlined text-lg">location_on</span>
                     </span>
                     <div>
-                      <div className="text-[10px] font-bold uppercase text-[#64748B]">Jurisdiction & Location</div>
-                      <div className="text-xs sm:text-sm font-bold text-[#0F172A]">
+                      <div className="text-[10px] font-bold uppercase text-[#736B5E]">Jurisdiction & Location</div>
+                      <div className="text-xs sm:text-sm font-bold text-[#1C1A15]">
                         Oroquieta City, Misamis Occidental, Philippines
                       </div>
                     </div>
@@ -2199,15 +2217,15 @@ export default function Home() {
               </div>
 
               {/* Engagement Status Card */}
-              <div className="p-6 rounded-[2rem] bg-gradient-to-br from-[#16222F] to-[#0E1620] text-white shadow-lg space-y-3 border border-[#C5A880]/40">
-                <div className="flex items-center gap-2 text-xs font-bold text-[#E5C590] uppercase tracking-wider">
-                  <span className="h-2 w-2 rounded-full bg-[#E5C590] animate-ping"></span>
+              <div className="p-6 rounded-[2rem] bg-[#25231C] text-white shadow-lg space-y-3 border border-[#BAA77E]/50">
+                <div className="flex items-center gap-2 text-xs font-bold text-[#E8DECA] uppercase tracking-wider">
+                  <span className="h-2 w-2 rounded-full bg-[#E8DECA] animate-ping"></span>
                   <span>Availability Notice</span>
                 </div>
                 <div className="font-serif text-base font-bold text-white">
                   Fractional & Full Retainer Engagements
                 </div>
-                <p className="text-xs text-[#CBD5E1] leading-relaxed">
+                <p className="text-xs text-[#D8CEBC] leading-relaxed">
                   Available for remote cloud controllership, on-site consultation for Northern Mindanao cooperatives, and statutory government advisory.
                 </p>
               </div>
@@ -2218,12 +2236,12 @@ export default function Home() {
               <div className="luminous-pearl-card rounded-[2.5rem] p-6 sm:p-8 bg-white">
                 {formSubmitted ? (
                   <div className="text-center py-10 space-y-4 animate-fadeIn">
-                    <div className="h-16 w-16 rounded-full bg-[#F5EBE1] text-[#9A7B56] mx-auto flex items-center justify-center border border-[#C5A880]">
+                    <div className="h-16 w-16 rounded-full bg-[#EFE9DC] text-[#7D735C] mx-auto flex items-center justify-center border border-[#BAA77E]">
                       <span className="material-symbols-outlined text-3xl">check_circle</span>
                     </div>
                     <div className="space-y-1">
-                      <h3 className="font-serif text-2xl font-bold text-[#0F172A]">Inquiry Transmitted</h3>
-                      <p className="text-sm text-[#334155] max-w-md mx-auto">
+                      <h3 className="font-serif text-2xl font-bold text-[#1C1A15]">Inquiry Transmitted</h3>
+                      <p className="text-sm text-[#4A4437] max-w-md mx-auto">
                         Thank you. Your consultation request has been forwarded directly to <strong>Ma. Faith B. Briones</strong>. You will receive a response within 24 business hours.
                       </p>
                     </div>
@@ -2233,7 +2251,7 @@ export default function Home() {
                           setFormSubmitted(false);
                           setFormMessage("");
                         }}
-                        className="px-6 py-2.5 rounded-full bg-[#F5EBE1] hover:bg-[#D5C2A5] text-[#0F172A] text-xs font-bold"
+                        className="px-6 py-2.5 rounded-full bg-[#EFE9DC] hover:bg-[#DCD2C0] text-[#1C1A15] text-xs font-bold"
                       >
                         Submit Another Inquiry
                       </button>
@@ -2241,42 +2259,42 @@ export default function Home() {
                   </div>
                 ) : (
                   <form onSubmit={handleFormSubmit} className="space-y-4">
-                    <div className="font-serif text-lg font-bold text-[#0F172A]">
+                    <div className="font-serif text-lg font-bold text-[#1C1A15]">
                       Submit Confidential Consultation Request
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1">
-                        <label className="text-xs font-bold text-[#0F172A]">Full Name / Organization *</label>
+                        <label className="text-xs font-bold text-[#1C1A15]">Full Name / Organization *</label>
                         <input
                           type="text"
                           required
                           value={formName}
                           onChange={(e) => setFormName(e.target.value)}
                           placeholder="e.g. Attorney Juan Dela Cruz / Apex Corp"
-                          className="w-full px-4 py-2.5 rounded-2xl bg-[#F8FAFC] border border-[#D5C2A5]/70 text-xs sm:text-sm text-[#0F172A] focus:bg-white focus:outline-none focus:border-[#C5A880] transition-all"
+                          className="w-full px-4 py-2.5 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs sm:text-sm text-[#1C1A15] focus:bg-white focus:outline-none focus:border-[#BAA77E] transition-all"
                         />
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-xs font-bold text-[#0F172A]">Email Address *</label>
+                        <label className="text-xs font-bold text-[#1C1A15]">Email Address *</label>
                         <input
                           type="email"
                           required
                           value={formEmail}
                           onChange={(e) => setFormEmail(e.target.value)}
                           placeholder="e.g. client@enterprise.com"
-                          className="w-full px-4 py-2.5 rounded-2xl bg-[#F8FAFC] border border-[#D5C2A5]/70 text-xs sm:text-sm text-[#0F172A] focus:bg-white focus:outline-none focus:border-[#C5A880] transition-all"
+                          className="w-full px-4 py-2.5 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs sm:text-sm text-[#1C1A15] focus:bg-white focus:outline-none focus:border-[#BAA77E] transition-all"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-[#0F172A]">Primary Engagement Scope *</label>
+                      <label className="text-xs font-bold text-[#1C1A15]">Primary Engagement Scope *</label>
                       <select
                         value={formService}
                         onChange={(e) => setFormService(e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-2xl bg-[#F8FAFC] border border-[#D5C2A5]/70 text-xs sm:text-sm text-[#0F172A] focus:bg-white focus:outline-none focus:border-[#C5A880] transition-all"
+                        className="w-full px-4 py-2.5 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs sm:text-sm text-[#1C1A15] focus:bg-white focus:outline-none focus:border-[#BAA77E] transition-all"
                       >
                         <option>Haute Fiduciary & Full-Cycle General Ledger</option>
                         <option>Bank Reconciliation & Daily Cash Book Hygiene</option>
@@ -2288,22 +2306,22 @@ export default function Home() {
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-[#0F172A]">Project Specifics & Timeline *</label>
+                      <label className="text-xs font-bold text-[#1C1A15]">Project Specifics & Timeline *</label>
                       <textarea
                         required
                         rows={4}
                         value={formMessage}
                         onChange={(e) => setFormMessage(e.target.value)}
                         placeholder="Please describe your current accounting setup, software used, transaction volume, or statutory assistance required..."
-                        className="w-full px-4 py-2.5 rounded-2xl bg-[#F8FAFC] border border-[#D5C2A5]/70 text-xs sm:text-sm text-[#0F172A] focus:bg-white focus:outline-none focus:border-[#C5A880] transition-all"
+                        className="w-full px-4 py-2.5 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs sm:text-sm text-[#1C1A15] focus:bg-white focus:outline-none focus:border-[#BAA77E] transition-all"
                       ></textarea>
                     </div>
 
                     <button
                       type="submit"
-                      className="w-full py-4 rounded-full bg-[#2C3E50] hover:bg-[#1E293B] text-[#E5C590] text-sm font-bold shadow-lg shadow-[#2C3E50]/25 flex items-center justify-center gap-2 hover:scale-[1.01] transition-all border border-[#C5A880]/60"
+                      className="w-full py-4 rounded-full bg-[#25231C] hover:bg-[#181712] text-[#E8DECA] text-sm font-bold shadow-lg shadow-[#25231C]/25 flex items-center justify-center gap-2 hover:scale-[1.01] transition-all border border-[#BAA77E]/70"
                     >
-                      <span className="material-symbols-outlined text-lg text-[#E5C590]">send</span>
+                      <span className="material-symbols-outlined text-lg text-[#E8DECA]">send</span>
                       <span>Transmit Consultation Request</span>
                     </button>
                   </form>
@@ -2315,10 +2333,10 @@ export default function Home() {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-12 px-4 sm:px-6 bg-[#0B1118] text-white border-t border-[#C5A880]/30">
+      <footer className="py-12 px-4 sm:px-6 bg-[#14130F] text-white border-t border-[#BAA77E]/30">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <div className="h-11 w-11 rounded-full overflow-hidden border-2 border-[#C5A880]">
+            <div className="h-11 w-11 rounded-full overflow-hidden border-2 border-[#BAA77E]">
               <img
                 src="/profile/avatar.jpg"
                 alt="Ma. Faith B. Briones"
@@ -2327,15 +2345,15 @@ export default function Home() {
             </div>
             <div>
               <div className="font-serif text-sm font-bold text-white">Ma. Faith Batilona Briones, BSA, CSE</div>
-              <div className="text-xs text-[#CBD5E1]">
+              <div className="text-xs text-[#D8CEBC]">
                 Bachelor of Science in Accountancy • Career Service Professional 80.24%
               </div>
             </div>
           </div>
 
-          <div className="text-xs text-[#CBD5E1] text-center md:text-right space-y-1">
-            <div className="font-serif italic text-[#E5C590]">The Executive Fiduciary Atelier • Republic of the Philippines</div>
-            <div className="text-[#64748B]">
+          <div className="text-xs text-[#D8CEBC] text-center md:text-right space-y-1">
+            <div className="font-serif italic text-[#E8DECA]">The Executive Fiduciary Atelier • Republic of the Philippines</div>
+            <div className="text-[#736B5E]">
               Cross-Referenced with CS Form 212 & Statutory Employment Records
             </div>
           </div>
@@ -2346,45 +2364,45 @@ export default function Home() {
       {showBackToTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 left-6 z-50 p-3.5 rounded-full bg-white text-[#0F172A] shadow-2xl border border-[#C5A880] hover:bg-[#F5EBE1] hover:scale-110 transition-all"
+          className="fixed bottom-6 left-6 z-50 p-3.5 rounded-full bg-white text-[#1C1A15] shadow-2xl border border-[#BAA77E] hover:bg-[#EFE9DC] hover:scale-110 transition-all"
           aria-label="Back to top"
         >
-          <span className="material-symbols-outlined text-xl text-[#9A7B56]">arrow_upward</span>
+          <span className="material-symbols-outlined text-xl text-[#7D735C]">arrow_upward</span>
         </button>
       )}
 
       {/* MODAL 1: STATUTORY DOSSIER INSPECTOR */}
       {activeModal === "doc-viewer" && selectedDoc && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-          <div className="relative w-full max-w-2xl rounded-[2.5rem] bg-white border border-[#C5A880] shadow-2xl p-6 sm:p-8 space-y-5 max-h-[90vh] overflow-y-auto text-[#0F172A]">
+          <div className="relative w-full max-w-2xl rounded-[2.5rem] bg-white border border-[#BAA77E] shadow-2xl p-6 sm:p-8 space-y-5 max-h-[90vh] overflow-y-auto text-[#1C1A15]">
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-1">
-                <span className="px-3.5 py-1 rounded-full bg-[#F5EBE1] text-[#9A7B56] text-xs font-bold border border-[#C5A880]/50">
+                <span className="px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
                   {selectedDoc.badge}
                 </span>
-                <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0F172A] mt-2">{selectedDoc.title}</h3>
-                <div className="text-xs text-[#9A7B56] font-semibold">{selectedDoc.issuer}</div>
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#1C1A15] mt-2">{selectedDoc.title}</h3>
+                <div className="text-xs text-[#7D735C] font-semibold">{selectedDoc.issuer}</div>
               </div>
               <button
                 onClick={() => setActiveModal(null)}
-                className="p-2 rounded-full bg-[#F5EBE1] hover:bg-[#D5C2A5] text-[#0F172A]"
+                className="p-2 rounded-full bg-[#EFE9DC] hover:bg-[#DCD2C0] text-[#1C1A15]"
               >
                 <span className="material-symbols-outlined text-lg">close</span>
               </button>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-[#D5C2A5]/50 text-xs sm:text-sm text-[#334155] leading-relaxed">
+            <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs sm:text-sm text-[#4A4437] leading-relaxed">
               {selectedDoc.summary}
             </div>
 
             <div className="space-y-2">
-              <div className="font-serif text-xs font-bold uppercase tracking-wider text-[#0F172A]">
+              <div className="font-serif text-xs font-bold uppercase tracking-wider text-[#1C1A15]">
                 Verified Statutory Points:
               </div>
-              <ul className="space-y-1.5 text-xs text-[#334155]">
+              <ul className="space-y-1.5 text-xs text-[#4A4437]">
                 {selectedDoc.keyPoints.map((pt, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <span className="material-symbols-outlined text-[#9A7B56] text-sm shrink-0">check_circle</span>
+                    <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">check_circle</span>
                     <span>{pt}</span>
                   </li>
                 ))}
@@ -2392,15 +2410,15 @@ export default function Home() {
             </div>
 
             {selectedDoc.supervisors && (
-              <div className="text-xs text-[#64748B] pt-2 border-t border-[#D5C2A5]/40">
-                <span className="font-bold text-[#0F172A]">Official Signatory:</span> {selectedDoc.supervisors}
+              <div className="text-xs text-[#736B5E] pt-2 border-t border-[#DCD2C0]/50">
+                <span className="font-bold text-[#1C1A15]">Official Signatory:</span> {selectedDoc.supervisors}
               </div>
             )}
 
-            <div className="pt-4 border-t border-[#D5C2A5]/40 flex items-center justify-end gap-3">
+            <div className="pt-4 border-t border-[#DCD2C0]/50 flex items-center justify-end gap-3">
               <button
                 onClick={() => setActiveModal(null)}
-                className="px-5 py-2.5 rounded-full bg-[#F5EBE1] hover:bg-[#D5C2A5] text-[#0F172A] text-xs font-bold"
+                className="px-5 py-2.5 rounded-full bg-[#EFE9DC] hover:bg-[#DCD2C0] text-[#1C1A15] text-xs font-bold"
               >
                 Close
               </button>
@@ -2409,7 +2427,7 @@ export default function Home() {
                 href={selectedDoc.pdfPath}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-2.5 rounded-full bg-[#2C3E50] hover:bg-[#1E293B] text-[#E5C590] text-xs font-bold flex items-center gap-1.5 shadow-md border border-[#C5A880]/60"
+                className="px-6 py-2.5 rounded-full bg-[#25231C] hover:bg-[#181712] text-[#E8DECA] text-xs font-bold flex items-center gap-1.5 shadow-md border border-[#BAA77E]/70"
               >
                 <span className="material-symbols-outlined text-sm">open_in_new</span>
                 <span>Open Official PDF Document</span>
@@ -2422,32 +2440,32 @@ export default function Home() {
       {/* MODAL 2: CERTIFICATE LIGHTBOX CAROUSEL */}
       {activeModal === "certificate-lightbox" && currentCert && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
-          <div className="relative w-full max-w-4xl rounded-[2.5rem] bg-white border border-[#C5A880] shadow-2xl p-6 sm:p-8 space-y-6 max-h-[95vh] overflow-y-auto text-[#0F172A]">
+          <div className="relative w-full max-w-4xl rounded-[2.5rem] bg-white border border-[#BAA77E] shadow-2xl p-6 sm:p-8 space-y-6 max-h-[95vh] overflow-y-auto text-[#1C1A15]">
             {/* Top Bar */}
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="px-3.5 py-1 rounded-full bg-[#F5EBE1] text-[#9A7B56] text-xs font-bold border border-[#C5A880]/50">
+                  <span className="px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
                     {currentCert.categoryLabel}
                   </span>
-                  <span className="text-xs text-[#64748B] font-mono font-bold">
+                  <span className="text-xs text-[#736B5E] font-mono font-bold">
                     {selectedCertificateIndex + 1} of {filteredCertificates.length}
                   </span>
                 </div>
-                <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0F172A] mt-1">{currentCert.title}</h3>
-                <div className="text-xs text-[#64748B]">{currentCert.issuer}</div>
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#1C1A15] mt-1">{currentCert.title}</h3>
+                <div className="text-xs text-[#736B5E]">{currentCert.issuer}</div>
               </div>
 
               <button
                 onClick={() => setActiveModal(null)}
-                className="p-2 rounded-full bg-[#F5EBE1] hover:bg-[#D5C2A5] text-[#0F172A]"
+                className="p-2 rounded-full bg-[#EFE9DC] hover:bg-[#DCD2C0] text-[#1C1A15]"
               >
                 <span className="material-symbols-outlined text-lg">close</span>
               </button>
             </div>
 
             {/* High-Resolution Certificate Image Preview */}
-            <div className="relative aspect-[16/10] w-full rounded-[2rem] overflow-hidden bg-[#0F172A] border border-[#C5A880]/40 flex items-center justify-center group shadow-inner">
+            <div className="relative aspect-[16/10] w-full rounded-[2rem] overflow-hidden bg-[#181712] border border-[#BAA77E]/50 flex items-center justify-center group shadow-inner">
               <img
                 src={currentCert.imageSrc}
                 alt={currentCert.title}
@@ -2459,14 +2477,14 @@ export default function Home() {
                 <>
                   <button
                     onClick={prevCertificate}
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/95 hover:bg-white text-[#0F172A] shadow-xl transition-transform hover:scale-110 border border-[#C5A880]"
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/95 hover:bg-white text-[#1C1A15] shadow-xl transition-transform hover:scale-110 border border-[#BAA77E]"
                     aria-label="Previous Certificate"
                   >
                     <span className="material-symbols-outlined text-lg">chevron_left</span>
                   </button>
                   <button
                     onClick={nextCertificate}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/95 hover:bg-white text-[#0F172A] shadow-xl transition-transform hover:scale-110 border border-[#C5A880]"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/95 hover:bg-white text-[#1C1A15] shadow-xl transition-transform hover:scale-110 border border-[#BAA77E]"
                     aria-label="Next Certificate"
                   >
                     <span className="material-symbols-outlined text-lg">chevron_right</span>
@@ -2478,17 +2496,17 @@ export default function Home() {
             {/* Verification & Description */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <div className="font-serif text-xs font-bold text-[#0F172A]">Certificate Curriculum Scope:</div>
-                <p className="text-xs text-[#334155] leading-relaxed">{currentCert.description}</p>
+                <div className="font-serif text-xs font-bold text-[#1C1A15]">Certificate Curriculum Scope:</div>
+                <p className="text-xs text-[#4A4437] leading-relaxed">{currentCert.description}</p>
               </div>
 
               <div className="space-y-2">
-                <div className="font-serif text-xs font-bold text-[#0F172A]">Verified Competency Tags:</div>
+                <div className="font-serif text-xs font-bold text-[#1C1A15]">Verified Competency Tags:</div>
                 <div className="flex flex-wrap gap-1.5">
                   {currentCert.skills.map((s, idx) => (
                     <span
                       key={idx}
-                      className="px-3 py-1 rounded-full bg-[#F5EBE1] text-[#9A7B56] text-xs font-semibold border border-[#C5A880]/40"
+                      className="px-3 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-semibold border border-[#BAA77E]/50"
                     >
                       {s}
                     </span>
@@ -2498,8 +2516,8 @@ export default function Home() {
             </div>
 
             {/* Modal Bottom Actions */}
-            <div className="pt-4 border-t border-[#D5C2A5]/40 flex items-center justify-between">
-              <span className="text-xs font-mono font-bold text-[#64748B]">
+            <div className="pt-4 border-t border-[#DCD2C0]/50 flex items-center justify-between">
+              <span className="text-xs font-mono font-bold text-[#736B5E]">
                 Official Identifier: {currentCert.idNumber}
               </span>
 
@@ -2509,7 +2527,7 @@ export default function Home() {
                     href={currentCert.pdfPath}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-5 py-2 rounded-full bg-[#2C3E50] hover:bg-[#1E293B] text-[#E5C590] text-xs font-bold flex items-center gap-1 border border-[#C5A880]/60"
+                    className="px-5 py-2 rounded-full bg-[#25231C] hover:bg-[#181712] text-[#E8DECA] text-xs font-bold flex items-center gap-1 border border-[#BAA77E]/70"
                   >
                     <span className="material-symbols-outlined text-sm">picture_as_pdf</span>
                     <span>Open Conferred PDF</span>
@@ -2518,7 +2536,7 @@ export default function Home() {
 
                 <button
                   onClick={() => setActiveModal(null)}
-                  className="px-5 py-2 rounded-full bg-[#F5EBE1] hover:bg-[#D5C2A5] text-[#0F172A] text-xs font-bold"
+                  className="px-5 py-2 rounded-full bg-[#EFE9DC] hover:bg-[#DCD2C0] text-[#1C1A15] text-xs font-bold"
                 >
                   Done
                 </button>
