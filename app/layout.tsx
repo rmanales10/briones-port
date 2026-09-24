@@ -53,7 +53,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-[#0B1118] text-[#F1F5F9] font-sans antialiased min-h-screen selection:bg-[#C5A880] selection:text-[#0B1118]">
+      <body className="bg-[#F8FAFC] text-[#1E293B] font-sans antialiased min-h-screen selection:bg-[#2C3E50] selection:text-[#E5C590]">
         {children}
       </body>
     </html>

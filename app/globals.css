@@ -10,63 +10,83 @@
   --color-slate-card: #1A2634;
   --color-palette-primary: #2C3E50;
   --color-palette-secondary: #34495E;
-  --color-palette-slate: #7F8C8D;
-  --color-palette-silver: #BDC3C7;
+  --color-palette-slate: #64748B;
+  --color-palette-silver: #CBD5E1;
   --color-gold-light: #E5C590;
   --color-gold-rich: #C5A880;
   --color-gold-dark: #9A7B56;
 }
 
 @layer utilities {
-  .bg-dark-luxury-canvas {
-    background-color: #0B1118;
+  .bg-dualtone-canvas {
+    background-color: #F8FAFC;
+    background-image: 
+      radial-gradient(at 15% 10%, rgba(197, 168, 128, 0.08) 0px, transparent 45%),
+      radial-gradient(at 85% 15%, rgba(44, 62, 80, 0.05) 0px, transparent 40%),
+      radial-gradient(at 50% 60%, rgba(229, 197, 144, 0.06) 0px, transparent 50%),
+      radial-gradient(at 80% 85%, rgba(52, 73, 94, 0.06) 0px, transparent 45%);
+  }
+
+  .luminous-pearl-card {
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(213, 194, 165, 0.5);
+    box-shadow: 
+      0 4px 20px -2px rgba(44, 62, 80, 0.04),
+      0 12px 32px -8px rgba(197, 168, 128, 0.08),
+      0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .luminous-pearl-card:hover {
+    border-color: #C5A880;
+    box-shadow: 
+      0 20px 40px -10px rgba(44, 62, 80, 0.08),
+      0 0 25px -4px rgba(229, 197, 144, 0.3),
+      0 0 0 1px rgba(197, 168, 128, 0.3) inset;
+    transform: translateY(-4px);
   }
 
   .dark-luxury-card {
-    background: rgba(19, 29, 40, 0.85);
+    background: rgba(19, 29, 40, 0.95);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(197, 168, 128, 0.25);
+    border: 1px solid rgba(197, 168, 128, 0.3);
     box-shadow: 
-      0 10px 30px -10px rgba(0, 0, 0, 0.5),
-      0 0 20px -5px rgba(197, 168, 128, 0.05),
-      0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+      0 15px 35px -10px rgba(0, 0, 0, 0.4),
+      0 0 25px -5px rgba(197, 168, 128, 0.08),
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .dark-luxury-card:hover {
-    border-color: rgba(229, 197, 144, 0.65);
-    background: rgba(26, 38, 52, 0.94);
+    border-color: rgba(229, 197, 144, 0.7);
+    background: rgba(26, 38, 52, 0.98);
     box-shadow: 
-      0 20px 45px -10px rgba(0, 0, 0, 0.75),
-      0 0 35px -2px rgba(229, 197, 144, 0.25),
-      0 0 0 1px rgba(229, 197, 144, 0.3) inset;
-    transform: translateY(-5px);
-  }
-
-  .dark-elevated-card {
-    background: linear-gradient(145deg, #16222F 0%, #0E1620 100%);
-    border: 1px solid rgba(229, 197, 144, 0.35);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+      0 25px 50px -10px rgba(0, 0, 0, 0.6),
+      0 0 35px -2px rgba(229, 197, 144, 0.3),
+      0 0 0 1px rgba(229, 197, 144, 0.35) inset;
+    transform: translateY(-4px);
   }
 
   .gold-editorial-text {
-    background: linear-gradient(135deg, #E5C590 0%, #C5A880 50%, #F5EBE1 100%);
+    background: linear-gradient(135deg, #9A7B56 0%, #C5A880 50%, #E5C590 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
-  .silver-pearl-text {
-    background: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 50%, #94A3B8 100%);
+  .navy-editorial-text {
+    background: linear-gradient(135deg, #0F172A 0%, #2C3E50 50%, #34495E 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
-  .dark-subtle-pattern {
+  .dualtone-subtle-pattern {
     background-size: 36px 36px;
     background-image: 
-      linear-gradient(to right, rgba(197, 168, 128, 0.035) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(197, 168, 128, 0.035) 1px, transparent 1px);
+      linear-gradient(to right, rgba(44, 62, 80, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(44, 62, 80, 0.03) 1px, transparent 1px);
   }
 }
 
@@ -95,20 +115,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom Scrollbar for Dark Luxury */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #0B1118;
+  background: #F1F5F9;
 }
 ::-webkit-scrollbar-thumb {
-  background: #C5A880;
+  background: #CBD5E1;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #E5C590;
+  background: #C5A880;
 }
 
 /* Dynamic Background Keyframe Animations */
@@ -147,8 +167,8 @@
 
 @keyframes particleTwinkle {
   0%, 100% {
-    opacity: 0.2;
-    transform: translateY(0px) scale(0.8);
+    opacity: 0.25;
+    transform: translateY(0px) scale(0.85);
   }
   50% {
     opacity: 0.95;
@@ -162,17 +182,6 @@
   }
   50% {
     transform: translateY(-8px) rotate(0.4deg);
-  }
-}
-
-@keyframes pulseGoldGlow {
-  0%, 100% {
-    opacity: 0.6;
-    box-shadow: 0 0 15px rgba(229, 197, 144, 0.2);
-  }
-  50% {
-    opacity: 1;
-    box-shadow: 0 0 30px rgba(229, 197, 144, 0.45);
   }
 }
 
@@ -194,8 +203,4 @@
 
 .animate-float-luxury {
   animation: floatSmooth 6s ease-in-out infinite;
-}
-
-.animate-pulse-gold {
-  animation: pulseGoldGlow 4s ease-in-out infinite;
 }
