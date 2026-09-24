@@ -5,6 +5,7 @@ import React, { useState, useEffect, useRef } from "react";
 type DocCategory = "all" | "pds" | "coe" | "wes";
 type CredentialCategory = "all" | "accounting" | "finance" | "ops";
 type CareerCategory = "all" | "gov" | "private";
+type PipelineStage = "coa" | "vouchers" | "recon" | "close" | "compliance";
 
 interface OfficialDoc {
   id: string;
@@ -335,7 +336,6 @@ interface CareerRole {
   location: string;
   period: string;
   badge: string;
-  badgeColor: string;
   summary: string;
   highlights: string[];
   supervisors?: string;
@@ -351,7 +351,6 @@ const careerRoles: CareerRole[] = [
     location: "Oroquieta Branch, Misamis Occidental",
     period: "Jan 2023 – Present & Aug 2015 – Dec 2018",
     badge: "Public Administration",
-    badgeColor: "bg-amber-500/15 text-amber-300 border-amber-500/30",
     summary:
       "Responsible for core branch administrative operations, financial disbursement vouchers with complete statutory audit attachments, annual administrative budget prioritizations, PIMS supplies procurement, property asset registers, and UMID card releases.",
     highlights: [
@@ -371,7 +370,6 @@ const careerRoles: CareerRole[] = [
     location: "Oroquieta Branch, Misamis Occidental",
     period: "Jan 2019 – Dec 2022 & Reliever (2023 – Present)",
     badge: "2023 Division Awardee",
-    badgeColor: "bg-yellow-500/15 text-yellow-300 border-yellow-500/30",
     summary:
       "Frontline leadership in screening, evaluating, and processing complex member benefit claims (sickness, maternity, disability, retirement, funeral), loan applications, and annual confirmation of pensioners (ACOP). Awarded 2023 Best Customer Service Employee at the Division Level.",
     highlights: [
@@ -391,7 +389,6 @@ const careerRoles: CareerRole[] = [
     location: "Liloy Branch, Zamboanga del Norte",
     period: "Jan 23, 2006 – Aug 8, 2012 (6.5+ Years)",
     badge: "Lead Bookkeeper",
-    badgeColor: "bg-amber-500/15 text-amber-300 border-amber-500/30",
     summary:
       "Full-charge branch bookkeeper managing multi-million peso microfinance loan portfolios, double-entry general ledgers, cash book balances, daily bank deposits, and month-end financial closures under ISO 9001 quality systems.",
     highlights: [
@@ -411,7 +408,6 @@ const careerRoles: CareerRole[] = [
     location: "Plaridel, Misamis Occidental",
     period: "Dec 10, 2012 – Oct 10, 2013",
     badge: "Cooperative Accounting",
-    badgeColor: "bg-sky-500/15 text-sky-300 border-sky-500/30",
     summary:
       "Maintained statutory cooperative ledgers, member share capital accounts, loan ledgers, and financial statements in strict conformity with Cooperative Development Authority (CDA) regulatory frameworks.",
     highlights: [
@@ -429,7 +425,6 @@ const careerRoles: CareerRole[] = [
     location: "Misamis Occidental",
     period: "June 13, 2004 – Aug 31, 2005",
     badge: "Early Career Foundation",
-    badgeColor: "bg-slate-500/15 text-slate-300 border-slate-500/30",
     summary:
       "Early career accounting foundation following graduation from Andres Bonifacio College: managed daily cash receipts, disbursement journals, and cooperative bookkeeping registers.",
     highlights: [
@@ -439,7 +434,7 @@ const careerRoles: CareerRole[] = [
   },
 ];
 
-// Reusable Scroll-Reveal Animation Component
+// Reusable Scroll-Reveal Component
 function Reveal({
   children,
   className = "",
@@ -493,23 +488,30 @@ function Reveal({
   );
 }
 
-// Animated Counter Component
-function CountUp({
+// Animated Metric Card in Palette Style
+function AnimatedMetric({
   end,
   duration = 2000,
   decimals = 0,
-  prefix = "",
   suffix = "",
+  label,
+  sublabel,
+  progress = 100,
+  icon = "verified",
 }: {
   end: number;
   duration?: number;
   decimals?: number;
-  prefix?: string;
   suffix?: string;
+  label: string;
+  sublabel: string;
+  progress?: number;
+  icon?: string;
 }) {
   const [count, setCount] = useState(0);
+  const [barWidth, setBarWidth] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
-  const countRef = useRef<HTMLSpanElement>(null);
+  const metricRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -520,11 +522,12 @@ function CountUp({
 
           const animate = (currentTime: number) => {
             if (!startTime) startTime = currentTime;
-            const progress = Math.min((currentTime - startTime) / duration, 1);
-            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            const elapsed = Math.min((currentTime - startTime) / duration, 1);
+            const easeOutQuart = 1 - Math.pow(1 - elapsed, 4);
             setCount(easeOutQuart * end);
+            setBarWidth(easeOutQuart * progress);
 
-            if (progress < 1) {
+            if (elapsed < 1) {
               requestAnimationFrame(animate);
             }
           };
@@ -535,19 +538,40 @@ function CountUp({
       { threshold: 0.2 }
     );
 
-    if (countRef.current) observer.observe(countRef.current);
+    if (metricRef.current) observer.observe(metricRef.current);
     return () => observer.disconnect();
-  }, [end, duration, hasAnimated]);
+  }, [end, duration, hasAnimated, progress]);
 
   return (
-    <span ref={countRef}>
-      {prefix}
-      {count.toLocaleString("en-US", {
-        minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals,
-      })}
-      {suffix}
-    </span>
+    <div ref={metricRef} className="clouds-card rounded-3xl p-6 space-y-3 group bg-white shadow-xs border border-[#BDC3C7]/80 hover:shadow-md">
+      <div className="flex items-center justify-between">
+        <span className="text-3xl font-extrabold text-[#2C3E50] tracking-tight">
+          {count.toLocaleString("en-US", {
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals,
+          })}
+          <span className="text-[#34495E] ml-0.5">{suffix}</span>
+        </span>
+        <span className="h-10 w-10 rounded-2xl bg-[#ECF0F1] text-[#2C3E50] flex items-center justify-center border border-[#BDC3C7] shadow-xs group-hover:scale-110 transition-transform">
+          <span className="material-symbols-outlined text-lg">{icon}</span>
+        </span>
+      </div>
+
+      <div>
+        <div className="text-sm font-bold text-[#2C3E50] group-hover:text-[#34495E] transition-colors">
+          {label}
+        </div>
+        <div className="text-xs text-[#7F8C8D] mt-0.5">{sublabel}</div>
+      </div>
+
+      {/* Progress Track */}
+      <div className="w-full h-2 rounded-full bg-[#ECF0F1] overflow-hidden">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-[#2C3E50] via-[#34495E] to-[#7F8C8D] shadow-xs transition-all duration-150 ease-out"
+          style={{ width: `${barWidth}%` }}
+        />
+      </div>
+    </div>
   );
 }
 
@@ -557,6 +581,14 @@ export default function Home() {
   const [selectedCareerCategory, setSelectedCareerCategory] = useState<CareerCategory>("all");
   const [expandedRoleId, setExpandedRoleId] = useState<string>("sss-admin");
 
+  // Interactive Pipeline State
+  const [activePipelineStage, setActivePipelineStage] = useState<PipelineStage>("recon");
+
+  // Interactive Estimator State
+  const [estimatorOrg, setEstimatorOrg] = useState<string>("corporate");
+  const [estimatorModules, setEstimatorModules] = useState<string[]>(["gl", "bank", "statutory"]);
+  const [estimatorVolume, setEstimatorVolume] = useState<string>("medium");
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [selectedCertificateIndex, setSelectedCertificateIndex] = useState<number>(0);
@@ -565,6 +597,13 @@ export default function Home() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Quick form state
+  const [formName, setFormName] = useState("");
+  const [formEmail, setFormEmail] = useState("");
+  const [formService, setFormService] = useState("Full-Cycle Bookkeeping & General Ledger");
+  const [formMessage, setFormMessage] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -573,7 +612,7 @@ export default function Home() {
       setScrollProgress((currentScroll / totalScroll) * 100);
       setShowBackToTop(currentScroll > 400);
 
-      const sections = ["overview", "provenance", "dossier", "stack", "credentials", "contact"];
+      const sections = ["overview", "pipeline", "provenance", "dossier", "stack", "credentials", "estimator", "contact"];
       const scrollPosition = currentScroll + 200;
 
       for (const section of sections) {
@@ -592,6 +631,16 @@ export default function Home() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const showToast = (text: string) => {
+    setToastMessage(text);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  const copyToClipboard = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    showToast(`✓ Copied ${label} to clipboard!`);
+  };
 
   const filteredDocs = officialDocs.filter(
     (d) => selectedDocCategory === "all" || d.category === selectedDocCategory
@@ -632,27 +681,69 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const toggleModule = (id: string) => {
+    setEstimatorModules((prev) =>
+      prev.includes(id) ? prev.filter((m) => m !== id) : [...prev, id]
+    );
+  };
+
+  const handleApplyEstimatorToContact = () => {
+    const orgNames: Record<string, string> = {
+      corporate: "Private Enterprise / SME",
+      cooperative: "Cooperative / Microfinance (CDA)",
+      government: "Public Sector / Statutory Agency",
+      virtual: "Virtual Business / Remote Accounting",
+    };
+    const modNames: Record<string, string> = {
+      gl: "Full-Cycle GL & COA Architecture",
+      bank: "Daily Bank Reconciliation",
+      statutory: "SSS / BIR / Statutory HR Compliance",
+      cloud: "QuickBooks / Xero Migration",
+      audit: "Audit Prep & Financial Statement Package",
+    };
+    const selectedModList = estimatorModules.map((m) => modNames[m] || m).join(", ");
+    
+    setFormService("Custom Fractional Engagement Package");
+    setFormMessage(
+      `Hello Ma. Faith,\n\nI used your interactive engagement calculator for our organization (${orgNames[estimatorOrg]} with ${estimatorVolume} monthly volume).\n\nWe need assistance with:\n- ${selectedModList}\n\nPlease let us know your availability for a discovery discussion.`
+    );
+
+    const contactSection = document.getElementById("contact");
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: "smooth" });
+    }
+    showToast("✓ Configured scope loaded into Consultation form!");
+  };
+
   const currentCert = filteredCertificates[selectedCertificateIndex] || filteredCertificates[0];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#090D16] text-[#E2E8F0] relative selection:bg-[#D4AF37] selection:text-[#090D16]">
-      {/* Top Ambient Light Flare */}
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-radial-glow pointer-events-none z-0"></div>
+    <div className="flex flex-col min-h-screen bg-[#ECF0F1] text-[#2C3E50] relative selection:bg-[#34495E] selection:text-white bg-mesh-clouds clouds-grid-pattern">
+      {/* Toast Notification Alert */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-[100] px-5 py-3.5 rounded-2xl bg-[#2C3E50] text-[#ECF0F1] font-medium text-xs sm:text-sm shadow-2xl border border-[#34495E] flex items-center gap-3 animate-float-smooth">
+          <span className="material-symbols-outlined text-[#BDC3C7] text-base sm:text-lg">check_circle</span>
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
+      {/* Top Ambient Radiant Soft Glow */}
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[550px] bg-luminous-radial pointer-events-none z-0"></div>
 
       {/* Progress Line */}
-      <div className="fixed top-0 left-0 right-0 h-1 bg-transparent z-[60] pointer-events-none">
+      <div className="fixed top-0 left-0 right-0 h-1 bg-[#BDC3C7]/40 z-[60] pointer-events-none">
         <div
-          className="h-full bg-gradient-to-r from-amber-400 via-yellow-200 to-amber-500 shadow-[0_0_10px_rgba(212,175,55,0.7)] transition-all duration-75"
+          className="h-full bg-gradient-to-r from-[#2C3E50] via-[#34495E] to-[#7F8C8D] shadow-xs transition-all duration-75"
           style={{ width: `${scrollProgress}%` }}
         />
       </div>
 
-      {/* FLOATING ISLAND HEADER */}
+      {/* FLOATING CRYSTAL ISLAND HEADER */}
       <header className="fixed top-4 left-0 right-0 z-50 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto h-16 rounded-full bg-[#0F172A]/85 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.6)] px-4 sm:px-6 flex items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto h-16 rounded-full bg-white/95 backdrop-blur-xl border border-[#BDC3C7]/80 shadow-[0_8px_30px_rgba(44,62,80,0.08)] px-4 sm:px-6 flex items-center justify-between gap-4">
           {/* Identity Pill */}
           <a href="#overview" className="flex items-center gap-3 shrink-0 group">
-            <div className="relative h-10 w-10 shrink-0 rounded-full overflow-hidden border border-amber-400/40 shadow-md group-hover:scale-105 transition-transform">
+            <div className="relative h-10 w-10 shrink-0 rounded-full overflow-hidden border-2 border-[#34495E]/40 shadow-xs group-hover:scale-105 transition-transform">
               <img
                 src="/profile/avatar.jpg"
                 alt="Ma. Faith B. Briones"
@@ -660,32 +751,35 @@ export default function Home() {
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-bold text-white tracking-tight group-hover:text-amber-300 transition-colors">
+              <span className="text-sm font-bold text-[#2C3E50] tracking-tight group-hover:text-[#34495E] transition-colors">
                 Ma. Faith B. Briones
               </span>
-              <span className="text-[10px] text-amber-400 font-semibold tracking-wide">
-                BSA • CSE 80.24% • Senior Bookkeeper
+              <span className="text-[10px] text-[#34495E] font-bold tracking-wide flex items-center gap-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#34495E] inline-block animate-pulse"></span>
+                BSA • CSE 80.24% • Fiduciary Lead
               </span>
             </div>
           </a>
 
           {/* Nav Items */}
-          <nav className="hidden md:flex items-center gap-1.5 text-xs font-medium text-slate-300">
+          <nav className="hidden lg:flex items-center gap-1 text-xs font-semibold text-[#7F8C8D]">
             {[
               { id: "overview", label: "Overview" },
-              { id: "provenance", label: "Experience" },
-              { id: "dossier", label: "Dossier & PDFs" },
-              { id: "stack", label: "Systems & Standards" },
-              { id: "credentials", label: "Certificates" },
+              { id: "pipeline", label: "Workflow Pipeline" },
+              { id: "provenance", label: "Career Matrix" },
+              { id: "dossier", label: "Statutory Dossier" },
+              { id: "stack", label: "Systems" },
+              { id: "credentials", label: "Certifications" },
+              { id: "estimator", label: "Scope Calculator" },
               { id: "contact", label: "Contact" },
             ].map((item) => (
               <a
                 key={item.id}
                 href={`#${item.id}`}
-                className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${
+                className={`px-3 py-1.5 rounded-full transition-all duration-200 ${
                   activeSection === item.id
-                    ? "bg-amber-400/15 text-amber-300 border border-amber-400/30 font-semibold"
-                    : "hover:text-white hover:bg-white/5"
+                    ? "bg-[#2C3E50] text-white font-bold shadow-xs"
+                    : "hover:text-[#2C3E50] hover:bg-[#ECF0F1]"
                 }`}
               >
                 {item.label}
@@ -693,21 +787,21 @@ export default function Home() {
             ))}
           </nav>
 
-          {/* Quick Action */}
+          {/* Quick Action Button */}
           <div className="flex items-center gap-2.5 shrink-0">
             <a
               href="#contact"
-              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 text-xs font-bold shadow-[0_0_15px_rgba(212,175,55,0.35)] hover:shadow-[0_0_25px_rgba(212,175,55,0.6)] hover:scale-105 transition-all"
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#2C3E50] hover:bg-[#34495E] text-[#ECF0F1] text-xs font-bold shadow-md shadow-[#2C3E50]/20 hover:scale-105 transition-all border border-[#34495E]"
             >
-              <span>Get In Touch</span>
+              <span>Consult / Retain</span>
               <span className="material-symbols-outlined text-sm">arrow_forward</span>
             </a>
 
             {/* Mobile Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-full bg-white/5 text-slate-200 hover:text-white border border-white/10"
-              aria-label="Toggle menu"
+              className="lg:hidden p-2 rounded-full bg-[#ECF0F1] text-[#2C3E50] hover:text-[#34495E] border border-[#BDC3C7]"
+              aria-label="Toggle navigation"
             >
               <span className="material-symbols-outlined text-xl">
                 {mobileMenuOpen ? "close" : "menu"}
@@ -718,292 +812,661 @@ export default function Home() {
 
         {/* Mobile Dropdown */}
         {mobileMenuOpen && (
-          <div className="md:hidden mt-2 max-w-6xl mx-auto rounded-3xl bg-[#0F172A] border border-white/10 p-4 space-y-2 shadow-2xl animate-in slide-in-from-top-2 duration-200">
+          <div className="lg:hidden max-w-6xl mx-auto mt-2 rounded-3xl bg-white/95 backdrop-blur-xl border border-[#BDC3C7] p-4 shadow-xl space-y-1">
             {[
-              { id: "overview", label: "Overview" },
-              { id: "provenance", label: "Experience & Timeline" },
-              { id: "dossier", label: "Official Dossier & PDFs" },
-              { id: "stack", label: "Accounting Systems & Stack" },
-              { id: "credentials", label: "Verified Certificates" },
-              { id: "contact", label: "Direct Engagement" },
+              { id: "overview", label: "Executive Overview" },
+              { id: "pipeline", label: "Accounting Workflow Pipeline" },
+              { id: "provenance", label: "Career Provenance (20+ Yrs)" },
+              { id: "dossier", label: "Statutory Dossier & PDFs" },
+              { id: "stack", label: "Systems & Governance" },
+              { id: "credentials", label: "Verified Certifications (11 Proofs)" },
+              { id: "estimator", label: "Interactive Scope Calculator" },
+              { id: "contact", label: "Direct Intake & Consultation" },
             ].map((item) => (
               <a
                 key={item.id}
                 href={`#${item.id}`}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block px-4 py-2.5 rounded-2xl text-sm font-medium transition-colors ${
-                  activeSection === item.id ? "bg-amber-400/20 text-amber-300 font-semibold" : "text-slate-300 hover:bg-white/5"
-                }`}
+                className="flex items-center justify-between px-4 py-2.5 rounded-2xl text-xs font-bold text-[#2C3E50] hover:bg-[#ECF0F1] hover:text-[#34495E] transition-colors"
               >
-                {item.label}
+                <span>{item.label}</span>
+                <span className="material-symbols-outlined text-sm text-[#7F8C8D]">chevron_right</span>
               </a>
             ))}
-            <a
-              href="#contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block w-full text-center py-2.5 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 text-xs font-bold mt-2"
-            >
-              Request Consultation
-            </a>
           </div>
         )}
       </header>
 
-      <main className="w-full pt-28 pb-20 space-y-24">
-        {/* SECTION 1: MODERN BENTO HERO */}
-        <section className="relative w-full max-w-6xl mx-auto px-4 sm:px-6" id="overview">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-            {/* Bento 1: Primary Identity & Pitch (Col-span 7) */}
-            <Reveal className="lg:col-span-7 flex">
-              <div className="bento-card w-full rounded-3xl p-7 sm:p-9 flex flex-col justify-between space-y-6">
-                <div className="space-y-4">
-                  {/* Status Badges */}
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-xs font-semibold">
-                      <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse"></span>
-                      Civil Service Professional (80.24%)
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300 text-xs font-medium">
-                      BS in Accountancy Graduate
-                    </span>
-                  </div>
+      {/* HERO SECTION: PALETTE BENTO GRID */}
+      <section id="overview" className="relative pt-28 pb-16 md:pt-36 md:pb-24 px-4 sm:px-6 z-10">
+        <div className="max-w-6xl mx-auto space-y-12">
+          {/* Top Banner Chip */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#BDC3C7] shadow-xs text-xs font-semibold text-[#2C3E50]">
+              <span className="flex h-2 w-2 rounded-full bg-[#34495E] animate-ping"></span>
+              <span className="text-[#2C3E50] font-bold">Verified Fiduciary Record</span>
+              <span className="text-[#BDC3C7]">•</span>
+              <span className="text-[#7F8C8D]">BSA Andres Bonifacio College 2004</span>
+              <span className="text-[#BDC3C7]">•</span>
+              <span className="text-[#34495E] font-bold">CSE 80.24% Rating</span>
+            </div>
 
-                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15]">
-                    Ma. Faith B. Briones, <span className="gold-gradient-text">BSA, CSE</span>
-                  </h1>
-
-                  <p className="text-base text-slate-300 leading-relaxed">
-                    Over 20 years of hands-on fiduciary excellence in General Ledger accounting, zero-variance bank reconciliations, microfinance loan ledgers, and Social Security System (SSS) public administration.
-                  </p>
-                </div>
-
-                {/* Key Pillars Tags */}
-                <div className="space-y-4 pt-2 border-t border-white/5">
-                  <div className="flex flex-wrap gap-2 text-xs">
-                    <span className="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-300">
-                      📊 Full-Cycle General Ledger
-                    </span>
-                    <span className="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-300">
-                      🏛️ 12+ Yrs SSS Administration
-                    </span>
-                    <span className="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-300">
-                      🏆 2023 Best Customer Service Awardee
-                    </span>
-                    <span className="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-300">
-                      💼 QuickBooks &amp; Xero ERP
-                    </span>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex flex-wrap items-center gap-3 pt-2">
-                    <a
-                      href="#dossier"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-400 text-slate-950 font-bold text-xs shadow-lg hover:bg-amber-300 hover:scale-105 transition-all"
-                    >
-                      <span className="material-symbols-outlined text-base">folder_open</span>
-                      Explore Verified Dossier
-                    </a>
-                    <a
-                      href="/personal-data-sheet/PersonalDataSheet BRIONES.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-colors"
-                    >
-                      <span className="material-symbols-outlined text-base">download</span>
-                      Download PDS (CS Form 212)
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* Bento 2: Portrait & Verified Status (Col-span 5) */}
-            <Reveal delay={150} direction="scale" className="lg:col-span-5 flex">
-              <div className="bento-card w-full rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-4 relative overflow-hidden group">
-                {/* Photo Frame with 3:4 Aspect Ratio */}
-                <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden bg-slate-950 border border-white/10 shadow-xl">
-                  <img
-                    src="/profile/profile.jpg"
-                    alt="Ma. Faith B. Briones, BSA, CSE"
-                    className="w-full h-full object-cover object-[center_45%] group-hover:scale-103 transition-transform duration-500 ease-out"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-75"></div>
-
-                  {/* Floating Badges */}
-                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-                    <span className="px-2.5 py-1 rounded-full bg-slate-900/90 backdrop-blur-md border border-white/10 text-[10px] font-bold text-amber-300">
-                      BSA • 80.24% CSE
-                    </span>
-                    <span className="px-2.5 py-1 rounded-full bg-amber-400/20 backdrop-blur-md border border-amber-400/40 text-[10px] font-bold text-amber-300 flex items-center gap-1">
-                      <span className="material-symbols-outlined text-xs">verified</span>
-                      ACTIVE RECORD
-                    </span>
-                  </div>
-
-                  <div className="absolute bottom-3 left-3 right-3">
-                    <p className="text-white font-bold text-sm">Ma. Faith B. Briones</p>
-                    <p className="text-xs text-slate-300">Senior Bookkeeper &amp; Fiduciary Specialist</p>
-                  </div>
-                </div>
-
-                {/* Micro Details */}
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
-                    <span className="text-slate-400 block text-[10px] uppercase font-bold">Graduated</span>
-                    <span className="text-slate-200 font-semibold">Andres Bonifacio Coll.</span>
-                  </div>
-                  <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
-                    <span className="text-slate-400 block text-[10px] uppercase font-bold">Eligibility Conferred</span>
-                    <span className="text-amber-300 font-semibold">Civil Service Prof.</span>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* Bento 3: 4 Key Interactive Metric Cards (12 cols) */}
-            <div className="lg:col-span-12 grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {[
-                { value: 20, suffix: "+ Yrs", label: "Professional Accounting", desc: "Full-Cycle Practice" },
-                { value: 80.24, suffix: "%", decimals: 2, label: "Civil Service Rating", desc: "Career Service Prof." },
-                { value: 12, suffix: "+ Yrs", label: "SSS Public Service", desc: "Admin & Claims Lead" },
-                { value: 9, suffix: "+ Yrs", label: "Lead Bookkeeper", desc: "TSKI & Cooperatives" },
-              ].map((stat, i) => (
-                <Reveal key={i} delay={200 + i * 50}>
-                  <div className="bento-card rounded-2xl p-5 text-center sm:text-left space-y-1">
-                    <div className="text-2xl sm:text-3xl font-extrabold text-amber-400">
-                      <CountUp end={stat.value} decimals={stat.decimals || 0} suffix={stat.suffix} />
-                    </div>
-                    <div className="text-xs font-bold text-white">{stat.label}</div>
-                    <div className="text-[11px] text-slate-400">{stat.desc}</div>
-                  </div>
-                </Reveal>
-              ))}
+            <div className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white text-[#2C3E50] border border-[#BDC3C7] text-xs font-bold shadow-xs">
+              <span className="material-symbols-outlined text-sm text-[#34495E]">event_available</span>
+              <span>Available for Q3/Q4 2026 Fractional Retainers</span>
             </div>
           </div>
-        </section>
 
-        {/* SECTION 2: INTERACTIVE CAREER & PROVENANCE MATRIX */}
-        <section className="relative w-full max-w-6xl mx-auto px-4 sm:px-6" id="provenance">
+          {/* Hero Main Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Left Content Column (7 cols) */}
+            <div className="lg:col-span-7 space-y-6">
+              <Reveal>
+                <div className="space-y-3">
+                  <div className="text-xs font-extrabold uppercase tracking-widest text-[#34495E] flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-base">shield</span>
+                    Senior Bookkeeper • Fiduciary Controller • Government Administrator
+                  </div>
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#2C3E50] tracking-tight leading-[1.12]">
+                    Impeccable Ledger <span className="navy-gradient-text">Precision</span> & Statutory Governance.
+                  </h1>
+                </div>
+              </Reveal>
+
+              <Reveal delay={100}>
+                <p className="text-base sm:text-lg text-[#34495E] font-normal leading-relaxed">
+                  <strong>Ma. Faith Batilona Briones, BSA, CSE</strong> combines over <strong>20 years</strong> of double-entry General Ledger mastery with <strong>12+ years of Social Security System (SSS)</strong> public administration. Delivering zero-variance bank reconciliations, ISO 9001 microfinance compliance, and boardroom-grade controllership.
+                </p>
+              </Reveal>
+
+              {/* Action Buttons & Fast Links */}
+              <Reveal delay={200}>
+                <div className="flex flex-wrap items-center gap-3.5 pt-2">
+                  <a
+                    href="#pipeline"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#2C3E50] hover:bg-[#34495E] text-[#ECF0F1] text-sm font-bold shadow-lg shadow-[#2C3E50]/20 hover:scale-[1.02] transition-all border border-[#34495E]"
+                  >
+                    <span className="material-symbols-outlined text-lg">timeline</span>
+                    <span>Explore Workflow Pipeline</span>
+                  </a>
+
+                  <a
+                    href="#dossier"
+                    className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-white hover:bg-[#ECF0F1] text-[#2C3E50] text-sm font-bold border border-[#BDC3C7] shadow-xs transition-all"
+                  >
+                    <span className="material-symbols-outlined text-lg text-[#34495E]">article</span>
+                    <span>Official CSC & COEs</span>
+                  </a>
+
+                  <a
+                    href="#estimator"
+                    className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-white hover:bg-[#ECF0F1] text-[#34495E] text-sm font-bold border border-[#BDC3C7] shadow-xs transition-all"
+                  >
+                    <span className="material-symbols-outlined text-lg text-[#2C3E50]">calculate</span>
+                    <span>Scope Calculator</span>
+                  </a>
+                </div>
+              </Reveal>
+
+              {/* Quick Trust Highlights */}
+              <Reveal delay={300}>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-[#BDC3C7]">
+                  <div className="flex items-center gap-2.5">
+                    <span className="material-symbols-outlined text-[#34495E] text-xl">verified</span>
+                    <div>
+                      <div className="text-xs font-bold text-[#2C3E50]">100% On-Time</div>
+                      <div className="text-[11px] text-[#7F8C8D]">Statutory SSS & Tax</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2.5">
+                    <span className="material-symbols-outlined text-[#2C3E50] text-xl">account_balance</span>
+                    <div>
+                      <div className="text-xs font-bold text-[#2C3E50]">ISO 9001 Tested</div>
+                      <div className="text-[11px] text-[#7F8C8D]">TSKI Microfinance</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2.5 col-span-2 sm:col-span-1">
+                    <span className="material-symbols-outlined text-[#34495E] text-xl">military_tech</span>
+                    <div>
+                      <div className="text-xs font-bold text-[#2C3E50]">2023 Awardee</div>
+                      <div className="text-[11px] text-[#7F8C8D]">Best Customer Service</div>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+
+            {/* Right Portrait & Visual Bento (5 cols) */}
+            <div className="lg:col-span-5">
+              <Reveal direction="scale" delay={150}>
+                <div className="relative mx-auto max-w-sm lg:max-w-none">
+                  {/* Outer Frame with Palette Styling */}
+                  <div className="relative rounded-3xl p-3 bg-white border border-[#BDC3C7] shadow-[0_20px_50px_rgba(44,62,80,0.1)]">
+                    {/* Natural 3:4 Portrait Image Container */}
+                    <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden bg-[#ECF0F1] shadow-inner">
+                      <img
+                        src="/profile/profile.jpg"
+                        alt="Ma. Faith Batilona Briones, BSA, CSE"
+                        className="w-full h-full object-cover object-[center_45%] hover:scale-[1.02] transition-transform duration-500"
+                      />
+
+                      {/* Top & Bottom Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#2C3E50]/90 via-transparent to-transparent pointer-events-none"></div>
+
+                      {/* Floating Trust Pills Inside Image */}
+                      <div className="absolute bottom-4 left-4 right-4 text-[#ECF0F1] space-y-1.5">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#34495E]/90 backdrop-blur-md text-[11px] font-bold border border-[#BDC3C7]/40 shadow-xs">
+                          <span className="material-symbols-outlined text-sm">military_tech</span>
+                          <span>CSE Professional 80.24% • Verified 2025</span>
+                        </div>
+                        <div className="text-base font-bold text-white tracking-tight">
+                          Ma. Faith Batilona Briones, BSA, CSE
+                        </div>
+                        <div className="text-xs text-[#BDC3C7]">
+                          Bachelor of Science in Accountancy • Andres Bonifacio College
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Floating Badge (Top-Right) */}
+                    <div className="absolute -top-3 -right-3 px-3.5 py-1.5 rounded-2xl bg-white text-[#2C3E50] border border-[#BDC3C7] shadow-lg flex items-center gap-2 animate-float-smooth">
+                      <span className="h-2 w-2 rounded-full bg-[#2C3E50]"></span>
+                      <span className="text-xs font-bold">20+ Yrs Practice</span>
+                    </div>
+
+                    {/* Floating Badge (Bottom-Left) */}
+                    <div className="absolute -bottom-3 -left-3 px-3.5 py-1.5 rounded-2xl bg-white text-[#2C3E50] border border-[#BDC3C7] shadow-lg flex items-center gap-2 animate-float-smooth" style={{ animationDelay: "2s" }}>
+                      <span className="material-symbols-outlined text-[#34495E] text-sm">verified_user</span>
+                      <span className="text-xs font-bold">12+ Yrs Public Service</span>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+
+          {/* 4 INTERACTIVE ANIMATED METRICS COUNTERS */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+            <AnimatedMetric
+              end={20}
+              suffix="+"
+              label="Years Experience"
+              sublabel="Fiduciary & Public Accounting"
+              progress={100}
+              icon="calendar_month"
+            />
+            <AnimatedMetric
+              end={80.24}
+              decimals={2}
+              suffix="%"
+              label="CSE Professional Rating"
+              sublabel="Civil Service Commission Conferred"
+              progress={90}
+              icon="military_tech"
+            />
+            <AnimatedMetric
+              end={12}
+              suffix="+ Yrs"
+              label="SSS Public Administration"
+              sublabel="Disbursements & Claims Leadership"
+              progress={85}
+              icon="admin_panel_settings"
+            />
+            <AnimatedMetric
+              end={9}
+              suffix="+ Yrs"
+              label="Lead Bookkeeper"
+              sublabel="TSKI & Cooperative General Ledgers"
+              progress={80}
+              icon="account_balance_wallet"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* INTERACTIVE ACCOUNTING WORKFLOW & RECONCILIATION PIPELINE */}
+      <section id="pipeline" className="py-20 px-4 sm:px-6 bg-white/70 border-y border-[#BDC3C7]/80 relative">
+        <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div className="text-center max-w-3xl mx-auto space-y-3">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECF0F1] text-[#2C3E50] border border-[#BDC3C7] text-xs font-bold">
+                <span className="material-symbols-outlined text-sm">hub</span>
+                <span>Interactive Delivery Pipeline</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-[#2C3E50] tracking-tight">
+                How Engagements Deliver <span className="navy-gradient-text">Zero-Variance</span> Control.
+              </h2>
+              <p className="text-sm sm:text-base text-[#7F8C8D]">
+                Click through each phase below to inspect the actual controllership protocols, deliverables, and statutory safeguards implemented for every client.
+              </p>
+            </div>
+          </Reveal>
+
+          {/* Pipeline Interactive Tabs */}
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {[
+              { id: "coa" as PipelineStage, step: "01", label: "COA & Architecture", icon: "account_tree" },
+              { id: "vouchers" as PipelineStage, step: "02", label: "Disbursement Control", icon: "receipt_long" },
+              { id: "recon" as PipelineStage, step: "03", label: "Daily Bank Recon", icon: "sync_alt" },
+              { id: "close" as PipelineStage, step: "04", label: "Month-End P&L Close", icon: "query_stats" },
+              { id: "compliance" as PipelineStage, step: "05", label: "Statutory & Audit Defense", icon: "verified" },
+            ].map((p) => (
+              <button
+                key={p.id}
+                onClick={() => setActivePipelineStage(p.id)}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-all ${
+                  activePipelineStage === p.id
+                    ? "bg-[#2C3E50] text-[#ECF0F1] shadow-lg shadow-[#2C3E50]/20 scale-105 border border-[#34495E]"
+                    : "bg-white text-[#34495E] border border-[#BDC3C7] hover:bg-[#ECF0F1]"
+                }`}
+              >
+                <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded-md ${
+                  activePipelineStage === p.id ? "bg-white/20 text-white" : "bg-[#ECF0F1] text-[#7F8C8D]"
+                }`}>
+                  {p.step}
+                </span>
+                <span className="material-symbols-outlined text-base">{p.icon}</span>
+                <span>{p.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Dynamic Pipeline Content Display */}
+          <Reveal key={activePipelineStage} direction="scale">
+            <div className="clouds-card rounded-3xl p-6 sm:p-8 bg-white border border-[#BDC3C7] shadow-lg">
+              {activePipelineStage === "coa" && (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                  <div className="lg:col-span-7 space-y-4">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECF0F1] text-[#2C3E50] text-xs font-bold border border-[#BDC3C7]">
+                      <span>Phase 01: Systems & Account Architecture</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-[#2C3E50]">
+                      Standardized Chart of Accounts (COA) & ERP Setup
+                    </h3>
+                    <p className="text-[#34495E] text-sm leading-relaxed">
+                      Custom structural alignment with GAAP and CDA standards. Eliminates duplicate ledgers, sets up departmental cost centers, and maps accounting rules into QuickBooks or Xero.
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                      <div className="p-3.5 rounded-2xl bg-[#ECF0F1]/60 border border-[#BDC3C7]">
+                        <div className="text-xs font-bold text-[#2C3E50] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#34495E] text-base">check_circle</span>
+                          Key Deliverable
+                        </div>
+                        <div className="text-xs text-[#34495E] mt-1">Multi-tier COA Taxonomy & Class Mapping Matrix</div>
+                      </div>
+                      <div className="p-3.5 rounded-2xl bg-[#ECF0F1]/60 border border-[#BDC3C7]">
+                        <div className="text-xs font-bold text-[#2C3E50] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#34495E] text-base">speed</span>
+                          Turnaround
+                        </div>
+                        <div className="text-xs text-[#34495E] mt-1">1–3 Days Initial Onboarding Deployment</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-5 p-5 rounded-2xl bg-[#ECF0F1] border border-[#BDC3C7] space-y-3">
+                    <div className="text-xs font-bold text-[#2C3E50] uppercase tracking-wide">Fiduciary Safeguard</div>
+                    <ul className="space-y-2 text-xs text-[#34495E]">
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#2C3E50] text-sm shrink-0">task_alt</span>
+                        <span>Zero inter-company ledger mismatches</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#2C3E50] text-sm shrink-0">task_alt</span>
+                        <span>Standardized naming conventions for multi-currency</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#2C3E50] text-sm shrink-0">task_alt</span>
+                        <span>Automated bank feed synchronization rules</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+
+              {activePipelineStage === "vouchers" && (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                  <div className="lg:col-span-7 space-y-4">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECF0F1] text-[#2C3E50] text-xs font-bold border border-[#BDC3C7]">
+                      <span>Phase 02: Transaction & Voucher Hygiene</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-[#2C3E50]">
+                      Disbursement Vouchers, Receipts & PIMS Procurement
+                    </h3>
+                    <p className="text-[#34495E] text-sm leading-relaxed">
+                      Leveraging 12+ years of SSS disbursement voucher preparation and TSKI microfinance cash registers. Every expense has complete statutory invoice attachments and dual-authorization checks.
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                      <div className="p-3.5 rounded-2xl bg-[#ECF0F1]/60 border border-[#BDC3C7]">
+                        <div className="text-xs font-bold text-[#2C3E50] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#34495E] text-base">check_circle</span>
+                          Key Deliverable
+                        </div>
+                        <div className="text-xs text-[#34495E] mt-1">Audit-Ready Voucher Registry & Invoice Digital Archive</div>
+                      </div>
+                      <div className="p-3.5 rounded-2xl bg-[#ECF0F1]/60 border border-[#BDC3C7]">
+                        <div className="text-xs font-bold text-[#2C3E50] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#34495E] text-base">speed</span>
+                          Turnaround
+                        </div>
+                        <div className="text-xs text-[#34495E] mt-1">Daily / 24-Hour Processing Cycle</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-5 p-5 rounded-2xl bg-[#ECF0F1] border border-[#BDC3C7] space-y-3">
+                    <div className="text-xs font-bold text-[#2C3E50] uppercase tracking-wide">Fiduciary Safeguard</div>
+                    <ul className="space-y-2 text-xs text-[#34495E]">
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#2C3E50] text-sm shrink-0">task_alt</span>
+                        <span>Zero unauthorized disbursements or orphan receipts</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#2C3E50] text-sm shrink-0">task_alt</span>
+                        <span>PIMS and procurement asset tag tracing</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#2C3E50] text-sm shrink-0">task_alt</span>
+                        <span>Complete tax withholding documentation (BIR Form 2307)</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+
+              {activePipelineStage === "recon" && (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                  <div className="lg:col-span-7 space-y-4">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECF0F1] text-[#2C3E50] text-xs font-bold border border-[#BDC3C7]">
+                      <span>Phase 03: Cash & Bank Reconciliation</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-[#2C3E50]">
+                      Daily Bank Feeds, Merchant Accounts & Loan Portfolios
+                    </h3>
+                    <p className="text-[#34495E] text-sm leading-relaxed">
+                      Continuous bank-to-ledger matching for multi-bank accounts, Stripe/PayPal feeds, and microfinance loan amortizations. Outstanding checks and deposits in transit are resolved immediately.
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                      <div className="p-3.5 rounded-2xl bg-[#ECF0F1]/60 border border-[#BDC3C7]">
+                        <div className="text-xs font-bold text-[#2C3E50] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#34495E] text-base">check_circle</span>
+                          Key Deliverable
+                        </div>
+                        <div className="text-xs text-[#34495E] mt-1">Multi-Bank Reconciliation Schedules & Variance Log</div>
+                      </div>
+                      <div className="p-3.5 rounded-2xl bg-[#ECF0F1]/60 border border-[#BDC3C7]">
+                        <div className="text-xs font-bold text-[#2C3E50] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#34495E] text-base">speed</span>
+                          Turnaround
+                        </div>
+                        <div className="text-xs text-[#34495E] mt-1">Daily / Weekly Real-Time Balance Match</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-5 p-5 rounded-2xl bg-[#ECF0F1] border border-[#BDC3C7] space-y-3">
+                    <div className="text-xs font-bold text-[#2C3E50] uppercase tracking-wide">Fiduciary Safeguard</div>
+                    <ul className="space-y-2 text-xs text-[#34495E]">
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#2C3E50] text-sm shrink-0">task_alt</span>
+                        <span>0% undetected bank fee or payment discrepancies</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#2C3E50] text-sm shrink-0">task_alt</span>
+                        <span>Immediate identification of bounced or dishonored checks</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#2C3E50] text-sm shrink-0">task_alt</span>
+                        <span>Automated reconciliation rules for 90%+ daily speed</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+
+              {activePipelineStage === "close" && (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                  <div className="lg:col-span-7 space-y-4">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECF0F1] text-[#2C3E50] text-xs font-bold border border-[#BDC3C7]">
+                      <span>Phase 04: Month-End Close & Financial Reporting</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-[#2C3E50]">
+                      Trial Balance, Accruals, P&L & Balance Sheet Package
+                    </h3>
+                    <p className="text-[#34495E] text-sm leading-relaxed">
+                      Rigorous month-end close including prepaid expense amortization, fixed asset depreciation schedules, and variance analysis against monthly operational budgets.
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                      <div className="p-3.5 rounded-2xl bg-[#ECF0F1]/60 border border-[#BDC3C7]">
+                        <div className="text-xs font-bold text-[#2C3E50] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#34495E] text-base">check_circle</span>
+                          Key Deliverable
+                        </div>
+                        <div className="text-xs text-[#34495E] mt-1">Executive Monthly Financial Pack (P&L, BS, Cash Flow)</div>
+                      </div>
+                      <div className="p-3.5 rounded-2xl bg-[#ECF0F1]/60 border border-[#BDC3C7]">
+                        <div className="text-xs font-bold text-[#2C3E50] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#34495E] text-base">speed</span>
+                          Turnaround
+                        </div>
+                        <div className="text-xs text-[#34495E] mt-1">T+3 to T+5 Days Post-Month Close</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-5 p-5 rounded-2xl bg-[#ECF0F1] border border-[#BDC3C7] space-y-3">
+                    <div className="text-xs font-bold text-[#2C3E50] uppercase tracking-wide">Fiduciary Safeguard</div>
+                    <ul className="space-y-2 text-xs text-[#34495E]">
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#2C3E50] text-sm shrink-0">task_alt</span>
+                        <span>100% Trial Balance mathematical tie-out</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#2C3E50] text-sm shrink-0">task_alt</span>
+                        <span>Accrual schedules matching GAAP revenue recognition</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#2C3E50] text-sm shrink-0">task_alt</span>
+                        <span>Clear executive narrative highlighting cost anomalies</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+
+              {activePipelineStage === "compliance" && (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                  <div className="lg:col-span-7 space-y-4">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECF0F1] text-[#2C3E50] text-xs font-bold border border-[#BDC3C7]">
+                      <span>Phase 05: Statutory Compliance & Audit Defense</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-[#2C3E50]">
+                      SSS Remittances, CDA Cooperative Filings & Audit Readiness
+                    </h3>
+                    <p className="text-[#34495E] text-sm leading-relaxed">
+                      Direct integration with statutory portals (SSS, PhilHealth, Pag-IBIG, CDA). Prepares comprehensive audit workpapers and supporting schedules so external audits conclude with zero adjustments.
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                      <div className="p-3.5 rounded-2xl bg-[#ECF0F1]/60 border border-[#BDC3C7]">
+                        <div className="text-xs font-bold text-[#2C3E50] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#34495E] text-base">check_circle</span>
+                          Key Deliverable
+                        </div>
+                        <div className="text-xs text-[#34495E] mt-1">Audit Workpapers, Statutory Remittance Reports & Schedules</div>
+                      </div>
+                      <div className="p-3.5 rounded-2xl bg-[#ECF0F1]/60 border border-[#BDC3C7]">
+                        <div className="text-xs font-bold text-[#2C3E50] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#34495E] text-base">speed</span>
+                          Turnaround
+                        </div>
+                        <div className="text-xs text-[#34495E] mt-1">100% On-Time Before Statutory Deadlines</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-5 p-5 rounded-2xl bg-[#ECF0F1] border border-[#BDC3C7] space-y-3">
+                    <div className="text-xs font-bold text-[#2C3E50] uppercase tracking-wide">Fiduciary Safeguard</div>
+                    <ul className="space-y-2 text-xs text-[#34495E]">
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#2C3E50] text-sm shrink-0">task_alt</span>
+                        <span>Zero penalty guarantee for statutory deadlines</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#2C3E50] text-sm shrink-0">task_alt</span>
+                        <span>Full compliance with Republic Act 10173 (Data Privacy)</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#2C3E50] text-sm shrink-0">task_alt</span>
+                        <span>Official signing by verified BSA & CSE Professional</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 20-YEAR CAREER PROVENANCE MATRIX */}
+      <section id="provenance" className="py-20 px-4 sm:px-6 relative">
+        <div className="max-w-6xl mx-auto space-y-10">
+          <Reveal>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">Career Provenance &amp; Track Record</span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-1">
-                  20 Years of Government &amp; Corporate Service
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECF0F1] text-[#2C3E50] border border-[#BDC3C7] text-xs font-bold mb-2">
+                  <span className="material-symbols-outlined text-sm">history_edu</span>
+                  <span>Verified 20-Year Employment History</span>
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-[#2C3E50] tracking-tight">
+                  Career Provenance & Public Record
                 </h2>
-                <p className="text-sm text-slate-400 max-w-2xl mt-1">
-                  Click any appointment to inspect responsibilities, verified accomplishments, and supervisors.
+                <p className="text-sm text-[#7F8C8D] mt-1">
+                  Cross-referenced with CSC Form 212 and official Certificates of Employment.
                 </p>
               </div>
 
-              {/* Segmented Filter */}
-              <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-slate-900 border border-slate-800 self-start sm:self-auto">
-                <button
-                  onClick={() => setSelectedCareerCategory("all")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedCareerCategory === "all"
-                      ? "bg-amber-400 text-slate-950 shadow-md"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  All (5)
-                </button>
-                <button
-                  onClick={() => setSelectedCareerCategory("gov")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedCareerCategory === "gov"
-                      ? "bg-amber-400 text-slate-950 shadow-md"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  SSS Government (2)
-                </button>
-                <button
-                  onClick={() => setSelectedCareerCategory("private")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedCareerCategory === "private"
-                      ? "bg-amber-400 text-slate-950 shadow-md"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  Bookkeeping &amp; Coops (3)
-                </button>
+              {/* Filter Tabs */}
+              <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-white border border-[#BDC3C7] shadow-xs">
+                {[
+                  { id: "all" as CareerCategory, label: "All Engagements (5)" },
+                  { id: "gov" as CareerCategory, label: "SSS Public Service" },
+                  { id: "private" as CareerCategory, label: "Bookkeeping & Coops" },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setSelectedCareerCategory(tab.id)}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                      selectedCareerCategory === tab.id
+                        ? "bg-[#2C3E50] text-white shadow-xs"
+                        : "text-[#7F8C8D] hover:text-[#2C3E50] hover:bg-[#ECF0F1]"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
               </div>
             </div>
           </Reveal>
 
-          {/* Interactive Master-Detail Accordion Cards */}
+          {/* Interactive Career Accordions */}
           <div className="space-y-4">
             {filteredCareerRoles.map((role, idx) => {
               const isExpanded = expandedRoleId === role.id;
               return (
-                <Reveal key={role.id} delay={idx * 50}>
+                <Reveal key={role.id} delay={idx * 60}>
                   <div
-                    onClick={() => setExpandedRoleId(isExpanded ? "" : role.id)}
-                    className={`bento-card rounded-3xl p-6 sm:p-7 cursor-pointer transition-all duration-300 ${
-                      isExpanded ? "border-amber-400/40 bg-slate-900/90 shadow-2xl" : "hover:border-slate-700"
+                    className={`rounded-3xl border transition-all duration-300 bg-white ${
+                      isExpanded
+                        ? "border-[#34495E] shadow-md ring-2 ring-[#34495E]/10"
+                        : "border-[#BDC3C7] hover:border-[#7F8C8D] shadow-xs"
                     }`}
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                      <div className="space-y-1">
+                    {/* Header Row (Clickable) */}
+                    <button
+                      onClick={() => setExpandedRoleId(isExpanded ? "" : role.id)}
+                      className="w-full p-6 text-left flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                    >
+                      <div className="space-y-1.5">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${role.badgeColor}`}>
+                          <span
+                            className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold border bg-[#ECF0F1] text-[#2C3E50] border-[#BDC3C7]"
+                          >
                             {role.badge}
                           </span>
-                          <span className="text-xs text-slate-400">{role.period}</span>
+                          <span className="text-xs text-[#7F8C8D] font-semibold">{role.period}</span>
                         </div>
-                        <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-amber-300 transition-colors">
-                          {role.role}
-                        </h3>
-                        <p className="text-xs text-amber-300/90 font-medium">
-                          {role.organization} • <span className="text-slate-400">{role.location}</span>
-                        </p>
-                      </div>
-
-                      <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
-                        <span className="text-xs text-slate-400 hidden sm:inline">
-                          {isExpanded ? "Collapse Details" : "View Breakdown"}
-                        </span>
-                        <div className="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-300">
-                          <span className={`material-symbols-outlined text-lg transition-transform duration-300 ${isExpanded ? "rotate-180 text-amber-300" : ""}`}>
-                            expand_more
+                        <h3 className="text-lg font-bold text-[#2C3E50]">{role.role}</h3>
+                        <div className="text-xs text-[#34495E] font-bold flex items-center gap-1">
+                          <span className="material-symbols-outlined text-sm">location_on</span>
+                          <span>
+                            {role.organization} • {role.location}
                           </span>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Expandable Detail Panel */}
+                      <div className="flex items-center gap-3 shrink-0">
+                        <span className="text-xs font-bold text-[#7F8C8D] hidden sm:inline">
+                          {isExpanded ? "Collapse Record" : "View Breakdown"}
+                        </span>
+                        <div
+                          className={`h-9 w-9 rounded-2xl flex items-center justify-center border transition-all ${
+                            isExpanded
+                              ? "bg-[#2C3E50] text-white border-[#2C3E50] rotate-180"
+                              : "bg-[#ECF0F1] text-[#2C3E50] border-[#BDC3C7]"
+                          }`}
+                        >
+                          <span className="material-symbols-outlined text-lg">expand_more</span>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* Expandable Body */}
                     {isExpanded && (
-                      <div className="mt-5 pt-5 border-t border-slate-800 space-y-4 animate-in fade-in duration-300">
-                        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                      <div className="px-6 pb-6 pt-2 border-t border-[#ECF0F1] space-y-4 text-sm text-[#34495E] animate-fadeIn">
+                        <p className="leading-relaxed bg-[#ECF0F1]/60 p-4 rounded-2xl border border-[#BDC3C7] text-[#2C3E50]">
                           {role.summary}
                         </p>
 
                         <div className="space-y-2">
-                          <span className="text-xs font-bold text-white block">Key Responsibilities &amp; Accomplishments:</span>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-                            {role.highlights.map((item, hIdx) => (
-                              <div key={hIdx} className="p-3 rounded-2xl bg-slate-950/70 border border-slate-800/80 text-xs text-slate-300 flex items-start gap-2">
-                                <span className="text-amber-400 font-bold mt-0.5">✓</span>
-                                <span className="leading-relaxed">{item}</span>
-                              </div>
-                            ))}
+                          <div className="text-xs font-bold uppercase tracking-wider text-[#2C3E50] flex items-center gap-1.5">
+                            <span className="material-symbols-outlined text-[#34495E] text-sm">task_alt</span>
+                            <span>Key Duties & Verified Contributions</span>
                           </div>
+                          <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                            {role.highlights.map((h, i) => (
+                              <li
+                                key={i}
+                                className="flex items-start gap-2 p-2.5 rounded-xl bg-[#ECF0F1]/40 border border-[#BDC3C7]"
+                              >
+                                <span className="h-1.5 w-1.5 rounded-full bg-[#2C3E50] mt-1.5 shrink-0"></span>
+                                <span className="text-[#34495E]">{h}</span>
+                              </li>
+                            ))}
+                          </ul>
                         </div>
 
-                        {role.supervisors && (
-                          <div className="flex items-center gap-2 text-xs text-slate-400 pt-2">
-                            <span className="material-symbols-outlined text-sm text-amber-400">supervisor_account</span>
-                            <span>Direct Supervisor(s): <strong className="text-slate-200">{role.supervisors}</strong></span>
-                          </div>
-                        )}
+                        {/* Supervisory Verification & Tags */}
+                        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#BDC3C7]">
+                          {role.supervisors && (
+                            <div className="text-xs text-[#7F8C8D]">
+                              <span className="font-bold text-[#2C3E50]">Official Supervisors:</span>{" "}
+                              {role.supervisors}
+                            </div>
+                          )}
 
-                        <div className="flex flex-wrap gap-1.5 pt-2">
-                          {role.tags.map((tag, tIdx) => (
-                            <span key={tIdx} className="px-2.5 py-1 rounded-xl bg-slate-800 text-[11px] text-slate-300">
-                              {tag}
-                            </span>
-                          ))}
+                          <div className="flex flex-wrap items-center gap-1.5 ml-auto">
+                            {role.tags.map((t, idx) => (
+                              <span
+                                key={idx}
+                                className="px-2.5 py-1 rounded-lg bg-[#ECF0F1] text-[#2C3E50] font-semibold text-[11px] border border-[#BDC3C7]"
+                              >
+                                {t}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     )}
@@ -1012,648 +1475,920 @@ export default function Home() {
               );
             })}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* SECTION 3: INTERACTIVE DOCUMENT HUB (OFFICIAL DOSSIER) */}
-        <section className="relative w-full max-w-6xl mx-auto px-4 sm:px-6" id="dossier">
+      {/* OFFICIAL STATUTORY DOSSIER & PDF HUB */}
+      <section id="dossier" className="py-20 px-4 sm:px-6 bg-white/80 border-y border-[#BDC3C7]/80 relative">
+        <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">Statutory Authenticity</span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-1">
-                  Official Dossier &amp; Certified PDFs
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECF0F1] text-[#2C3E50] border border-[#BDC3C7] text-xs font-bold mb-2">
+                  <span className="material-symbols-outlined text-sm">folder_shared</span>
+                  <span>Direct Primary Records</span>
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-[#2C3E50] tracking-tight">
+                  Official Statutory Dossier & Signed PDFs
                 </h2>
-                <p className="text-sm text-slate-400 max-w-2xl mt-1">
-                  Direct access to extracted digital highlights and official signed PDF documents.
+                <p className="text-sm text-[#7F8C8D] mt-1">
+                  Inspect or download all 6 official signed records including CS Form 212, COEs, and Work Experience Sheets.
                 </p>
               </div>
 
-              {/* Filter Tabs */}
-              <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-slate-900 border border-slate-800 self-start sm:self-auto">
-                <button
-                  onClick={() => setSelectedDocCategory("all")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedDocCategory === "all" ? "bg-amber-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  All ({officialDocs.length})
-                </button>
-                <button
-                  onClick={() => setSelectedDocCategory("pds")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedDocCategory === "pds" ? "bg-amber-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  CSC Form 212
-                </button>
-                <button
-                  onClick={() => setSelectedDocCategory("coe")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedDocCategory === "coe" ? "bg-amber-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  COEs (2)
-                </button>
-                <button
-                  onClick={() => setSelectedDocCategory("wes")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedDocCategory === "wes" ? "bg-amber-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  Work Sheets (3)
-                </button>
+              {/* Category Filter */}
+              <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-white border border-[#BDC3C7] shadow-xs">
+                {[
+                  { id: "all" as DocCategory, label: "All Dossiers (6)" },
+                  { id: "pds" as DocCategory, label: "CSC Form 212" },
+                  { id: "coe" as DocCategory, label: "COE Certs" },
+                  { id: "wes" as DocCategory, label: "Work Experience" },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setSelectedDocCategory(tab.id)}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                      selectedDocCategory === tab.id
+                        ? "bg-[#2C3E50] text-white shadow-xs"
+                        : "text-[#7F8C8D] hover:text-[#2C3E50] hover:bg-[#ECF0F1]"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
               </div>
             </div>
           </Reveal>
 
-          {/* Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {/* Dossier Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredDocs.map((doc, idx) => (
-              <Reveal key={doc.id} delay={idx * 75}>
-                <div
-                  onClick={() => openDocViewer(doc)}
-                  className="bento-card rounded-3xl p-6 flex flex-col justify-between h-full cursor-pointer group space-y-4"
-                >
-                  <div className="space-y-3">
+              <Reveal key={doc.id} delay={idx * 60}>
+                <div className="clouds-card rounded-3xl p-6 bg-white border border-[#BDC3C7] shadow-xs flex flex-col justify-between space-y-5 h-full group hover:border-[#2C3E50]">
+                  <div className="space-y-3.5">
+                    {/* Card Top Icon & Badge */}
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-amber-300 uppercase tracking-wider">{doc.categoryLabel}</span>
-                      <span className="px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-[10px] text-slate-300">
+                      <span
+                        className="h-11 w-11 rounded-2xl flex items-center justify-center border bg-[#ECF0F1] text-[#2C3E50] border-[#BDC3C7]"
+                      >
+                        <span className="material-symbols-outlined text-xl">{doc.icon}</span>
+                      </span>
+                      <span className="px-3 py-1 rounded-full bg-[#ECF0F1] text-[#2C3E50] text-[11px] font-extrabold border border-[#BDC3C7]">
                         {doc.badge}
                       </span>
                     </div>
 
-                    <div className="flex items-start gap-3">
-                      <div className="h-10 w-10 shrink-0 rounded-2xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400 group-hover:bg-amber-400 group-hover:text-slate-950 transition-colors">
-                        <span className="material-symbols-outlined text-xl">{doc.icon}</span>
+                    <div>
+                      <div className="text-[11px] font-extrabold uppercase tracking-wide text-[#7F8C8D]">
+                        {doc.categoryLabel}
                       </div>
-                      <div>
-                        <h3 className="text-base font-bold text-white group-hover:text-amber-300 transition-colors leading-snug">
-                          {doc.title}
-                        </h3>
-                        <p className="text-[11px] text-slate-400 mt-0.5">{doc.issuer}</p>
-                      </div>
+                      <h3 className="text-base font-bold text-[#2C3E50] group-hover:text-[#34495E] transition-colors mt-0.5">
+                        {doc.title}
+                      </h3>
+                      <div className="text-xs text-[#34495E] font-semibold mt-1">{doc.issuer}</div>
+                      <div className="text-[11px] text-[#7F8C8D] font-medium">{doc.dateOrDuration}</div>
                     </div>
 
-                    <p className="text-xs text-slate-300 leading-relaxed line-clamp-3">
+                    <p className="text-xs text-[#34495E] line-clamp-3 leading-relaxed">
                       {doc.summary}
                     </p>
-
-                    <div className="pt-2 space-y-1 border-t border-slate-800">
-                      {doc.keyPoints.slice(0, 2).map((pt, pIdx) => (
-                        <div key={pIdx} className="flex items-start gap-1.5 text-[11px] text-slate-300">
-                          <span className="text-amber-400 font-bold">✓</span>
-                          <span className="line-clamp-1">{pt}</span>
-                        </div>
-                      ))}
-                    </div>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                    <span className="text-amber-300 font-semibold flex items-center gap-1">
+                  {/* Actions */}
+                  <div className="pt-4 border-t border-[#ECF0F1] flex items-center gap-2">
+                    <button
+                      onClick={() => openDocViewer(doc)}
+                      className="flex-1 py-2.5 px-3 rounded-xl bg-[#ECF0F1] hover:bg-[#34495E] text-[#2C3E50] hover:text-white text-xs font-bold border border-[#BDC3C7] flex items-center justify-center gap-1.5 transition-all"
+                    >
                       <span className="material-symbols-outlined text-sm">visibility</span>
-                      Inspect Details
-                    </span>
-                    <span className="text-slate-400 text-[11px]">PDF Attached</span>
+                      <span>Inspect Dossier</span>
+                    </button>
+
+                    <a
+                      href={doc.pdfPath}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2.5 rounded-xl bg-white hover:bg-[#ECF0F1] text-[#2C3E50] border border-[#BDC3C7] flex items-center justify-center transition-colors"
+                      title="Open Signed PDF in New Tab"
+                    >
+                      <span className="material-symbols-outlined text-sm">open_in_new</span>
+                    </a>
                   </div>
                 </div>
               </Reveal>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* SECTION 4: SYSTEMS & STANDARDS STACK */}
-        <section className="relative w-full max-w-6xl mx-auto px-4 sm:px-6" id="stack">
+      {/* SYSTEMS & GOVERNANCE STACK */}
+      <section id="stack" className="py-20 px-4 sm:px-6 relative">
+        <div className="max-w-6xl mx-auto space-y-12">
           <Reveal>
-            <div className="text-center max-w-2xl mx-auto mb-8 space-y-2">
-              <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">Accounting Systems &amp; Standards</span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                Software Stack &amp; Statutory Governance
+            <div className="text-center max-w-2xl mx-auto space-y-3">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECF0F1] text-[#2C3E50] border border-[#BDC3C7] text-xs font-bold">
+                <span className="material-symbols-outlined text-sm">terminal</span>
+                <span>Software & Statutory Architecture</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-[#2C3E50] tracking-tight">
+                Systems & Compliance Ecosystem
               </h2>
-              <p className="text-sm text-slate-400">
-                End-to-end proficiency across cloud general ledgers, government portals, spreadsheet modeling, and statutory data security.
+              <p className="text-sm text-[#7F8C8D]">
+                End-to-end fluency across cloud ERPs, government statutory portals, and financial modeling tools.
               </p>
             </div>
           </Reveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                title: "QuickBooks Desktop & Online",
-                category: "Accounting & ERP",
+                title: "QuickBooks Online & Desktop",
+                badge: "Certified ERP",
+                category: "Accounting Systems",
                 icon: "diamond",
-                desc: "Chart of accounts design, multi-bank feed automation, vendor/customer ledgers, and month-end closes.",
+                desc: "Full-cycle general ledger management, chart of accounts standardization, automated bank feed reconciliation, and vendor/customer accounts setup.",
+                metrics: "100% Reconciliation Accuracy",
               },
               {
                 title: "Xero Cloud Accounting",
-                category: "Cloud Systems",
+                badge: "Certified Specialist",
+                category: "Cloud Controllership",
                 icon: "sync_alt",
-                desc: "Cloud reconciliation workflows, automated rule configurations, invoicing, and customized P&L templates.",
+                desc: "Multi-currency bank feed automations, dynamic custom invoice workflows, real-time management dashboards, and audit-ready report generation.",
+                metrics: "Real-Time Cloud Feeds",
               },
               {
-                title: "Advanced MS Excel",
-                category: "Financial Modeling",
+                title: "Excel Financial Modeling & Analysis",
+                badge: "Master Tier",
+                category: "Spreadsheet Architecture",
                 icon: "table_chart",
-                desc: "PivotTables, VLOOKUP/XLOOKUP, multi-year asset depreciation schedules, and 13-week cash projections.",
+                desc: "Advanced nested financial models, 13-week rolling cash flow forecasts, debt amortization schedules, and trial balance validation bridges.",
+                metrics: "Zero Formula Errors",
               },
               {
-                title: "SSS Member & Claims Portal",
-                category: "Public Sector Portal",
+                title: "SSS Systems & Member Portal",
+                badge: "12+ Yrs Public Sector",
+                category: "Statutory Portals",
                 icon: "account_balance",
-                desc: "Claims verification, sickness/maternity/disability screening, member loan processing, and ACOP certifications.",
+                desc: "Expert processing of SSS sickness, maternity, retirement, and disability benefit claims, member loan applications, and annual confirmation of pensioners.",
+                metrics: "2023 Division Service Winner",
               },
               {
-                title: "PIMS Procurement & Asset Reg.",
-                category: "Government Operations",
-                icon: "inventory",
-                desc: "Official government supplies requisitioning, procurement compliance, and property inventory asset registers.",
+                title: "PIMS Procurement & Asset Registry",
+                badge: "Institutional Record",
+                category: "Government Procurement",
+                icon: "inventory_2",
+                desc: "Property and Inventory Management System (PIMS) operations, government purchase requisitions, physical inventory tracking, and disbursement voucher compliance.",
+                metrics: "Zero COA Audit Findings",
               },
               {
-                title: "R.A. 10173 Data Privacy Act",
-                category: "Statutory Compliance",
-                icon: "security",
-                desc: "Strict compliance with Philippine Data Privacy standards, safeguarding confidential accounting and identity data.",
+                title: "R.A. 10173 Data Privacy & QMS",
+                badge: "Statutory Law",
+                category: "Fiduciary Governance",
+                icon: "lock",
+                desc: "Strict adherence to the Philippine Data Privacy Act of 2012, protecting confidential member/client financial records under ISO 9001 Quality Management Systems.",
+                metrics: "100% Data Confidentiality",
               },
-            ].map((tool, idx) => (
+            ].map((item, idx) => (
               <Reveal key={idx} delay={idx * 60}>
-                <div className="bento-card rounded-3xl p-5 flex flex-col justify-between h-full group space-y-3">
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider">{tool.category}</span>
-                      <span className="material-symbols-outlined text-lg text-slate-400 group-hover:text-amber-400 transition-colors">{tool.icon}</span>
-                    </div>
-                    <h3 className="text-base font-bold text-white group-hover:text-amber-300 transition-colors">
-                      {tool.title}
-                    </h3>
-                    <p className="text-xs text-slate-300 leading-relaxed mt-1">
-                      {tool.desc}
-                    </p>
+                <div className="clouds-card rounded-3xl p-6 bg-white border border-[#BDC3C7] shadow-xs space-y-4 hover:border-[#2C3E50]">
+                  <div className="flex items-center justify-between">
+                    <span
+                      className="h-11 w-11 rounded-2xl flex items-center justify-center border bg-[#ECF0F1] text-[#2C3E50] border-[#BDC3C7]"
+                    >
+                      <span className="material-symbols-outlined text-xl">{item.icon}</span>
+                    </span>
+                    <span className="px-2.5 py-1 rounded-full bg-[#ECF0F1] text-[#2C3E50] text-[11px] font-bold border border-[#BDC3C7]">
+                      {item.badge}
+                    </span>
                   </div>
-                  <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
-                    <span>Proficiency: High</span>
-                    <span className="text-amber-400 font-semibold">Verified</span>
+
+                  <div>
+                    <div className="text-[11px] font-extrabold uppercase tracking-wide text-[#34495E]">
+                      {item.category}
+                    </div>
+                    <h3 className="text-base font-bold text-[#2C3E50] mt-0.5">{item.title}</h3>
+                  </div>
+
+                  <p className="text-xs text-[#34495E] leading-relaxed">{item.desc}</p>
+
+                  <div className="pt-3 border-t border-[#ECF0F1] flex items-center justify-between text-xs">
+                    <span className="text-[#7F8C8D] font-medium">Standard:</span>
+                    <span className="font-bold text-[#2C3E50] flex items-center gap-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#34495E]"></span>
+                      {item.metrics}
+                    </span>
                   </div>
                 </div>
               </Reveal>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* SECTION 5: CERTIFICATES & ACCREDITATIONS (CAROUSEL / GRID UX) */}
-        <section className="relative w-full max-w-6xl mx-auto px-4 sm:px-6" id="credentials">
+      {/* VERIFIED CERTIFICATIONS GALLERY (ALL 11 PROOFS WITH LIGHTBOX) */}
+      <section id="credentials" className="py-20 px-4 sm:px-6 bg-white/80 border-y border-[#BDC3C7]/80 relative">
+        <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">Verified Accreditations</span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-1">
-                  Professional Certifications ({certificateData.length})
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECF0F1] text-[#2C3E50] border border-[#BDC3C7] text-xs font-bold mb-2">
+                  <span className="material-symbols-outlined text-sm">workspace_premium</span>
+                  <span>11 Conferred Certifications</span>
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-[#2C3E50] tracking-tight">
+                  Verified Conferred Credentials
                 </h2>
-                <p className="text-sm text-slate-400 max-w-2xl mt-1">
-                  Click any certificate to inspect full high-resolution imagery and download official PDFs.
+                <p className="text-sm text-[#7F8C8D] mt-1">
+                  Click any certificate for high-resolution inspection, verified skills, and official certificate IDs.
                 </p>
               </div>
 
-              {/* Filters */}
-              <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-slate-900 border border-slate-800 self-start sm:self-auto">
-                <button
-                  onClick={() => setSelectedCertCategory("all")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedCertCategory === "all" ? "bg-amber-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  All ({certificateData.length})
-                </button>
-                <button
-                  onClick={() => setSelectedCertCategory("accounting")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedCertCategory === "accounting" ? "bg-amber-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  Accounting &amp; ERP (4)
-                </button>
-                <button
-                  onClick={() => setSelectedCertCategory("finance")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedCertCategory === "finance" ? "bg-amber-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  Finance (3)
-                </button>
-                <button
-                  onClick={() => setSelectedCertCategory("ops")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedCertCategory === "ops" ? "bg-amber-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  Operations (4)
-                </button>
+              {/* Filter Tabs */}
+              <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-white border border-[#BDC3C7] shadow-xs">
+                {[
+                  { id: "all" as CredentialCategory, label: "All 11 Proofs" },
+                  { id: "accounting" as CredentialCategory, label: "Accounting & ERP (4)" },
+                  { id: "finance" as CredentialCategory, label: "Finance & Debt (3)" },
+                  { id: "ops" as CredentialCategory, label: "Gov & Operations (4)" },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setSelectedCertCategory(tab.id)}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                      selectedCertCategory === tab.id
+                        ? "bg-[#2C3E50] text-white shadow-xs"
+                        : "text-[#7F8C8D] hover:text-[#2C3E50] hover:bg-[#ECF0F1]"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
               </div>
             </div>
           </Reveal>
 
           {/* Certificate Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCertificates.map((cert, idx) => (
-              <Reveal key={cert.id} delay={idx * 60}>
+              <Reveal key={cert.id} delay={idx * 50}>
                 <div
                   onClick={() => openCertificateLightbox(idx)}
-                  className="bento-card rounded-3xl overflow-hidden flex flex-col justify-between h-full cursor-pointer group"
+                  className="clouds-card rounded-3xl p-4 sm:p-5 bg-white border border-[#BDC3C7] shadow-xs cursor-pointer group flex flex-col justify-between space-y-4 hover:border-[#2C3E50] hover:shadow-xl transition-all"
                 >
-                  <div>
-                    {/* Visual Frame */}
-                    <div className="relative aspect-[16/11] w-full overflow-hidden bg-slate-950 border-b border-white/10">
-                      <img
-                        alt={cert.title}
-                        src={cert.imageSrc}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
-
-                      <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-                        <span className="px-2 py-0.5 rounded-full bg-slate-900/90 backdrop-blur-md border border-white/10 text-[10px] font-bold text-amber-300">
-                          {cert.categoryLabel}
-                        </span>
-                        <span className="px-2 py-0.5 rounded-full bg-amber-400/20 backdrop-blur-md border border-amber-400/40 text-[10px] font-bold text-amber-300 flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[12px]">verified</span>
-                          {cert.badge}
-                        </span>
-                      </div>
-
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/60 backdrop-blur-xs">
-                        <span className="px-3.5 py-1.5 rounded-full bg-amber-400 text-slate-950 text-xs font-bold shadow-lg">
-                          Inspect Certificate
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="p-5 space-y-2">
-                      <span className="text-[10px] text-slate-400 block">{cert.issuer}</span>
-                      <h3 className="text-base font-bold text-white group-hover:text-amber-300 transition-colors line-clamp-1">
-                        {cert.title}
-                      </h3>
-                      <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
-                        {cert.description}
-                      </p>
+                  {/* Visual Preview Container */}
+                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#ECF0F1] border border-[#BDC3C7] shadow-inner group-hover:scale-[1.02] transition-transform duration-300">
+                    <img
+                      src={cert.imageSrc}
+                      alt={cert.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#2C3E50]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/95 text-[#2C3E50] text-xs font-bold shadow-md">
+                        <span className="material-symbols-outlined text-sm text-[#34495E]">zoom_in</span>
+                        <span>Click to Inspect High-Res</span>
+                      </span>
                     </div>
                   </div>
 
-                  <div className="p-5 pt-0 flex items-center justify-between text-xs text-slate-400">
-                    <span className="text-[11px]">{cert.idNumber}</span>
-                    <span className="text-amber-300 font-bold flex items-center gap-0.5">
-                      Enlarge <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                    </span>
+                  {/* Text Details */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wide text-[#2C3E50] bg-[#ECF0F1] px-2 py-0.5 rounded-md border border-[#BDC3C7]">
+                        {cert.categoryLabel}
+                      </span>
+                      <span className="text-[11px] font-mono text-[#7F8C8D] font-bold">
+                        {cert.idNumber}
+                      </span>
+                    </div>
+
+                    <h3 className="text-sm font-bold text-[#2C3E50] group-hover:text-[#34495E] transition-colors line-clamp-2">
+                      {cert.title}
+                    </h3>
+                    <div className="text-xs text-[#7F8C8D] line-clamp-1">{cert.issuer}</div>
+
+                    {/* Skill Tags */}
+                    <div className="flex flex-wrap gap-1 pt-1">
+                      {cert.skills.slice(0, 3).map((s, i) => (
+                        <span
+                          key={i}
+                          className="px-2 py-0.5 rounded-md bg-[#ECF0F1] text-[#34495E] text-[10px] font-semibold border border-[#BDC3C7]"
+                        >
+                          {s}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </Reveal>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* SECTION 6: ENGAGEMENT & INTAKE */}
-        <section className="relative w-full max-w-6xl mx-auto px-4 sm:px-6" id="contact">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Left Info Card */}
-            <Reveal direction="left" className="lg:col-span-5 flex">
-              <div className="bento-card w-full rounded-3xl p-7 sm:p-9 flex flex-col justify-between space-y-6">
-                <div className="space-y-4">
-                  <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">Direct Engagement</span>
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                    Retain Bookkeeping &amp; Advisory Services
-                  </h2>
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                    Available for high-stakes bookkeeping mandates, QuickBooks/Xero ledger catch-up, month-end accrual closes, SSS statutory process advisory, and executive virtual administrative support.
-                  </p>
+      {/* INTERACTIVE SCOPE & RETAINER ESTIMATOR */}
+      <section id="estimator" className="py-20 px-4 sm:px-6 relative">
+        <div className="max-w-6xl mx-auto space-y-10">
+          <Reveal>
+            <div className="text-center max-w-3xl mx-auto space-y-3">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECF0F1] text-[#2C3E50] border border-[#BDC3C7] text-xs font-bold">
+                <span className="material-symbols-outlined text-sm">calculate</span>
+                <span>Interactive Client Tool</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-[#2C3E50] tracking-tight">
+                Interactive Scope & Retainer Calculator
+              </h2>
+              <p className="text-sm sm:text-base text-[#7F8C8D]">
+                Select your organization model and required accounting modules to calculate recommended delivery cadences and prefill a consultation request.
+              </p>
+            </div>
+          </Reveal>
 
-                  <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3 text-xs">
-                    <div className="flex items-center gap-3">
-                      <div className="h-9 w-9 rounded-xl bg-amber-400/10 flex items-center justify-center text-amber-400 shrink-0">
-                        <span className="material-symbols-outlined text-lg">mail</span>
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-slate-400 uppercase block font-semibold">Government / Official Email</span>
-                        <a href="mailto:brionesmb@sss.gov.ph" className="text-white hover:text-amber-300 font-medium transition-colors">
-                          brionesmb@sss.gov.ph
-                        </a>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="h-9 w-9 rounded-xl bg-amber-400/10 flex items-center justify-center text-amber-400 shrink-0">
-                        <span className="material-symbols-outlined text-lg">call</span>
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-slate-400 uppercase block font-semibold">Official Phone Contact</span>
-                        <a href="tel:+639515784797" className="text-white hover:text-amber-300 font-medium transition-colors">
-                          +63 951 578 4797
-                        </a>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="h-9 w-9 rounded-xl bg-amber-400/10 flex items-center justify-center text-amber-400 shrink-0">
-                        <span className="material-symbols-outlined text-lg">location_on</span>
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-slate-400 uppercase block font-semibold">Location</span>
-                        <span className="text-white font-medium">Oroquieta City, Misamis Occidental</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-slate-950/60 border border-slate-800/80 text-[11px] text-slate-400">
-                  🔒 <strong>Confidentiality Accord:</strong> All client records and inquiries are strictly governed under the Data Privacy Act of 2012 (R.A. 10173).
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Step 1: Configuration Form (7 cols) */}
+            <div className="lg:col-span-7 clouds-card rounded-3xl p-6 sm:p-8 bg-white border border-[#BDC3C7] shadow-md space-y-6">
+              {/* Org Type Picker */}
+              <div className="space-y-3">
+                <label className="text-xs font-bold text-[#2C3E50] uppercase tracking-wide flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[#34495E] text-base">domain</span>
+                  <span>1. Select Organization Structure</span>
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {[
+                    { id: "corporate", label: "Private Enterprise / SME", icon: "business" },
+                    { id: "cooperative", label: "Cooperative / Microfinance", icon: "groups" },
+                    { id: "government", label: "Public Sector Agency", icon: "account_balance" },
+                    { id: "virtual", label: "Virtual / Remote Company", icon: "laptop_chromebook" },
+                  ].map((org) => (
+                    <button
+                      key={org.id}
+                      type="button"
+                      onClick={() => setEstimatorOrg(org.id)}
+                      className={`flex items-center gap-2.5 p-3 rounded-2xl text-xs font-bold border transition-all text-left ${
+                        estimatorOrg === org.id
+                          ? "bg-[#2C3E50] text-white border-[#2C3E50] shadow-xs"
+                          : "bg-[#ECF0F1]/60 text-[#34495E] border-[#BDC3C7] hover:bg-[#ECF0F1]"
+                      }`}
+                    >
+                      <span className="material-symbols-outlined text-base">{org.icon}</span>
+                      <span>{org.label}</span>
+                    </button>
+                  ))}
                 </div>
               </div>
-            </Reveal>
 
-            {/* Right Form Card */}
-            <Reveal delay={150} direction="scale" className="lg:col-span-7 flex">
-              <div className="bento-card w-full rounded-3xl p-7 sm:p-9 shadow-2xl">
-                <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800">
-                  <div>
-                    <h3 className="text-xl font-bold text-white">Direct Consultation Request</h3>
-                    <p className="text-xs text-slate-400">Prompt executive response within 24 hours.</p>
-                  </div>
-                  <span className="px-3 py-1 rounded-full bg-amber-400/10 text-amber-300 text-xs font-bold border border-amber-400/30">
-                    Active Intake
+              {/* Modules Selector */}
+              <div className="space-y-3">
+                <label className="text-xs font-bold text-[#2C3E50] uppercase tracking-wide flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[#34495E] text-base">check_box</span>
+                  <span>2. Select Required Controllership Modules</span>
+                </label>
+                <div className="space-y-2">
+                  {[
+                    { id: "gl", label: "Full-Cycle General Ledger & COA Hygiene", desc: "Double-entry journal entries, trial balance, and depreciation schedules." },
+                    { id: "bank", label: "Daily Bank Feeds & Multi-Account Reconciliation", desc: "Automated statement matching, merchant clearing, zero variance." },
+                    { id: "statutory", label: "SSS / BIR / Statutory HR Compliance", desc: "Monthly statutory contributions, employee benefits claims, Form 2307s." },
+                    { id: "cloud", label: "QuickBooks & Xero Cloud Migration", desc: "Software onboarding, historical data clean-up, automated feed setup." },
+                    { id: "audit", label: "Audit Preparation & Financial Statement Pack", desc: "Balance sheet schedules, P&L bridges, external auditor defense." },
+                  ].map((m) => {
+                    const isChecked = estimatorModules.includes(m.id);
+                    return (
+                      <button
+                        key={m.id}
+                        type="button"
+                        onClick={() => toggleModule(m.id)}
+                        className={`w-full p-3 rounded-2xl border text-left flex items-start gap-3 transition-all ${
+                          isChecked
+                            ? "bg-[#ECF0F1] border-[#2C3E50] shadow-xs"
+                            : "bg-white border-[#BDC3C7] hover:bg-[#ECF0F1]/50"
+                        }`}
+                      >
+                        <div
+                          className={`h-5 w-5 rounded-md flex items-center justify-center mt-0.5 shrink-0 transition-colors ${
+                            isChecked ? "bg-[#2C3E50] text-white" : "border border-[#BDC3C7] bg-white"
+                          }`}
+                        >
+                          {isChecked && <span className="material-symbols-outlined text-xs">check</span>}
+                        </div>
+                        <div>
+                          <div className={`text-xs font-bold ${isChecked ? "text-[#2C3E50]" : "text-[#34495E]"}`}>
+                            {m.label}
+                          </div>
+                          <div className="text-[11px] text-[#7F8C8D] mt-0.5">{m.desc}</div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Volume Range */}
+              <div className="space-y-3">
+                <label className="text-xs font-bold text-[#2C3E50] uppercase tracking-wide flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[#34495E] text-base">swap_calls</span>
+                  <span>3. Monthly Transaction Volume</span>
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { id: "low", label: "Standard (< 300 txns)" },
+                    { id: "medium", label: "Growth (300-1K txns)" },
+                    { id: "high", label: "Enterprise (1K+ txns)" },
+                  ].map((v) => (
+                    <button
+                      key={v.id}
+                      type="button"
+                      onClick={() => setEstimatorVolume(v.id)}
+                      className={`p-2.5 rounded-2xl text-xs font-bold border transition-all text-center ${
+                        estimatorVolume === v.id
+                          ? "bg-[#2C3E50] text-white border-[#2C3E50] shadow-xs"
+                          : "bg-[#ECF0F1]/60 text-[#34495E] border-[#BDC3C7] hover:bg-[#ECF0F1]"
+                      }`}
+                    >
+                      {v.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Step 2: Dynamic Summary Card (5 cols) */}
+            <div className="lg:col-span-5 clouds-card rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-[#2C3E50] to-[#34495E] text-[#ECF0F1] border border-[#34495E] shadow-xl space-y-6">
+              <div className="space-y-1">
+                <div className="text-xs font-bold text-[#BDC3C7] uppercase tracking-widest flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-sm">receipt</span>
+                  <span>Custom Retainer Blueprint</span>
+                </div>
+                <h3 className="text-2xl font-extrabold text-white">Recommended Delivery Cadence</h3>
+              </div>
+
+              <div className="space-y-3 pt-2">
+                <div className="p-4 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-between">
+                  <span className="text-xs text-[#BDC3C7]">Target Response Cadence:</span>
+                  <span className="text-xs font-bold text-white">
+                    {estimatorVolume === "high" ? "Daily Dedicated Check-ins" : "Weekly Close + Month-End"}
                   </span>
                 </div>
 
-                {formSubmitted ? (
-                  <div className="py-10 text-center space-y-4 animate-in fade-in zoom-in-95 duration-200">
-                    <div className="h-14 w-14 rounded-full bg-amber-400/20 text-amber-400 flex items-center justify-center mx-auto text-2xl font-bold border border-amber-400/40">
-                      ✓
+                <div className="p-4 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-between">
+                  <span className="text-xs text-[#BDC3C7]">Modules Selected:</span>
+                  <span className="text-xs font-bold text-white">{estimatorModules.length} Active Modules</span>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-between">
+                  <span className="text-xs text-[#BDC3C7]">Fiduciary Lead:</span>
+                  <span className="text-xs font-bold text-white">Ma. Faith Briones, BSA, CSE</span>
+                </div>
+              </div>
+
+              <div className="space-y-2 pt-2 border-t border-white/10 text-xs text-[#BDC3C7]">
+                <div className="font-bold text-white">Included Standard Guarantees:</div>
+                <ul className="space-y-1.5">
+                  <li className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[#BDC3C7] text-sm">check_circle</span>
+                    <span>100% Zero-Variance Bank Tie-Out</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[#BDC3C7] text-sm">check_circle</span>
+                    <span>On-Time Statutory SSS / BIR Compliance</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[#BDC3C7] text-sm">check_circle</span>
+                    <span>Direct Communication & Executive Narrative</span>
+                  </li>
+                </ul>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleApplyEstimatorToContact}
+                className="w-full py-3.5 rounded-2xl bg-[#ECF0F1] hover:bg-white text-[#2C3E50] text-sm font-extrabold shadow-lg shadow-black/20 flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
+              >
+                <span className="material-symbols-outlined text-lg">send</span>
+                <span>Load Scope into Consultation Form</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* DIRECT INTAKE & CONTACT SUITE */}
+      <section id="contact" className="py-20 px-4 sm:px-6 bg-white/70 border-t border-[#BDC3C7]/80 relative">
+        <div className="max-w-6xl mx-auto space-y-12">
+          <Reveal>
+            <div className="text-center max-w-2xl mx-auto space-y-3">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECF0F1] text-[#2C3E50] border border-[#BDC3C7] text-xs font-bold">
+                <span className="material-symbols-outlined text-sm">mail</span>
+                <span>Fiduciary Advisory & Controllership</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-[#2C3E50] tracking-tight">
+                Initiate Fiduciary Consultation
+              </h2>
+              <p className="text-sm text-[#7F8C8D]">
+                Engage for fractional controllership, general ledger hygiene, cooperative bookkeeping, or government administrative consultation.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Contact Details & Direct Connect (5 cols) */}
+            <div className="lg:col-span-5 space-y-4">
+              <div className="clouds-card rounded-3xl p-6 bg-white border border-[#BDC3C7] shadow-xs space-y-4">
+                <div className="text-xs font-bold uppercase tracking-wider text-[#2C3E50]">
+                  Official Communication Channels
+                </div>
+
+                <div className="space-y-3">
+                  {/* Email Box */}
+                  <div className="p-4 rounded-2xl bg-[#ECF0F1]/60 border border-[#BDC3C7] flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <span className="h-10 w-10 rounded-xl bg-[#2C3E50] text-white flex items-center justify-center shrink-0">
+                        <span className="material-symbols-outlined text-lg">mail</span>
+                      </span>
+                      <div>
+                        <div className="text-[10px] font-bold uppercase text-[#7F8C8D]">Direct Email</div>
+                        <a
+                          href="mailto:faithbriones22@gmail.com"
+                          className="text-xs sm:text-sm font-bold text-[#2C3E50] hover:text-[#34495E] transition-colors"
+                        >
+                          faithbriones22@gmail.com
+                        </a>
+                      </div>
                     </div>
-                    <h4 className="text-xl font-bold text-white">Inquiry Received</h4>
-                    <p className="text-xs text-slate-300 max-w-sm mx-auto">
-                      Thank you. Ma. Faith B. Briones has received your mandate parameters and will follow up promptly.
-                    </p>
                     <button
-                      onClick={() => setFormSubmitted(false)}
-                      className="px-5 py-2 rounded-full bg-slate-800 text-white text-xs font-semibold hover:bg-slate-700 transition-colors"
+                      onClick={() => copyToClipboard("faithbriones22@gmail.com", "Email")}
+                      className="p-2 rounded-xl bg-white hover:bg-[#ECF0F1] text-[#2C3E50] border border-[#BDC3C7] text-xs font-bold"
+                      title="Copy Email"
                     >
-                      Send Another Inquiry
+                      <span className="material-symbols-outlined text-sm">content_copy</span>
                     </button>
                   </div>
+
+                  {/* Phone Box */}
+                  <div className="p-4 rounded-2xl bg-[#ECF0F1]/60 border border-[#BDC3C7] flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <span className="h-10 w-10 rounded-xl bg-[#34495E] text-white flex items-center justify-center shrink-0">
+                        <span className="material-symbols-outlined text-lg">call</span>
+                      </span>
+                      <div>
+                        <div className="text-[10px] font-bold uppercase text-[#7F8C8D]">Direct Mobile</div>
+                        <a
+                          href="tel:+639482454704"
+                          className="text-xs sm:text-sm font-bold text-[#2C3E50] hover:text-[#34495E] transition-colors"
+                        >
+                          +63 948 245 4704
+                        </a>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => copyToClipboard("+63 948 245 4704", "Mobile Number")}
+                      className="p-2 rounded-xl bg-white hover:bg-[#ECF0F1] text-[#2C3E50] border border-[#BDC3C7] text-xs font-bold"
+                      title="Copy Mobile"
+                    >
+                      <span className="material-symbols-outlined text-sm">content_copy</span>
+                    </button>
+                  </div>
+
+                  {/* Location Box */}
+                  <div className="p-4 rounded-2xl bg-[#ECF0F1]/60 border border-[#BDC3C7] flex items-center gap-3">
+                    <span className="h-10 w-10 rounded-xl bg-[#7F8C8D] text-white flex items-center justify-center shrink-0">
+                      <span className="material-symbols-outlined text-lg">location_on</span>
+                    </span>
+                    <div>
+                      <div className="text-[10px] font-bold uppercase text-[#7F8C8D]">Jurisdiction & Location</div>
+                      <div className="text-xs sm:text-sm font-bold text-[#2C3E50]">
+                        Oroquieta City, Misamis Occidental, Philippines
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Engagement Status Card */}
+              <div className="p-6 rounded-3xl bg-gradient-to-br from-[#2C3E50] to-[#34495E] text-white shadow-lg space-y-3">
+                <div className="flex items-center gap-2 text-xs font-bold text-[#BDC3C7] uppercase tracking-wide">
+                  <span className="h-2 w-2 rounded-full bg-[#BDC3C7] animate-ping"></span>
+                  <span>Direct Availability Notice</span>
+                </div>
+                <div className="text-base font-bold text-white">
+                  Fractional & Full Retainer Engagements
+                </div>
+                <p className="text-xs text-[#ECF0F1] leading-relaxed">
+                  Available for remote cloud controllership, on-site consultation for Northern Mindanao cooperatives, and statutory government advisory.
+                </p>
+              </div>
+            </div>
+
+            {/* Interactive Consultation Form (7 cols) */}
+            <div className="lg:col-span-7">
+              <div className="clouds-card rounded-3xl p-6 sm:p-8 bg-white border border-[#BDC3C7] shadow-md">
+                {formSubmitted ? (
+                  <div className="text-center py-10 space-y-4 animate-fadeIn">
+                    <div className="h-16 w-16 rounded-full bg-[#ECF0F1] text-[#2C3E50] mx-auto flex items-center justify-center border border-[#BDC3C7]">
+                      <span className="material-symbols-outlined text-3xl">check_circle</span>
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="text-2xl font-bold text-[#2C3E50]">Inquiry Transmitted</h3>
+                      <p className="text-sm text-[#34495E] max-w-md mx-auto">
+                        Thank you. Your consultation request has been forwarded directly to <strong>Ma. Faith B. Briones</strong>. You will receive a response within 24 business hours.
+                      </p>
+                    </div>
+                    <div className="pt-2">
+                      <button
+                        onClick={() => {
+                          setFormSubmitted(false);
+                          setFormMessage("");
+                        }}
+                        className="px-5 py-2.5 rounded-xl bg-[#ECF0F1] hover:bg-[#BDC3C7] text-[#2C3E50] text-xs font-bold"
+                      >
+                        Submit Another Inquiry
+                      </button>
+                    </div>
+                  </div>
                 ) : (
-                  <form onSubmit={handleFormSubmit} className="space-y-4 text-xs">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label className="font-semibold text-slate-300">Your Full Name *</label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="e.g. Attorney / Executive Juan Dela Cruz"
-                          className="w-full rounded-xl bg-slate-900 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none transition-colors"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="font-semibold text-slate-300">Organization / Enterprise</label>
-                        <input
-                          type="text"
-                          placeholder="e.g. Mindanao Enterprise Corp."
-                          className="w-full rounded-xl bg-slate-900 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none transition-colors"
-                        />
-                      </div>
+                  <form onSubmit={handleFormSubmit} className="space-y-4">
+                    <div className="text-base font-bold text-[#2C3E50]">
+                      Submit Confidential Consultation Request
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1">
-                        <label className="font-semibold text-slate-300">Email Address *</label>
+                        <label className="text-xs font-bold text-[#2C3E50]">Full Name / Organization *</label>
+                        <input
+                          type="text"
+                          required
+                          value={formName}
+                          onChange={(e) => setFormName(e.target.value)}
+                          placeholder="e.g. Attorney Juan Dela Cruz / Apex Corp"
+                          className="w-full px-4 py-2.5 rounded-2xl bg-[#ECF0F1]/50 border border-[#BDC3C7] text-xs sm:text-sm text-[#2C3E50] focus:bg-white focus:outline-none focus:border-[#2C3E50] transition-all"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-[#2C3E50]">Email Address *</label>
                         <input
                           type="email"
                           required
-                          placeholder="name@company.com"
-                          className="w-full rounded-xl bg-slate-900 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none transition-colors"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="font-semibold text-slate-300">Contact Number</label>
-                        <input
-                          type="tel"
-                          placeholder="+63 9XX XXX XXXX"
-                          className="w-full rounded-xl bg-slate-900 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none transition-colors"
+                          value={formEmail}
+                          onChange={(e) => setFormEmail(e.target.value)}
+                          placeholder="e.g. client@enterprise.com"
+                          className="w-full px-4 py-2.5 rounded-2xl bg-[#ECF0F1]/50 border border-[#BDC3C7] text-xs sm:text-sm text-[#2C3E50] focus:bg-white focus:outline-none focus:border-[#2C3E50] transition-all"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-1">
-                      <label className="font-semibold text-slate-300">Mandate Scope</label>
-                      <select className="w-full rounded-xl bg-slate-900 border border-slate-700 px-3.5 py-2.5 text-xs text-white focus:border-amber-400 focus:outline-none transition-colors">
-                        <option value="bookkeeping">Full-Charge Bookkeeping &amp; General Ledger Catch-up</option>
-                        <option value="reconciliation">Bank Reconciliation &amp; Audit Preparation</option>
-                        <option value="quickbooks">QuickBooks / Xero Setup &amp; Training</option>
-                        <option value="sss">SSS Administrative &amp; Claims Advisory</option>
-                        <option value="retainer">Monthly Fiduciary Retainer Mandate</option>
+                      <label className="text-xs font-bold text-[#2C3E50]">Primary Engagement Scope *</label>
+                      <select
+                        value={formService}
+                        onChange={(e) => setFormService(e.target.value)}
+                        className="w-full px-4 py-2.5 rounded-2xl bg-[#ECF0F1]/50 border border-[#BDC3C7] text-xs sm:text-sm text-[#2C3E50] focus:bg-white focus:outline-none focus:border-[#2C3E50] transition-all"
+                      >
+                        <option>Full-Cycle Bookkeeping & General Ledger</option>
+                        <option>Bank Reconciliation & Daily Cash Book Hygiene</option>
+                        <option>Cooperative / Microfinance Accounting & CDA Standards</option>
+                        <option>SSS / PhilHealth / Pag-IBIG Statutory HR & Claims</option>
+                        <option>QuickBooks / Xero Cloud Systems Migration</option>
+                        <option>Custom Fractional Engagement Package</option>
                       </select>
                     </div>
 
                     <div className="space-y-1">
-                      <label className="font-semibold text-slate-300">Message / Requirement Details *</label>
+                      <label className="text-xs font-bold text-[#2C3E50]">Project Specifics & Timeline *</label>
                       <textarea
                         required
-                        rows={3}
-                        placeholder="Please describe your accounting, audit reconciliation, or administrative requirements..."
-                        className="w-full rounded-xl bg-slate-900 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none transition-colors resize-none"
+                        rows={4}
+                        value={formMessage}
+                        onChange={(e) => setFormMessage(e.target.value)}
+                        placeholder="Please describe your current accounting setup, software used, transaction volume, or statutory assistance required..."
+                        className="w-full px-4 py-2.5 rounded-2xl bg-[#ECF0F1]/50 border border-[#BDC3C7] text-xs sm:text-sm text-[#2C3E50] focus:bg-white focus:outline-none focus:border-[#2C3E50] transition-all"
                       ></textarea>
                     </div>
 
                     <button
                       type="submit"
-                      className="w-full py-3 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-bold text-xs shadow-lg hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-[1.01] transition-all cursor-pointer flex items-center justify-center gap-2"
+                      className="w-full py-3.5 rounded-2xl bg-[#2C3E50] hover:bg-[#34495E] text-[#ECF0F1] text-sm font-bold shadow-lg shadow-[#2C3E50]/20 flex items-center justify-center gap-2 hover:scale-[1.01] transition-all border border-[#34495E]"
                     >
-                      <span className="material-symbols-outlined text-base">send</span>
-                      Dispatch Consultation Request
+                      <span className="material-symbols-outlined text-lg">send</span>
+                      <span>Transmit Consultation Request</span>
                     </button>
                   </form>
                 )}
               </div>
-            </Reveal>
+            </div>
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
 
       {/* FOOTER */}
-      <footer className="w-full border-t border-slate-800 bg-[#060911] py-8 text-xs text-slate-400">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <footer className="py-12 px-4 sm:px-6 bg-[#2C3E50] text-[#ECF0F1] border-t border-[#34495E]">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <img src="/profile/avatar.jpg" alt="Ma. Faith B. Briones" className="h-8 w-8 rounded-full object-cover border border-amber-400/40" />
-            <span className="text-slate-200 font-semibold">Ma. Faith B. Briones, BSA, CSE</span>
+            <div className="h-10 w-10 rounded-full overflow-hidden border border-[#BDC3C7]">
+              <img
+                src="/profile/avatar.jpg"
+                alt="Ma. Faith B. Briones"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div>
+              <div className="text-sm font-bold text-white">Ma. Faith Batilona Briones, BSA, CSE</div>
+              <div className="text-xs text-[#BDC3C7]">
+                Bachelor of Science in Accountancy • Career Service Professional 80.24%
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-4 text-[11px]">
-            <a href="#overview" className="hover:text-amber-300">Overview</a>
-            <a href="#provenance" className="hover:text-amber-300">Experience</a>
-            <a href="#dossier" className="hover:text-amber-300">Dossier</a>
-            <a href="#credentials" className="hover:text-amber-300">Certificates</a>
-            <a href="#contact" className="hover:text-amber-300">Contact</a>
+
+          <div className="text-xs text-[#BDC3C7] text-center md:text-right space-y-1">
+            <div>Official Executive Portfolio • Republic of the Philippines</div>
+            <div className="text-[#7F8C8D]">
+              Cross-Referenced with CS Form 212 & Statutory Employment Records
+            </div>
           </div>
-          <p className="text-[11px] text-slate-500">&copy; {new Date().getFullYear()} All Rights Reserved.</p>
         </div>
       </footer>
 
-      {/* FLOATING ACTION & BACK TO TOP */}
+      {/* BACK TO TOP BUTTON */}
       {showBackToTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-amber-400 text-slate-950 shadow-xl hover:scale-110 transition-all cursor-pointer"
+          className="fixed bottom-6 left-6 z-50 p-3 rounded-full bg-white text-[#2C3E50] shadow-xl border border-[#BDC3C7] hover:bg-[#ECF0F1] hover:scale-110 transition-all"
           aria-label="Back to top"
         >
-          <span className="material-symbols-outlined text-xl">arrow_upward</span>
+          <span className="material-symbols-outlined text-xl text-[#2C3E50]">arrow_upward</span>
         </button>
       )}
 
-      {/* MODAL DIALOGS */}
-      {activeModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-150"
-          onClick={() => {
-            setActiveModal(null);
-            setSelectedDoc(null);
-          }}
-        >
-          <div
-            className="relative w-full max-w-2xl rounded-3xl bg-[#0F172A] p-6 sm:p-8 border border-slate-700 shadow-2xl max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-150"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => {
-                setActiveModal(null);
-                setSelectedDoc(null);
-              }}
-              className="absolute top-4 right-4 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white transition-colors"
-            >
-              <span className="material-symbols-outlined text-lg">close</span>
-            </button>
+      {/* MODAL 1: STATUTORY DOSSIER INSPECTOR */}
+      {activeModal === "doc-viewer" && selectedDoc && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#2C3E50]/70 backdrop-blur-md animate-fadeIn">
+          <div className="relative w-full max-w-2xl rounded-3xl bg-white border border-[#BDC3C7] shadow-2xl p-6 sm:p-8 space-y-5 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-start justify-between gap-4">
+              <div className="space-y-1">
+                <span className="px-3 py-1 rounded-full bg-[#ECF0F1] text-[#2C3E50] text-xs font-bold border border-[#BDC3C7]">
+                  {selectedDoc.badge}
+                </span>
+                <h3 className="text-xl font-bold text-[#2C3E50] mt-2">{selectedDoc.title}</h3>
+                <div className="text-xs text-[#34495E] font-semibold">{selectedDoc.issuer}</div>
+              </div>
+              <button
+                onClick={() => setActiveModal(null)}
+                className="p-2 rounded-full bg-[#ECF0F1] hover:bg-[#BDC3C7] text-[#2C3E50]"
+              >
+                <span className="material-symbols-outlined text-lg">close</span>
+              </button>
+            </div>
 
-            {/* DOC VIEWER */}
-            {activeModal === "doc-viewer" && selectedDoc && (
-              <div className="space-y-5 text-xs">
-                <div className="flex items-center gap-3">
-                  <div className="h-11 w-11 rounded-2xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400">
-                    <span className="material-symbols-outlined text-2xl">{selectedDoc.icon}</span>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white">{selectedDoc.title}</h3>
-                    <p className="text-slate-400">{selectedDoc.issuer} • {selectedDoc.dateOrDuration}</p>
-                  </div>
-                </div>
+            <div className="p-4 rounded-2xl bg-[#ECF0F1]/60 border border-[#BDC3C7] text-xs sm:text-sm text-[#2C3E50] leading-relaxed">
+              {selectedDoc.summary}
+            </div>
 
-                <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1.5">
-                  <span className="font-bold text-amber-300 block uppercase text-[10px]">Official Summary</span>
-                  <p className="text-slate-300 leading-relaxed">{selectedDoc.summary}</p>
-                </div>
+            <div className="space-y-2">
+              <div className="text-xs font-bold uppercase tracking-wider text-[#2C3E50]">
+                Verified Statutory Points:
+              </div>
+              <ul className="space-y-1.5 text-xs text-[#34495E]">
+                {selectedDoc.keyPoints.map((pt, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="material-symbols-outlined text-[#2C3E50] text-sm shrink-0">check_circle</span>
+                    <span>{pt}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-                <div className="space-y-2">
-                  <span className="font-bold text-white block uppercase text-[10px]">Key Verified Highlights:</span>
-                  <div className="space-y-1.5">
-                    {selectedDoc.keyPoints.map((pt, i) => (
-                      <div key={i} className="p-2.5 rounded-xl bg-slate-900 border border-slate-800/80 text-slate-300 flex items-start gap-2">
-                        <span className="text-amber-400 font-bold">✓</span>
-                        <span className="leading-relaxed">{pt}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
-                  <span className="text-slate-400">Signed Official Document</span>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setActiveModal(null)}
-                      className="px-4 py-2 rounded-full bg-slate-800 text-white font-semibold hover:bg-slate-700 transition-colors"
-                    >
-                      Close
-                    </button>
-                    <a
-                      href={selectedDoc.pdfPath}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 rounded-full bg-amber-400 text-slate-950 font-bold hover:bg-amber-300 transition-colors inline-flex items-center gap-1.5 shadow-md"
-                    >
-                      <span className="material-symbols-outlined text-sm">picture_as_pdf</span>
-                      Open Official PDF
-                    </a>
-                  </div>
-                </div>
+            {selectedDoc.supervisors && (
+              <div className="text-xs text-[#7F8C8D] pt-2 border-t border-[#BDC3C7]">
+                <span className="font-bold text-[#2C3E50]">Official Signatory:</span> {selectedDoc.supervisors}
               </div>
             )}
 
-            {/* CERTIFICATE LIGHTBOX WITH PREV/NEXT CAROUSEL CONTROLS */}
-            {activeModal === "certificate-lightbox" && currentCert && (
-              <div className="space-y-4 text-xs">
-                <div className="flex items-center justify-between pr-8">
-                  <div>
-                    <h3 className="text-base font-bold text-white">{currentCert.title}</h3>
-                    <p className="text-slate-400">{currentCert.issuer} • {currentCert.idNumber}</p>
-                  </div>
-                  <span className="text-[11px] text-amber-400 font-bold">
-                    {selectedCertificateIndex + 1} / {filteredCertificates.length}
+            <div className="pt-4 border-t border-[#BDC3C7] flex items-center justify-end gap-3">
+              <button
+                onClick={() => setActiveModal(null)}
+                className="px-4 py-2.5 rounded-xl bg-[#ECF0F1] hover:bg-[#BDC3C7] text-[#2C3E50] text-xs font-bold"
+              >
+                Close
+              </button>
+
+              <a
+                href={selectedDoc.pdfPath}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-2.5 rounded-xl bg-[#2C3E50] hover:bg-[#34495E] text-white text-xs font-bold flex items-center gap-1.5 shadow-md border border-[#34495E]"
+              >
+                <span className="material-symbols-outlined text-sm">open_in_new</span>
+                <span>Open Official PDF Document</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 2: CERTIFICATE LIGHTBOX CAROUSEL */}
+      {activeModal === "certificate-lightbox" && currentCert && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#2C3E50]/80 backdrop-blur-md animate-fadeIn">
+          <div className="relative w-full max-w-4xl rounded-3xl bg-white border border-[#BDC3C7] shadow-2xl p-6 sm:p-8 space-y-6 max-h-[95vh] overflow-y-auto">
+            {/* Top Bar */}
+            <div className="flex items-start justify-between gap-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="px-3 py-1 rounded-full bg-[#ECF0F1] text-[#2C3E50] text-xs font-bold border border-[#BDC3C7]">
+                    {currentCert.categoryLabel}
+                  </span>
+                  <span className="text-xs text-[#7F8C8D] font-mono font-bold">
+                    {selectedCertificateIndex + 1} of {filteredCertificates.length}
                   </span>
                 </div>
+                <h3 className="text-xl font-bold text-[#2C3E50] mt-1">{currentCert.title}</h3>
+                <div className="text-xs text-[#7F8C8D]">{currentCert.issuer}</div>
+              </div>
 
-                {/* High Resolution Image */}
-                <div className="relative rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center max-h-[480px]">
-                  <img
-                    alt={currentCert.title}
-                    src={currentCert.imageSrc}
-                    className="w-full h-auto max-h-[460px] object-contain"
-                  />
+              <button
+                onClick={() => setActiveModal(null)}
+                className="p-2 rounded-full bg-[#ECF0F1] hover:bg-[#BDC3C7] text-[#2C3E50]"
+              >
+                <span className="material-symbols-outlined text-lg">close</span>
+              </button>
+            </div>
 
-                  {/* Carousel Left/Right Buttons */}
+            {/* High-Resolution Certificate Image Preview */}
+            <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-[#2C3E50] border border-[#BDC3C7] flex items-center justify-center group shadow-inner">
+              <img
+                src={currentCert.imageSrc}
+                alt={currentCert.title}
+                className="max-h-full max-w-full object-contain"
+              />
+
+              {/* Prev / Next Controls */}
+              {filteredCertificates.length > 1 && (
+                <>
                   <button
                     onClick={prevCertificate}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-900/80 hover:bg-amber-400 hover:text-slate-950 text-white border border-white/10 transition-colors shadow-lg"
-                    aria-label="Previous certificate"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-white/95 hover:bg-white text-[#2C3E50] shadow-lg transition-transform hover:scale-110 border border-[#BDC3C7]"
+                    aria-label="Previous Certificate"
                   >
-                    <span className="material-symbols-outlined text-base">chevron_left</span>
+                    <span className="material-symbols-outlined text-lg">chevron_left</span>
                   </button>
                   <button
                     onClick={nextCertificate}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-900/80 hover:bg-amber-400 hover:text-slate-950 text-white border border-white/10 transition-colors shadow-lg"
-                    aria-label="Next certificate"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-white/95 hover:bg-white text-[#2C3E50] shadow-lg transition-transform hover:scale-110 border border-[#BDC3C7]"
+                    aria-label="Next Certificate"
                   >
-                    <span className="material-symbols-outlined text-base">chevron_right</span>
+                    <span className="material-symbols-outlined text-lg">chevron_right</span>
                   </button>
-                </div>
+                </>
+              )}
+            </div>
 
-                <div className="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
-                  <p className="text-slate-300 leading-relaxed">{currentCert.description}</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {currentCert.skills.map((skill, i) => (
-                      <span key={i} className="px-2 py-0.5 rounded-lg bg-slate-800 text-[10px] text-amber-300 font-medium">
-                        ✓ {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+            {/* Verification & Description */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <div className="text-xs font-bold text-[#2C3E50]">Certificate Curriculum Scope:</div>
+                <p className="text-xs text-[#34495E] leading-relaxed">{currentCert.description}</p>
+              </div>
 
-                <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
-                  <span className="text-amber-400 font-semibold">Verified Credential</span>
-                  <div className="flex gap-2">
-                    {currentCert.pdfPath && (
-                      <a
-                        href={currentCert.pdfPath}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-4 py-2 rounded-full bg-slate-800 text-amber-300 border border-amber-400/30 font-bold hover:bg-slate-700 transition-colors inline-flex items-center gap-1.5 shadow-md"
-                      >
-                        <span className="material-symbols-outlined text-sm">picture_as_pdf</span>
-                        Open Original PDF
-                      </a>
-                    )}
-                    <a
-                      href={currentCert.imageSrc}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 rounded-full bg-amber-400 text-slate-950 font-bold hover:bg-amber-300 transition-colors inline-flex items-center gap-1.5 shadow-md"
+              <div className="space-y-2">
+                <div className="text-xs font-bold text-[#2C3E50]">Verified Competency Tags:</div>
+                <div className="flex flex-wrap gap-1.5">
+                  {currentCert.skills.map((s, idx) => (
+                    <span
+                      key={idx}
+                      className="px-2.5 py-1 rounded-lg bg-[#ECF0F1] text-[#2C3E50] text-xs font-semibold border border-[#BDC3C7]"
                     >
-                      <span className="material-symbols-outlined text-sm">open_in_new</span>
-                      Full Size
-                    </a>
-                  </div>
+                      {s}
+                    </span>
+                  ))}
                 </div>
               </div>
-            )}
+            </div>
+
+            {/* Modal Bottom Actions */}
+            <div className="pt-4 border-t border-[#BDC3C7] flex items-center justify-between">
+              <span className="text-xs font-mono font-bold text-[#7F8C8D]">
+                Official Identifier: {currentCert.idNumber}
+              </span>
+
+              <div className="flex items-center gap-2">
+                {currentCert.pdfPath && (
+                  <a
+                    href={currentCert.pdfPath}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 rounded-xl bg-[#2C3E50] hover:bg-[#34495E] text-white text-xs font-bold flex items-center gap-1 border border-[#34495E]"
+                  >
+                    <span className="material-symbols-outlined text-sm">picture_as_pdf</span>
+                    <span>Open Conferred PDF</span>
+                  </a>
+                )}
+
+                <button
+                  onClick={() => setActiveModal(null)}
+                  className="px-4 py-2 rounded-xl bg-[#ECF0F1] hover:bg-[#BDC3C7] text-[#2C3E50] text-xs font-bold"
+                >
+                  Done
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
