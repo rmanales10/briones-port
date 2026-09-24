@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect, useRef } from "react";
 
-type DocCategory = "all" | "pds" | "coe" | "wes";
+type DocCategory = "all" | "pds" | "coe" | "wes" | "fs";
 type CredentialCategory = "all" | "accounting" | "finance" | "ops";
 type CareerCategory = "all" | "gov" | "private";
 type PipelineStage = "coa" | "vouchers" | "recon" | "close" | "compliance";
 
 interface OfficialDoc {
   id: string;
-  category: "pds" | "coe" | "wes";
+  category: "pds" | "coe" | "wes" | "fs";
   categoryLabel: string;
   title: string;
   issuer: string;
@@ -23,6 +23,25 @@ interface OfficialDoc {
 }
 
 const officialDocs: OfficialDoc[] = [
+  {
+    id: "fs-bir-2019",
+    category: "fs",
+    categoryLabel: "BIR Statutory Financials",
+    title: "Annual Financial Statements & BIR Tax Schedules (FY 2019)",
+    issuer: "Bureau of Internal Revenue (BIR) • Statutory Financial Workpapers",
+    dateOrDuration: "Fiscal Year 2019 • Audited Statutory Workpapers",
+    pdfPath: "/fs-bir/fs-2019 final.ods",
+    badge: "BIR Tax & FS Schedules",
+    icon: "table_chart",
+    summary:
+      "Statutory Financial Statement working papers, Balance Sheet, P&L schedules, and BIR tax compliance reconciliations prepared in full adherence to Philippine GAAP and BIR statutory reporting requirements.",
+    keyPoints: [
+      "Financial Reporting: Full Statement of Financial Position (Balance Sheet), P&L, and Trial Balance mathematical tie-out",
+      "Statutory Tax Alignment: BIR Annual Income Tax Schedules, Withholding Tax summaries, and VAT/percentage reconciliations",
+      "Ledger Discipline: Depreciation schedules, accruals, prepayments, and subsidiary ledger balance verification",
+      "Format: OpenDocument Spreadsheet (.ODS) compatible with Excel & LibreOffice for fiscal analysis",
+    ],
+  },
   {
     id: "pds",
     category: "pds",
@@ -479,9 +498,8 @@ function Reveal({
     <div
       ref={domRef}
       style={{ transitionDelay: `${delay}ms` }}
-      className={`transition-all duration-700 ease-out ${
-        isVisible ? "opacity-100 translate-y-0 translate-x-0 scale-100" : `opacity-0 ${transformClass}`
-      } ${className}`}
+      className={`transition-all duration-700 ease-out ${isVisible ? "opacity-100 translate-y-0 translate-x-0 scale-100" : `opacity-0 ${transformClass}`
+        } ${className}`}
     >
       {children}
     </div>
@@ -759,7 +777,7 @@ export default function Home() {
       audit: "Audit Prep & Executive Board Pack",
     };
     const selectedModList = estimatorModules.map((m) => modNames[m] || m).join(", ");
-    
+
     setFormService("Private Client Fractional Retainer");
     setFormMessage(
       `Dear Ma. Faith,\n\nI have curated an engagement scope for our organization (${orgNames[estimatorOrg]} with ${estimatorVolume} monthly volume).\n\nPriority Modules Required:\n• ${selectedModList}\n\nWe look forward to scheduling a private discovery conversation.`
@@ -828,11 +846,10 @@ export default function Home() {
             }}
           >
             <div
-              className={`rounded-full border transition-all duration-200 ease-out flex items-center justify-center ${
-                isHoveringInteractive
-                  ? "w-12 h-12 border-[#7D735C] bg-[#7D735C]/10 shadow-[0_0_20px_rgba(125,115,92,0.25)] scale-110"
-                  : "w-8 h-8 border-[#BAA77E] bg-[#BAA77E]/15 shadow-[0_0_10px_rgba(186,167,126,0.35)]"
-              }`}
+              className={`rounded-full border transition-all duration-200 ease-out flex items-center justify-center ${isHoveringInteractive
+                ? "w-12 h-12 border-[#7D735C] bg-[#7D735C]/10 shadow-[0_0_20px_rgba(125,115,92,0.25)] scale-110"
+                : "w-8 h-8 border-[#BAA77E] bg-[#BAA77E]/15 shadow-[0_0_10px_rgba(186,167,126,0.35)]"
+                }`}
             >
               {isHoveringInteractive && (
                 <span className="h-1 w-1 rounded-full bg-[#7D735C] animate-ping"></span>
@@ -906,11 +923,10 @@ export default function Home() {
               <a
                 key={item.id}
                 href={`#${item.id}`}
-                className={`px-3.5 py-1.5 rounded-full transition-all duration-300 ${
-                  activeSection === item.id
-                    ? "bg-[#7D735C] text-white font-bold shadow-xs border border-[#685F49]"
-                    : "hover:text-[#1C1A15] hover:bg-[#EFE9DC]/80"
-                }`}
+                className={`px-3.5 py-1.5 rounded-full transition-all duration-300 ${activeSection === item.id
+                  ? "bg-[#7D735C] text-white font-bold shadow-xs border border-[#685F49]"
+                  : "hover:text-[#1C1A15] hover:bg-[#EFE9DC]/80"
+                  }`}
               >
                 {item.label}
               </a>
@@ -1193,15 +1209,13 @@ export default function Home() {
                 <button
                   key={p.id}
                   onClick={() => setActivePipelineStage(p.id)}
-                  className={`flex items-center gap-2.5 px-5 py-3 rounded-full text-xs sm:text-sm font-bold transition-all ${
-                    isActive
-                      ? "bg-[#7D735C] text-white shadow-md shadow-[#7D735C]/20 scale-105 border border-[#685F49]"
-                      : "bg-white text-[#736B5E] border border-[#DCD2C0] hover:bg-[#EFE9DC] hover:text-[#1C1A15]"
-                  }`}
+                  className={`flex items-center gap-2.5 px-5 py-3 rounded-full text-xs sm:text-sm font-bold transition-all ${isActive
+                    ? "bg-[#7D735C] text-white shadow-md shadow-[#7D735C]/20 scale-105 border border-[#685F49]"
+                    : "bg-white text-[#736B5E] border border-[#DCD2C0] hover:bg-[#EFE9DC] hover:text-[#1C1A15]"
+                    }`}
                 >
-                  <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
-                    isActive ? "bg-white text-[#7D735C]" : "bg-[#EFE9DC] text-[#7D735C]"
-                  }`}>
+                  <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${isActive ? "bg-white text-[#7D735C]" : "bg-[#EFE9DC] text-[#7D735C]"
+                    }`}>
                     {p.step}
                   </span>
                   <span className="material-symbols-outlined text-base">{p.icon}</span>
@@ -1511,11 +1525,10 @@ export default function Home() {
                   <button
                     key={tab.id}
                     onClick={() => setSelectedCareerCategory(tab.id)}
-                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
-                      selectedCareerCategory === tab.id
-                        ? "bg-[#7D735C] text-white shadow-xs font-bold"
-                        : "text-[#736B5E] hover:text-[#1C1A15] hover:bg-[#EFE9DC]"
-                    }`}
+                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${selectedCareerCategory === tab.id
+                      ? "bg-[#7D735C] text-white shadow-xs font-bold"
+                      : "text-[#736B5E] hover:text-[#1C1A15] hover:bg-[#EFE9DC]"
+                      }`}
                   >
                     {tab.label}
                   </button>
@@ -1531,11 +1544,10 @@ export default function Home() {
               return (
                 <Reveal key={role.id} delay={idx * 60}>
                   <div
-                    className={`rounded-[2rem] border transition-all duration-300 bg-white ${
-                      isExpanded
-                        ? "border-[#BAA77E] shadow-md ring-2 ring-[#BAA77E]/25"
-                        : "border-[#DCD2C0]/80 hover:border-[#BAA77E] shadow-xs"
-                    }`}
+                    className={`rounded-[2rem] border transition-all duration-300 bg-white ${isExpanded
+                      ? "border-[#BAA77E] shadow-md ring-2 ring-[#BAA77E]/25"
+                      : "border-[#DCD2C0]/80 hover:border-[#BAA77E] shadow-xs"
+                      }`}
                   >
                     {/* Header Row */}
                     <button
@@ -1565,11 +1577,10 @@ export default function Home() {
                           {isExpanded ? "Collapse Record" : "View Breakdown"}
                         </span>
                         <div
-                          className={`h-9 w-9 rounded-full flex items-center justify-center border transition-all ${
-                            isExpanded
-                              ? "bg-[#7D735C] text-white border-[#7D735C] rotate-180"
-                              : "bg-[#EFE9DC] text-[#7D735C] border-[#DCD2C0]"
-                          }`}
+                          className={`h-9 w-9 rounded-full flex items-center justify-center border transition-all ${isExpanded
+                            ? "bg-[#7D735C] text-white border-[#7D735C] rotate-180"
+                            : "bg-[#EFE9DC] text-[#7D735C] border-[#DCD2C0]"
+                            }`}
                         >
                           <span className="material-symbols-outlined text-lg">expand_more</span>
                         </div>
@@ -1631,7 +1642,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STATUTORY ARCHIVE & SIGNED PDFS (LUMINOUS KHAKI REFINEMENT) */}
+      {/* STATUTORY ARCHIVE, FINANCIAL SCHEDULES & SIGNED RECORDS */}
       <section id="dossier" className="py-20 px-4 sm:px-6 bg-white/85 border-y border-[#DCD2C0]/60 relative">
         <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
@@ -1642,17 +1653,18 @@ export default function Home() {
                   <span>Primary Archival Dossier</span>
                 </div>
                 <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
-                  Official Statutory Archive & Signed PDFs
+                  Official Statutory Archive & Financial Schedules
                 </h2>
                 <p className="text-sm text-[#736B5E] mt-1">
-                  Inspect or download all 6 official signed records including CS Form 212, COEs, and Work Experience Sheets.
+                  Inspect or download all 7 official verified records including BIR Financial Statements (.ODS), CS Form 212, COEs, and Work Experience Sheets.
                 </p>
               </div>
 
               {/* Category Filter */}
               <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-full bg-white border border-[#DCD2C0] shadow-xs">
                 {[
-                  { id: "all" as DocCategory, label: "All Dossiers (6)" },
+                  { id: "all" as DocCategory, label: "All Dossiers (7)" },
+                  { id: "fs" as DocCategory, label: "BIR Financials (FS)" },
                   { id: "pds" as DocCategory, label: "CSC Form 212" },
                   { id: "coe" as DocCategory, label: "COE Certs" },
                   { id: "wes" as DocCategory, label: "Work Experience" },
@@ -1660,11 +1672,10 @@ export default function Home() {
                   <button
                     key={tab.id}
                     onClick={() => setSelectedDocCategory(tab.id)}
-                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
-                      selectedDocCategory === tab.id
-                        ? "bg-[#7D735C] text-white shadow-xs font-bold"
-                        : "text-[#736B5E] hover:text-[#1C1A15] hover:bg-[#EFE9DC]"
-                    }`}
+                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${selectedDocCategory === tab.id
+                      ? "bg-[#7D735C] text-white shadow-xs font-bold"
+                      : "text-[#736B5E] hover:text-[#1C1A15] hover:bg-[#EFE9DC]"
+                      }`}
                   >
                     {tab.label}
                   </button>
@@ -1722,9 +1733,11 @@ export default function Home() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-2.5 rounded-full bg-white hover:bg-[#EFE9DC] text-[#7D735C] border border-[#DCD2C0] flex items-center justify-center transition-colors"
-                      title="Open Signed PDF in New Tab"
+                      title={doc.pdfPath.endsWith(".ods") ? "Download / Open Spreadsheet (.ODS)" : "Open Signed PDF in New Tab"}
                     >
-                      <span className="material-symbols-outlined text-sm">open_in_new</span>
+                      <span className="material-symbols-outlined text-sm">
+                        {doc.pdfPath.endsWith(".ods") ? "table_view" : "open_in_new"}
+                      </span>
                     </a>
                   </div>
                 </div>
@@ -1868,11 +1881,10 @@ export default function Home() {
                   <button
                     key={tab.id}
                     onClick={() => setSelectedCertCategory(tab.id)}
-                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
-                      selectedCertCategory === tab.id
-                        ? "bg-[#7D735C] text-white shadow-xs font-bold"
-                        : "text-[#736B5E] hover:text-[#1C1A15] hover:bg-[#EFE9DC]"
-                    }`}
+                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${selectedCertCategory === tab.id
+                      ? "bg-[#7D735C] text-white shadow-xs font-bold"
+                      : "text-[#736B5E] hover:text-[#1C1A15] hover:bg-[#EFE9DC]"
+                      }`}
                   >
                     {tab.label}
                   </button>
@@ -1977,11 +1989,10 @@ export default function Home() {
                       key={org.id}
                       type="button"
                       onClick={() => setEstimatorOrg(org.id)}
-                      className={`flex items-center gap-2.5 p-3 rounded-2xl text-xs font-bold border transition-all text-left ${
-                        estimatorOrg === org.id
-                          ? "bg-[#7D735C] text-white border-[#7D735C] shadow-sm font-extrabold"
-                          : "bg-[#F7F4EE] text-[#4A4437] border-[#DCD2C0] hover:bg-[#EFE9DC]"
-                      }`}
+                      className={`flex items-center gap-2.5 p-3 rounded-2xl text-xs font-bold border transition-all text-left ${estimatorOrg === org.id
+                        ? "bg-[#7D735C] text-white border-[#7D735C] shadow-sm font-extrabold"
+                        : "bg-[#F7F4EE] text-[#4A4437] border-[#DCD2C0] hover:bg-[#EFE9DC]"
+                        }`}
                     >
                       <span className="material-symbols-outlined text-base">{org.icon}</span>
                       <span>{org.label}</span>
@@ -2010,16 +2021,14 @@ export default function Home() {
                         key={m.id}
                         type="button"
                         onClick={() => toggleModule(m.id)}
-                        className={`w-full p-3.5 rounded-2xl border text-left flex items-start gap-3 transition-all ${
-                          isChecked
-                            ? "bg-[#EFE9DC] border-[#BAA77E] shadow-xs"
-                            : "bg-white border-[#DCD2C0]/70 hover:bg-[#F7F4EE]"
-                        }`}
+                        className={`w-full p-3.5 rounded-2xl border text-left flex items-start gap-3 transition-all ${isChecked
+                          ? "bg-[#EFE9DC] border-[#BAA77E] shadow-xs"
+                          : "bg-white border-[#DCD2C0]/70 hover:bg-[#F7F4EE]"
+                          }`}
                       >
                         <div
-                          className={`h-5 w-5 rounded-md flex items-center justify-center mt-0.5 shrink-0 transition-colors ${
-                            isChecked ? "bg-[#7D735C] text-white" : "border border-[#DCD2C0] bg-white"
-                          }`}
+                          className={`h-5 w-5 rounded-md flex items-center justify-center mt-0.5 shrink-0 transition-colors ${isChecked ? "bg-[#7D735C] text-white" : "border border-[#DCD2C0] bg-white"
+                            }`}
                         >
                           {isChecked && <span className="material-symbols-outlined text-xs">check</span>}
                         </div>
@@ -2051,11 +2060,10 @@ export default function Home() {
                       key={v.id}
                       type="button"
                       onClick={() => setEstimatorVolume(v.id)}
-                      className={`p-2.5 rounded-2xl text-xs font-bold border transition-all text-center ${
-                        estimatorVolume === v.id
-                          ? "bg-[#7D735C] text-white border-[#7D735C] shadow-xs font-bold"
-                          : "bg-[#F7F4EE] text-[#4A4437] border-[#DCD2C0] hover:bg-[#EFE9DC]"
-                      }`}
+                      className={`p-2.5 rounded-2xl text-xs font-bold border transition-all text-center ${estimatorVolume === v.id
+                        ? "bg-[#7D735C] text-white border-[#7D735C] shadow-xs font-bold"
+                        : "bg-[#F7F4EE] text-[#4A4437] border-[#DCD2C0] hover:bg-[#EFE9DC]"
+                        }`}
                     >
                       {v.label}
                     </button>
@@ -2160,15 +2168,15 @@ export default function Home() {
                       <div>
                         <div className="text-[10px] font-bold uppercase text-[#736B5E]">Direct Email</div>
                         <a
-                          href="mailto:faithbriones22@gmail.com"
+                          href="mailto:faithbriones1984@gmail.com"
                           className="text-xs sm:text-sm font-bold text-[#1C1A15] hover:text-[#7D735C] transition-colors"
                         >
-                          faithbriones22@gmail.com
+                          faithbriones1984@gmail.com
                         </a>
                       </div>
                     </div>
                     <button
-                      onClick={() => copyToClipboard("faithbriones22@gmail.com", "Email")}
+                      onClick={() => copyToClipboard("faithbriones1984@gmail.com", "Email")}
                       className="p-2 rounded-xl bg-white hover:bg-[#EFE9DC] text-[#1C1A15] border border-[#DCD2C0] text-xs font-bold"
                       title="Copy Email"
                     >
@@ -2185,15 +2193,15 @@ export default function Home() {
                       <div>
                         <div className="text-[10px] font-bold uppercase text-[#736B5E]">Direct Mobile</div>
                         <a
-                          href="tel:+639482454704"
+                          href="tel:+639515784797"
                           className="text-xs sm:text-sm font-bold text-[#1C1A15] hover:text-[#7D735C] transition-colors"
                         >
-                          +63 948 245 4704
+                          +63 951 578 4797
                         </a>
                       </div>
                     </div>
                     <button
-                      onClick={() => copyToClipboard("+63 948 245 4704", "Mobile Number")}
+                      onClick={() => copyToClipboard("+63 951 578 4797", "Mobile Number")}
                       className="p-2 rounded-xl bg-white hover:bg-[#EFE9DC] text-[#1C1A15] border border-[#DCD2C0] text-xs font-bold"
                       title="Copy Mobile"
                     >
@@ -2429,8 +2437,12 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="px-6 py-2.5 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-xs font-bold flex items-center gap-1.5 shadow-md border border-[#BAA77E]"
               >
-                <span className="material-symbols-outlined text-sm">open_in_new</span>
-                <span>Open Official PDF Document</span>
+                <span className="material-symbols-outlined text-sm">
+                  {selectedDoc.pdfPath.endsWith(".ods") ? "table_view" : "open_in_new"}
+                </span>
+                <span>
+                  {selectedDoc.pdfPath.endsWith(".ods") ? "Open / Download Spreadsheet (.ODS)" : "Open Official PDF Document"}
+                </span>
               </a>
             </div>
           </div>
