@@ -2,13 +2,15 @@
 
 import React, { useState, useEffect, useRef } from "react";
 
-type DocCategory = "all" | "pds" | "coe" | "wes";
+type DocCategory = "all" | "work-sample" | "pds" | "coe" | "wes";
 type CredentialCategory = "all" | "accounting" | "finance" | "ops";
 type CareerCategory = "all" | "gov" | "private";
+type PipelineStage = "coa" | "vouchers" | "recon" | "close" | "compliance";
+type WorkSampleTab = "bs" | "pnl" | "tax" | "depr";
 
 interface OfficialDoc {
   id: string;
-  category: "pds" | "coe" | "wes";
+  category: "work-sample" | "pds" | "coe" | "wes";
   categoryLabel: string;
   title: string;
   issuer: string;
@@ -22,6 +24,25 @@ interface OfficialDoc {
 }
 
 const officialDocs: OfficialDoc[] = [
+  {
+    id: "fs-bir-2019",
+    category: "work-sample",
+    categoryLabel: "Work Sample • Financial Model",
+    title: "Annual Financial Statements & BIR Tax Schedules (FY 2019)",
+    issuer: "Bureau of Internal Revenue (BIR) • Statutory Financial Workpapers",
+    dateOrDuration: "Fiscal Year 2019 • Audited Statutory Workpapers",
+    pdfPath: "/fs-bir/fs-2019 final.ods",
+    badge: "Work Sample • FS Schedules",
+    icon: "table_chart",
+    summary:
+      "Statutory Financial Statement working papers, Statement of Financial Position (Balance Sheet), Statement of Comprehensive Income (P&L), depreciation schedules, and BIR statutory tax reconciliations prepared in full adherence to Philippine GAAP, PFRS, and BIR regulations.",
+    keyPoints: [
+      "Financial Reporting: Full Statement of Financial Position (Balance Sheet), P&L, and Trial Balance mathematical tie-out with zero variance",
+      "Statutory Tax Alignment: BIR Annual Income Tax Schedules, Withholding Tax summaries, and VAT/percentage reconciliations",
+      "Ledger Discipline: Straight-line depreciation schedules, accruals, prepayments, and subsidiary ledger balance verification",
+      "Format: OpenDocument Spreadsheet (.ODS) fully compatible with Microsoft Excel, LibreOffice & Google Sheets",
+    ],
+  },
   {
     id: "pds",
     category: "pds",
@@ -335,7 +356,6 @@ interface CareerRole {
   location: string;
   period: string;
   badge: string;
-  badgeColor: string;
   summary: string;
   highlights: string[];
   supervisors?: string;
@@ -351,7 +371,6 @@ const careerRoles: CareerRole[] = [
     location: "Oroquieta Branch, Misamis Occidental",
     period: "Jan 2023 – Present & Aug 2015 – Dec 2018",
     badge: "Public Administration",
-    badgeColor: "bg-amber-500/15 text-amber-300 border-amber-500/30",
     summary:
       "Responsible for core branch administrative operations, financial disbursement vouchers with complete statutory audit attachments, annual administrative budget prioritizations, PIMS supplies procurement, property asset registers, and UMID card releases.",
     highlights: [
@@ -371,7 +390,6 @@ const careerRoles: CareerRole[] = [
     location: "Oroquieta Branch, Misamis Occidental",
     period: "Jan 2019 – Dec 2022 & Reliever (2023 – Present)",
     badge: "2023 Division Awardee",
-    badgeColor: "bg-yellow-500/15 text-yellow-300 border-yellow-500/30",
     summary:
       "Frontline leadership in screening, evaluating, and processing complex member benefit claims (sickness, maternity, disability, retirement, funeral), loan applications, and annual confirmation of pensioners (ACOP). Awarded 2023 Best Customer Service Employee at the Division Level.",
     highlights: [
@@ -391,7 +409,6 @@ const careerRoles: CareerRole[] = [
     location: "Liloy Branch, Zamboanga del Norte",
     period: "Jan 23, 2006 – Aug 8, 2012 (6.5+ Years)",
     badge: "Lead Bookkeeper",
-    badgeColor: "bg-amber-500/15 text-amber-300 border-amber-500/30",
     summary:
       "Full-charge branch bookkeeper managing multi-million peso microfinance loan portfolios, double-entry general ledgers, cash book balances, daily bank deposits, and month-end financial closures under ISO 9001 quality systems.",
     highlights: [
@@ -411,7 +428,6 @@ const careerRoles: CareerRole[] = [
     location: "Plaridel, Misamis Occidental",
     period: "Dec 10, 2012 – Oct 10, 2013",
     badge: "Cooperative Accounting",
-    badgeColor: "bg-sky-500/15 text-sky-300 border-sky-500/30",
     summary:
       "Maintained statutory cooperative ledgers, member share capital accounts, loan ledgers, and financial statements in strict conformity with Cooperative Development Authority (CDA) regulatory frameworks.",
     highlights: [
@@ -429,7 +445,6 @@ const careerRoles: CareerRole[] = [
     location: "Misamis Occidental",
     period: "June 13, 2004 – Aug 31, 2005",
     badge: "Early Career Foundation",
-    badgeColor: "bg-slate-500/15 text-slate-300 border-slate-500/30",
     summary:
       "Early career accounting foundation following graduation from Andres Bonifacio College: managed daily cash receipts, disbursement journals, and cooperative bookkeeping registers.",
     highlights: [
@@ -439,7 +454,7 @@ const careerRoles: CareerRole[] = [
   },
 ];
 
-// Reusable Scroll-Reveal Animation Component
+// Reusable Scroll-Reveal Component
 function Reveal({
   children,
   className = "",
@@ -484,32 +499,38 @@ function Reveal({
     <div
       ref={domRef}
       style={{ transitionDelay: `${delay}ms` }}
-      className={`transition-all duration-700 ease-out ${
-        isVisible ? "opacity-100 translate-y-0 translate-x-0 scale-100" : `opacity-0 ${transformClass}`
-      } ${className}`}
+      className={`transition-all duration-700 ease-out ${isVisible ? "opacity-100 translate-y-0 translate-x-0 scale-100" : `opacity-0 ${transformClass}`
+        } ${className}`}
     >
       {children}
     </div>
   );
 }
 
-// Animated Counter Component
-function CountUp({
+// Dual-Tone Luminous Metric Card
+function AnimatedMetric({
   end,
   duration = 2000,
   decimals = 0,
-  prefix = "",
   suffix = "",
+  label,
+  sublabel,
+  progress = 100,
+  icon = "verified",
 }: {
   end: number;
   duration?: number;
   decimals?: number;
-  prefix?: string;
   suffix?: string;
+  label: string;
+  sublabel: string;
+  progress?: number;
+  icon?: string;
 }) {
   const [count, setCount] = useState(0);
+  const [barWidth, setBarWidth] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
-  const countRef = useRef<HTMLSpanElement>(null);
+  const metricRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -520,11 +541,12 @@ function CountUp({
 
           const animate = (currentTime: number) => {
             if (!startTime) startTime = currentTime;
-            const progress = Math.min((currentTime - startTime) / duration, 1);
-            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            const elapsed = Math.min((currentTime - startTime) / duration, 1);
+            const easeOutQuart = 1 - Math.pow(1 - elapsed, 4);
             setCount(easeOutQuart * end);
+            setBarWidth(easeOutQuart * progress);
 
-            if (progress < 1) {
+            if (elapsed < 1) {
               requestAnimationFrame(animate);
             }
           };
@@ -535,19 +557,40 @@ function CountUp({
       { threshold: 0.2 }
     );
 
-    if (countRef.current) observer.observe(countRef.current);
+    if (metricRef.current) observer.observe(metricRef.current);
     return () => observer.disconnect();
-  }, [end, duration, hasAnimated]);
+  }, [end, duration, hasAnimated, progress]);
 
   return (
-    <span ref={countRef}>
-      {prefix}
-      {count.toLocaleString("en-US", {
-        minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals,
-      })}
-      {suffix}
-    </span>
+    <div ref={metricRef} className="luminous-pearl-card rounded-[2rem] p-6 space-y-3.5 group bg-white">
+      <div className="flex items-center justify-between">
+        <span className="font-serif text-3xl sm:text-4xl font-semibold text-[#1C1A15] tracking-tight">
+          {count.toLocaleString("en-US", {
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals,
+          })}
+          <span className="font-sans text-xl font-bold text-[#7D735C] ml-1">{suffix}</span>
+        </span>
+        <span className="h-11 w-11 rounded-2xl bg-[#EFE9DC] text-[#7D735C] flex items-center justify-center border border-[#BAA77E]/50 shadow-xs group-hover:scale-110 transition-transform">
+          <span className="material-symbols-outlined text-xl">{icon}</span>
+        </span>
+      </div>
+
+      <div>
+        <div className="text-sm font-bold text-[#1C1A15] group-hover:text-[#7D735C] transition-colors">
+          {label}
+        </div>
+        <div className="text-xs text-[#736B5E] mt-0.5 font-medium">{sublabel}</div>
+      </div>
+
+      {/* Khaki Gold Progress Track */}
+      <div className="w-full h-1.5 rounded-full bg-[#EFE9DC] overflow-hidden">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-[#7D735C] via-[#BAA77E] to-[#E8DECA] shadow-xs transition-all duration-150 ease-out"
+          style={{ width: `${barWidth}%` }}
+        />
+      </div>
+    </div>
   );
 }
 
@@ -557,6 +600,17 @@ export default function Home() {
   const [selectedCareerCategory, setSelectedCareerCategory] = useState<CareerCategory>("all");
   const [expandedRoleId, setExpandedRoleId] = useState<string>("sss-admin");
 
+  // Interactive Work Sample State
+  const [activeWorkSampleTab, setActiveWorkSampleTab] = useState<WorkSampleTab>("bs");
+
+  // Interactive 5-Step Process State
+  const [activePipelineStage, setActivePipelineStage] = useState<PipelineStage>("recon");
+
+  // Interactive Estimator State
+  const [estimatorOrg, setEstimatorOrg] = useState<string>("corporate");
+  const [estimatorModules, setEstimatorModules] = useState<string[]>(["gl", "bank", "statutory"]);
+  const [estimatorVolume, setEstimatorVolume] = useState<string>("medium");
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [selectedCertificateIndex, setSelectedCertificateIndex] = useState<number>(0);
@@ -565,6 +619,70 @@ export default function Home() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Mouse Movement Follower State
+  const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
+  const [trailingPos, setTrailingPos] = useState({ x: -100, y: -100 });
+  const [isHoveringInteractive, setIsHoveringInteractive] = useState(false);
+  const [cursorVisible, setCursorVisible] = useState(false);
+
+  // Quick form state
+  const [formName, setFormName] = useState("");
+  const [formEmail, setFormEmail] = useState("");
+  const [formService, setFormService] = useState("Full-Cycle Bookkeeping & General Ledger");
+  const [formMessage, setFormMessage] = useState("");
+
+  useEffect(() => {
+    let animationFrameId: number;
+    let targetX = -100;
+    let targetY = -100;
+    let currentX = -100;
+    let currentY = -100;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+      setMousePos({ x: e.clientX, y: e.clientY });
+      if (!cursorVisible) setCursorVisible(true);
+
+      const target = e.target as HTMLElement;
+      if (
+        target.closest("button") ||
+        target.closest("a") ||
+        target.closest("input") ||
+        target.closest("select") ||
+        target.closest("textarea") ||
+        target.closest(".cursor-pointer")
+      ) {
+        setIsHoveringInteractive(true);
+      } else {
+        setIsHoveringInteractive(false);
+      }
+    };
+
+    const handleMouseLeave = () => {
+      setCursorVisible(false);
+    };
+
+    const animateFollower = () => {
+      currentX += (targetX - currentX) * 0.18;
+      currentY += (targetY - currentY) * 0.18;
+      setTrailingPos({ x: currentX, y: currentY });
+
+      animationFrameId = requestAnimationFrame(animateFollower);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    document.addEventListener("mouseleave", handleMouseLeave);
+    animationFrameId = requestAnimationFrame(animateFollower);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [cursorVisible]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -573,7 +691,7 @@ export default function Home() {
       setScrollProgress((currentScroll / totalScroll) * 100);
       setShowBackToTop(currentScroll > 400);
 
-      const sections = ["overview", "provenance", "dossier", "stack", "credentials", "contact"];
+      const sections = ["overview", "pipeline", "provenance", "worksamples", "dossier", "stack", "credentials", "estimator", "contact"];
       const scrollPosition = currentScroll + 200;
 
       for (const section of sections) {
@@ -592,6 +710,16 @@ export default function Home() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const showToast = (text: string) => {
+    setToastMessage(text);
+    setTimeout(() => setToastMessage(null), 3200);
+  };
+
+  const copyToClipboard = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    showToast(`✓ Copied ${label} to clipboard!`);
+  };
 
   const filteredDocs = officialDocs.filter(
     (d) => selectedDocCategory === "all" || d.category === selectedDocCategory
@@ -632,82 +760,199 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const toggleModule = (id: string) => {
+    setEstimatorModules((prev) =>
+      prev.includes(id) ? prev.filter((m) => m !== id) : [...prev, id]
+    );
+  };
+
+  const handleApplyEstimatorToContact = () => {
+    const orgNames: Record<string, string> = {
+      corporate: "Private Business / SME",
+      cooperative: "Cooperative / Microfinance (CDA)",
+      government: "Government Agency",
+      virtual: "Online / Remote Business",
+    };
+    const modNames: Record<string, string> = {
+      gl: "General Ledger & Bookkeeping",
+      bank: "Daily Bank Reconciliation",
+      statutory: "Government Compliance (SSS / BIR)",
+      cloud: "QuickBooks / Xero Setup",
+      audit: "Year-End Audit Prep & Reports",
+    };
+    const selectedModList = estimatorModules.map((m) => modNames[m] || m).join(", ");
+
+    setFormService("Full-Cycle Bookkeeping & General Ledger");
+    setFormMessage(
+      `Hello Ma. Faith,\n\nI would like to inquire about accounting services for our organization (${orgNames[estimatorOrg]} with ${estimatorVolume} transaction volume).\n\nServices Needed:\n• ${selectedModList}\n\nPlease let me know your availability for a quick consultation.`
+    );
+
+    const contactSection = document.getElementById("contact");
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: "smooth" });
+    }
+    showToast("✨ Plan details loaded into the contact form!");
+  };
+
   const currentCert = filteredCertificates[selectedCertificateIndex] || filteredCertificates[0];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#090D16] text-[#E2E8F0] relative selection:bg-[#D4AF37] selection:text-[#090D16]">
-      {/* Top Ambient Light Flare */}
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-radial-glow pointer-events-none z-0"></div>
+    <div className="flex flex-col min-h-screen bg-[#F7F4EE] text-[#1C1A15] relative selection:bg-[#BAA77E] selection:text-[#1C1A15] bg-dualtone-canvas dualtone-subtle-pattern overflow-x-hidden">
+      {/* ANIMATED DUAL-TONE BACKGROUND ENGINE */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        {/* Floating Aurora Orb 1 (Top Khaki Gold) */}
+        <div className="absolute -top-[12%] left-[22%] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#BAA77E]/20 via-[#E8DECA]/15 to-transparent blur-[130px] animate-orb-1"></div>
 
-      {/* Progress Line */}
-      <div className="fixed top-0 left-0 right-0 h-1 bg-transparent z-[60] pointer-events-none">
+        {/* Floating Aurora Orb 2 (Right Warm Linen Khaki) */}
+        <div className="absolute top-[30%] -right-[8%] w-[700px] h-[700px] rounded-full bg-gradient-to-tl from-[#BAA77E]/16 via-[#DCD2C0]/25 to-transparent blur-[150px] animate-orb-2"></div>
+
+        {/* Floating Aurora Orb 3 (Left Olive Sand Khaki) */}
+        <div className="absolute top-[55%] -left-[10%] w-[550px] h-[550px] rounded-full bg-gradient-to-tr from-[#7D735C]/16 via-[#BAA77E]/12 to-transparent blur-[130px] animate-orb-3"></div>
+
+        {/* Floating Aurora Orb 4 (Bottom Soft Champagne Gold) */}
+        <div className="absolute -bottom-[8%] left-[28%] w-[650px] h-[650px] rounded-full bg-gradient-to-t from-[#DCD2C0]/30 via-[#BAA77E]/15 to-transparent blur-[140px] animate-orb-1"></div>
+
+        {/* Constellation Starlight Dust Particles */}
+        <div className="absolute top-[12%] left-[15%] h-1.5 w-1.5 rounded-full bg-[#BAA77E] shadow-[0_0_8px_#BAA77E] animate-particle" style={{ animationDelay: "0s" }}></div>
+        <div className="absolute top-[22%] right-[18%] h-2 w-2 rounded-full bg-[#7D735C] shadow-[0_0_10px_#7D735C] animate-particle" style={{ animationDelay: "1.5s" }}></div>
+        <div className="absolute top-[45%] left-[8%] h-1.5 w-1.5 rounded-full bg-[#BAA77E] shadow-[0_0_6px_#BAA77E] animate-particle" style={{ animationDelay: "3s" }}></div>
+        <div className="absolute top-[58%] right-[12%] h-2 w-2 rounded-full bg-[#BAA77E] shadow-[0_0_12px_#BAA77E] animate-particle" style={{ animationDelay: "0.8s" }}></div>
+        <div className="absolute top-[75%] left-[22%] h-1 w-1 rounded-full bg-[#7D735C] shadow-[0_0_6px_#7D735C] animate-particle" style={{ animationDelay: "2.2s" }}></div>
+        <div className="absolute top-[88%] right-[25%] h-1.5 w-1.5 rounded-full bg-[#BAA77E] shadow-[0_0_8px_#BAA77E] animate-particle" style={{ animationDelay: "4s" }}></div>
+
+        {/* Dynamic Interactive Mouse Torch Spotlight */}
+        {cursorVisible && (
+          <div
+            className="fixed pointer-events-none z-0 transition-opacity duration-500 will-change-transform"
+            style={{
+              left: `${mousePos.x}px`,
+              top: `${mousePos.y}px`,
+              transform: "translate(-50%, -50%)",
+              width: "600px",
+              height: "600px",
+              background: "radial-gradient(circle, rgba(186, 167, 126, 0.16) 0%, rgba(125, 115, 92, 0.05) 50%, transparent 70%)",
+              filter: "blur(35px)",
+            }}
+          />
+        )}
+      </div>
+
+      {/* LUXURY INTERACTIVE MOUSE FOLLOWER HALO (Desktop Only) */}
+      {cursorVisible && (
+        <>
+          {/* Smooth Trailing Halo Ring */}
+          <div
+            className="fixed pointer-events-none z-[9999] hidden md:block will-change-transform"
+            style={{
+              left: `${trailingPos.x}px`,
+              top: `${trailingPos.y}px`,
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <div
+              className={`rounded-full border transition-all duration-200 ease-out flex items-center justify-center ${isHoveringInteractive
+                ? "w-12 h-12 border-[#7D735C] bg-[#7D735C]/10 shadow-[0_0_20px_rgba(125,115,92,0.25)] scale-110"
+                : "w-8 h-8 border-[#BAA77E] bg-[#BAA77E]/15 shadow-[0_0_10px_rgba(186,167,126,0.35)]"
+                }`}
+            >
+              {isHoveringInteractive && (
+                <span className="h-1 w-1 rounded-full bg-[#7D735C] animate-ping"></span>
+              )}
+            </div>
+          </div>
+
+          {/* Precision Core Spark Dot */}
+          <div
+            className="fixed pointer-events-none z-[9999] hidden md:block w-1.5 h-1.5 rounded-full bg-[#7D735C] shadow-[0_0_6px_#7D735C] will-change-transform"
+            style={{
+              left: `${mousePos.x}px`,
+              top: `${mousePos.y}px`,
+              transform: "translate(-50%, -50%)",
+            }}
+          />
+        </>
+      )}
+
+      {/* Toast Notification Alert */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-[100] px-5 py-3.5 rounded-2xl bg-[#EFE9DC] text-[#1C1A15] font-medium text-xs sm:text-sm shadow-2xl border border-[#BAA77E] flex items-center gap-3 animate-float-luxury">
+          <span className="material-symbols-outlined text-[#7D735C] text-base sm:text-lg">auto_awesome</span>
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
+      {/* Luxury Khaki Gold Progress Line */}
+      <div className="fixed top-0 left-0 right-0 h-1 bg-[#DCD2C0]/60 z-[60] pointer-events-none">
         <div
-          className="h-full bg-gradient-to-r from-amber-400 via-yellow-200 to-amber-500 shadow-[0_0_10px_rgba(212,175,55,0.7)] transition-all duration-75"
+          className="h-full bg-gradient-to-r from-[#7D735C] via-[#BAA77E] to-[#C9B27C] shadow-sm transition-all duration-75"
           style={{ width: `${scrollProgress}%` }}
         />
       </div>
 
-      {/* FLOATING ISLAND HEADER */}
-      <header className="fixed top-4 left-0 right-0 z-50 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto h-16 rounded-full bg-[#0F172A]/85 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.6)] px-4 sm:px-6 flex items-center justify-between gap-4">
-          {/* Identity Pill */}
-          <a href="#overview" className="flex items-center gap-3 shrink-0 group">
-            <div className="relative h-10 w-10 shrink-0 rounded-full overflow-hidden border border-amber-400/40 shadow-md group-hover:scale-105 transition-transform">
+      {/* HEADER NAVBAR (COMPACT & NO WORD WRAP) */}
+      <header className="fixed top-4 left-0 right-0 z-50 px-3 sm:px-6">
+        <div className="max-w-7xl mx-auto h-16 rounded-full bg-white/95 backdrop-blur-2xl border border-[#DCD2C0]/80 shadow-[0_10px_35px_rgba(37,35,28,0.06)] px-3 sm:px-5 flex items-center justify-between gap-2 xl:gap-4">
+          {/* Identity */}
+          <a href="#overview" className="flex items-center gap-2.5 shrink-0 group">
+            <div className="relative h-9 w-9 shrink-0 rounded-full overflow-hidden border-2 border-[#BAA77E] shadow-xs group-hover:scale-105 transition-transform">
               <img
                 src="/profile/avatar.jpg"
                 alt="Ma. Faith B. Briones"
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-bold text-white tracking-tight group-hover:text-amber-300 transition-colors">
+            <div className="flex flex-col whitespace-nowrap">
+              <span className="font-serif text-xs sm:text-sm font-bold text-[#1C1A15] tracking-tight group-hover:text-[#7D735C] transition-colors">
                 Ma. Faith B. Briones
               </span>
-              <span className="text-[10px] text-amber-400 font-semibold tracking-wide">
-                BSA • CSE 80.24% • Senior Bookkeeper
+              <span className="text-[9px] sm:text-[10px] text-[#7D735C] font-bold tracking-wider uppercase flex items-center gap-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#BAA77E] inline-block animate-ping"></span>
+                BSA • CSE 80.24%
               </span>
             </div>
           </a>
 
-          {/* Nav Items */}
-          <nav className="hidden md:flex items-center gap-1.5 text-xs font-medium text-slate-300">
+          {/* Compact Nav Items with Whitespace-Nowrap */}
+          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 text-[11px] xl:text-xs font-semibold text-[#736B5E] whitespace-nowrap">
             {[
-              { id: "overview", label: "Overview" },
+              { id: "overview", label: "About" },
+              { id: "pipeline", label: "Process" },
               { id: "provenance", label: "Experience" },
-              { id: "dossier", label: "Dossier & PDFs" },
-              { id: "stack", label: "Systems & Standards" },
+              { id: "worksamples", label: "Work Samples" },
+              { id: "dossier", label: "Records" },
+              { id: "stack", label: "Software" },
               { id: "credentials", label: "Certificates" },
+              { id: "estimator", label: "Pricing" },
               { id: "contact", label: "Contact" },
             ].map((item) => (
               <a
                 key={item.id}
                 href={`#${item.id}`}
-                className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${
-                  activeSection === item.id
-                    ? "bg-amber-400/15 text-amber-300 border border-amber-400/30 font-semibold"
-                    : "hover:text-white hover:bg-white/5"
-                }`}
+                className={`px-2.5 xl:px-3 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap ${activeSection === item.id
+                  ? "bg-[#7D735C] text-white font-bold shadow-xs border border-[#685F49]"
+                  : "hover:text-[#1C1A15] hover:bg-[#EFE9DC]/80"
+                  }`}
               >
                 {item.label}
               </a>
             ))}
           </nav>
 
-          {/* Quick Action */}
-          <div className="flex items-center gap-2.5 shrink-0">
+          {/* CTA Button */}
+          <div className="flex items-center gap-2 shrink-0">
             <a
               href="#contact"
-              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 text-xs font-bold shadow-[0_0_15px_rgba(212,175,55,0.35)] hover:shadow-[0_0_25px_rgba(212,175,55,0.6)] hover:scale-105 transition-all"
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-xs font-bold shadow-md shadow-[#7D735C]/20 hover:scale-105 transition-all border border-[#BAA77E]/60 whitespace-nowrap"
             >
-              <span>Get In Touch</span>
-              <span className="material-symbols-outlined text-sm">arrow_forward</span>
+              <span className="material-symbols-outlined text-sm text-[#E8DECA]">mail</span>
+              <span>Contact</span>
             </a>
 
             {/* Mobile Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-full bg-white/5 text-slate-200 hover:text-white border border-white/10"
-              aria-label="Toggle menu"
+              className="lg:hidden p-2 rounded-full bg-[#EFE9DC] text-[#7D735C] hover:text-[#1C1A15] border border-[#DCD2C0]"
+              aria-label="Toggle navigation"
             >
               <span className="material-symbols-outlined text-xl">
                 {mobileMenuOpen ? "close" : "menu"}
@@ -718,292 +963,680 @@ export default function Home() {
 
         {/* Mobile Dropdown */}
         {mobileMenuOpen && (
-          <div className="md:hidden mt-2 max-w-6xl mx-auto rounded-3xl bg-[#0F172A] border border-white/10 p-4 space-y-2 shadow-2xl animate-in slide-in-from-top-2 duration-200">
+          <div className="lg:hidden max-w-6xl mx-auto mt-2 rounded-3xl bg-white/98 backdrop-blur-2xl border border-[#DCD2C0] p-4 shadow-xl space-y-1">
             {[
-              { id: "overview", label: "Overview" },
-              { id: "provenance", label: "Experience & Timeline" },
-              { id: "dossier", label: "Official Dossier & PDFs" },
-              { id: "stack", label: "Accounting Systems & Stack" },
-              { id: "credentials", label: "Verified Certificates" },
-              { id: "contact", label: "Direct Engagement" },
+              { id: "overview", label: "About Ma. Faith Briones" },
+              { id: "pipeline", label: "How I Work (5-Step Process)" },
+              { id: "provenance", label: "20-Year Work Experience" },
+              { id: "worksamples", label: "Work Samples & Spreadsheets" },
+              { id: "dossier", label: "Official Documents & Signed Records" },
+              { id: "stack", label: "Software & Government Portals" },
+              { id: "credentials", label: "Certificates & Training (11 Proofs)" },
+              { id: "estimator", label: "Service Cost & Scope Estimator" },
+              { id: "contact", label: "Contact & Consultation Form" },
             ].map((item) => (
               <a
                 key={item.id}
                 href={`#${item.id}`}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block px-4 py-2.5 rounded-2xl text-sm font-medium transition-colors ${
-                  activeSection === item.id ? "bg-amber-400/20 text-amber-300 font-semibold" : "text-slate-300 hover:bg-white/5"
-                }`}
+                className="flex items-center justify-between px-4 py-2.5 rounded-2xl text-xs font-bold text-[#1C1A15] hover:bg-[#EFE9DC] hover:text-[#7D735C] transition-colors"
               >
-                {item.label}
+                <span>{item.label}</span>
+                <span className="material-symbols-outlined text-sm text-[#BAA77E]">chevron_right</span>
               </a>
             ))}
-            <a
-              href="#contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block w-full text-center py-2.5 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 text-xs font-bold mt-2"
-            >
-              Request Consultation
-            </a>
           </div>
         )}
       </header>
 
-      <main className="w-full pt-28 pb-20 space-y-24">
-        {/* SECTION 1: MODERN BENTO HERO */}
-        <section className="relative w-full max-w-6xl mx-auto px-4 sm:px-6" id="overview">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-            {/* Bento 1: Primary Identity & Pitch (Col-span 7) */}
-            <Reveal className="lg:col-span-7 flex">
-              <div className="bento-card w-full rounded-3xl p-7 sm:p-9 flex flex-col justify-between space-y-6">
-                <div className="space-y-4">
-                  {/* Status Badges */}
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-xs font-semibold">
-                      <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse"></span>
-                      Civil Service Professional (80.24%)
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300 text-xs font-medium">
-                      BS in Accountancy Graduate
-                    </span>
-                  </div>
+      {/* HERO SECTION: DUAL-TONE KHAKI WITH CLEAR, SIMPLE ENGLISH */}
+      <section id="overview" className="relative pt-28 pb-16 md:pt-36 md:pb-24 px-4 sm:px-6 z-10">
+        <div className="max-w-6xl mx-auto space-y-12">
+          {/* Masthead Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#DCD2C0]/70 pb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#DCD2C0] shadow-xs text-xs font-medium text-[#1C1A15]">
+              <span className="font-serif italic font-semibold text-[#7D735C]">Professional Portfolio</span>
+              <span className="text-[#BAA77E]">•</span>
+              <span className="text-[#736B5E]">Andres Bonifacio College (BS Accountancy, 2004)</span>
+              <span className="text-[#BAA77E]">•</span>
+              <span className="text-[#7D735C] font-bold">Civil Service Professional (80.24% Rating)</span>
+            </div>
 
-                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15]">
-                    Ma. Faith B. Briones, <span className="gold-gradient-text">BSA, CSE</span>
-                  </h1>
-
-                  <p className="text-base text-slate-300 leading-relaxed">
-                    Over 20 years of hands-on fiduciary excellence in General Ledger accounting, zero-variance bank reconciliations, microfinance loan ledgers, and Social Security System (SSS) public administration.
-                  </p>
-                </div>
-
-                {/* Key Pillars Tags */}
-                <div className="space-y-4 pt-2 border-t border-white/5">
-                  <div className="flex flex-wrap gap-2 text-xs">
-                    <span className="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-300">
-                      📊 Full-Cycle General Ledger
-                    </span>
-                    <span className="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-300">
-                      🏛️ 12+ Yrs SSS Administration
-                    </span>
-                    <span className="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-300">
-                      🏆 2023 Best Customer Service Awardee
-                    </span>
-                    <span className="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-300">
-                      💼 QuickBooks &amp; Xero ERP
-                    </span>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex flex-wrap items-center gap-3 pt-2">
-                    <a
-                      href="#dossier"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-400 text-slate-950 font-bold text-xs shadow-lg hover:bg-amber-300 hover:scale-105 transition-all"
-                    >
-                      <span className="material-symbols-outlined text-base">folder_open</span>
-                      Explore Verified Dossier
-                    </a>
-                    <a
-                      href="/personal-data-sheet/PersonalDataSheet BRIONES.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-colors"
-                    >
-                      <span className="material-symbols-outlined text-base">download</span>
-                      Download PDS (CS Form 212)
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* Bento 2: Portrait & Verified Status (Col-span 5) */}
-            <Reveal delay={150} direction="scale" className="lg:col-span-5 flex">
-              <div className="bento-card w-full rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-4 relative overflow-hidden group">
-                {/* Photo Frame with 3:4 Aspect Ratio */}
-                <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden bg-slate-950 border border-white/10 shadow-xl">
-                  <img
-                    src="/profile/profile.jpg"
-                    alt="Ma. Faith B. Briones, BSA, CSE"
-                    className="w-full h-full object-cover object-[center_45%] group-hover:scale-103 transition-transform duration-500 ease-out"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-75"></div>
-
-                  {/* Floating Badges */}
-                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-                    <span className="px-2.5 py-1 rounded-full bg-slate-900/90 backdrop-blur-md border border-white/10 text-[10px] font-bold text-amber-300">
-                      BSA • 80.24% CSE
-                    </span>
-                    <span className="px-2.5 py-1 rounded-full bg-amber-400/20 backdrop-blur-md border border-amber-400/40 text-[10px] font-bold text-amber-300 flex items-center gap-1">
-                      <span className="material-symbols-outlined text-xs">verified</span>
-                      ACTIVE RECORD
-                    </span>
-                  </div>
-
-                  <div className="absolute bottom-3 left-3 right-3">
-                    <p className="text-white font-bold text-sm">Ma. Faith B. Briones</p>
-                    <p className="text-xs text-slate-300">Senior Bookkeeper &amp; Fiduciary Specialist</p>
-                  </div>
-                </div>
-
-                {/* Micro Details */}
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
-                    <span className="text-slate-400 block text-[10px] uppercase font-bold">Graduated</span>
-                    <span className="text-slate-200 font-semibold">Andres Bonifacio Coll.</span>
-                  </div>
-                  <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
-                    <span className="text-slate-400 block text-[10px] uppercase font-bold">Eligibility Conferred</span>
-                    <span className="text-amber-300 font-semibold">Civil Service Prof.</span>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* Bento 3: 4 Key Interactive Metric Cards (12 cols) */}
-            <div className="lg:col-span-12 grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {[
-                { value: 20, suffix: "+ Yrs", label: "Professional Accounting", desc: "Full-Cycle Practice" },
-                { value: 80.24, suffix: "%", decimals: 2, label: "Civil Service Rating", desc: "Career Service Prof." },
-                { value: 12, suffix: "+ Yrs", label: "SSS Public Service", desc: "Admin & Claims Lead" },
-                { value: 9, suffix: "+ Yrs", label: "Lead Bookkeeper", desc: "TSKI & Cooperatives" },
-              ].map((stat, i) => (
-                <Reveal key={i} delay={200 + i * 50}>
-                  <div className="bento-card rounded-2xl p-5 text-center sm:text-left space-y-1">
-                    <div className="text-2xl sm:text-3xl font-extrabold text-amber-400">
-                      <CountUp end={stat.value} decimals={stat.decimals || 0} suffix={stat.suffix} />
-                    </div>
-                    <div className="text-xs font-bold text-white">{stat.label}</div>
-                    <div className="text-[11px] text-slate-400">{stat.desc}</div>
-                  </div>
-                </Reveal>
-              ))}
+            <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold shadow-xs">
+              <span className="material-symbols-outlined text-sm text-[#7D735C]">verified</span>
+              <span>Open for Bookkeeping & Accounting Inquiries</span>
             </div>
           </div>
-        </section>
 
-        {/* SECTION 2: INTERACTIVE CAREER & PROVENANCE MATRIX */}
-        <section className="relative w-full max-w-6xl mx-auto px-4 sm:px-6" id="provenance">
+          {/* Hero Main Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            {/* Left Content Column (7 cols) */}
+            <div className="lg:col-span-7 space-y-6">
+              <Reveal>
+                <div className="space-y-4">
+                  <div className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#7D735C] flex items-center gap-2">
+                    <span className="h-px w-6 bg-[#BAA77E]"></span>
+                    Senior Bookkeeper • Accountancy Graduate • Government Administrator
+                  </div>
+                  <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl text-[#1C1A15] tracking-tight leading-[1.12]">
+                    Accurate <em className="italic font-normal text-[#7D735C]">Bookkeeping</em>, Clear Reports & Peace of Mind.
+                  </h1>
+                </div>
+              </Reveal>
+
+              <Reveal delay={100}>
+                <p className="text-base sm:text-lg text-[#4A4437] font-normal leading-relaxed">
+                  <strong>Ma. Faith Batilona Briones, BSA, CSE</strong> has over <strong>20 years of hands-on bookkeeping experience</strong> and <strong>12+ years of government service with the Social Security System (SSS)</strong>. She delivers error-free bank reconciliations, accurate financial statements, and complete government compliance.
+                </p>
+              </Reveal>
+
+              {/* Action Buttons */}
+              <Reveal delay={200}>
+                <div className="flex flex-wrap items-center gap-3.5 pt-2">
+                  <a
+                    href="#pipeline"
+                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-sm font-bold shadow-md shadow-[#7D735C]/25 hover:scale-[1.02] transition-all border border-[#BAA77E]"
+                  >
+                    <span className="material-symbols-outlined text-lg text-[#E8DECA]">checklist</span>
+                    <span>How I Work (5 Steps)</span>
+                  </a>
+
+                  <a
+                    href="#worksamples"
+                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white hover:bg-[#EFE9DC] text-[#1C1A15] text-sm font-bold border border-[#DCD2C0] shadow-xs transition-all"
+                  >
+                    <span className="material-symbols-outlined text-lg text-[#7D735C]">table_chart</span>
+                    <span>View Work Samples</span>
+                  </a>
+
+                  <a
+                    href="#estimator"
+                    className="inline-flex items-center gap-2 px-5 py-3.5 rounded-full bg-[#EFE9DC]/90 hover:bg-[#EFE9DC] text-[#7D735C] text-sm font-bold border border-[#BAA77E]/60 shadow-xs transition-all"
+                  >
+                    <span className="material-symbols-outlined text-lg text-[#7D735C]">calculate</span>
+                    <span>Price Estimator</span>
+                  </a>
+                </div>
+              </Reveal>
+
+              {/* Trust Badges */}
+              <Reveal delay={300}>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-5 border-t border-[#DCD2C0]/70">
+                  <div className="flex items-center gap-2.5">
+                    <span className="h-8 w-8 rounded-full bg-[#EFE9DC] text-[#7D735C] flex items-center justify-center border border-[#BAA77E]/50">
+                      <span className="material-symbols-outlined text-base">verified</span>
+                    </span>
+                    <div>
+                      <div className="text-xs font-bold text-[#1C1A15]">100% On-Time</div>
+                      <div className="text-[11px] text-[#736B5E]">SSS & Tax Filings</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2.5">
+                    <span className="h-8 w-8 rounded-full bg-[#EFE9DC] text-[#7D735C] flex items-center justify-center border border-[#BAA77E]/50">
+                      <span className="material-symbols-outlined text-base">account_balance</span>
+                    </span>
+                    <div>
+                      <div className="text-xs font-bold text-[#1C1A15]">ISO 9001 Tested</div>
+                      <div className="text-[11px] text-[#736B5E]">TSKI Microfinance</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2.5 col-span-2 sm:col-span-1">
+                    <span className="h-8 w-8 rounded-full bg-[#EFE9DC] text-[#7D735C] flex items-center justify-center border border-[#BAA77E]/50">
+                      <span className="material-symbols-outlined text-base">military_tech</span>
+                    </span>
+                    <div>
+                      <div className="text-xs font-bold text-[#1C1A15]">2023 Awardee</div>
+                      <div className="text-[11px] text-[#736B5E]">Best Customer Service</div>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+
+            {/* Right Portrait & Visual Bento */}
+            <div className="lg:col-span-5">
+              <Reveal direction="scale" delay={150}>
+                <div className="relative mx-auto max-w-sm lg:max-w-none">
+                  {/* Outer Frame with Gold Leaf Border */}
+                  <div className="relative rounded-[2.5rem] p-3.5 bg-white border border-[#BAA77E]/80 shadow-[0_25px_60px_rgba(37,35,28,0.1)]">
+                    {/* Natural 3:4 Portrait Image Container */}
+                    <div className="relative aspect-[3/4] w-full rounded-[2rem] overflow-hidden bg-[#EFE9DC] shadow-inner">
+                      <img
+                        src="/profile/profile.jpg"
+                        alt="Ma. Faith Batilona Briones, BSA, CSE"
+                        className="w-full h-full object-cover object-[center_45%] hover:scale-[1.03] transition-transform duration-700"
+                      />
+
+                      {/* Top & Bottom Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#2C271E]/75 via-transparent to-transparent pointer-events-none"></div>
+
+                      {/* Floating Trust Pills Inside Image */}
+                      <div className="absolute bottom-5 left-5 right-5 text-white space-y-1.5">
+                        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC]/95 backdrop-blur-md text-[11px] font-bold border border-[#BAA77E] shadow-xs text-[#7D735C]">
+                          <span className="material-symbols-outlined text-sm">workspace_premium</span>
+                          <span>CSE Professional 80.24% • Verified Record</span>
+                        </div>
+                        <div className="font-serif text-lg font-bold text-white tracking-tight">
+                          Ma. Faith Batilona Briones, BSA, CSE
+                        </div>
+                        <div className="text-xs text-[#E8DECA] font-medium">
+                          BS in Accountancy • Andres Bonifacio College
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Floating Luxury Seal (Top-Right) */}
+                    <div className="absolute -top-3.5 -right-3.5 px-4 py-2 rounded-2xl bg-white text-[#1C1A15] border border-[#BAA77E] shadow-xl flex items-center gap-2 animate-float-luxury">
+                      <span className="h-2 w-2 rounded-full bg-[#7D735C]"></span>
+                      <span className="font-serif text-xs font-bold text-[#1C1A15]">20+ Years Bookkeeping</span>
+                    </div>
+
+                    {/* Floating Luxury Seal (Bottom-Left) */}
+                    <div className="absolute -bottom-3.5 -left-3.5 px-4 py-2 rounded-2xl bg-white text-[#1C1A15] border border-[#BAA77E] shadow-xl flex items-center gap-2 animate-float-luxury" style={{ animationDelay: "2.5s" }}>
+                      <span className="material-symbols-outlined text-[#7D735C] text-sm">shield</span>
+                      <span className="font-serif text-xs font-bold">12+ Years SSS Service</span>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+
+          {/* 4 DUAL-TONE METRIC COUNTERS */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+            <AnimatedMetric
+              end={20}
+              suffix="+"
+              label="Years Experience"
+              sublabel="Fiduciary & Public Accounting"
+              progress={100}
+              icon="calendar_month"
+            />
+            <AnimatedMetric
+              end={80.24}
+              decimals={2}
+              suffix="%"
+              label="CSE Professional Rating"
+              sublabel="Civil Service Commission Conferred"
+              progress={90}
+              icon="military_tech"
+            />
+            <AnimatedMetric
+              end={12}
+              suffix="+ Yrs"
+              label="SSS Public Administration"
+              sublabel="Disbursements & Claims Leadership"
+              progress={85}
+              icon="admin_panel_settings"
+            />
+            <AnimatedMetric
+              end={9}
+              suffix="+ Yrs"
+              label="Lead Bookkeeper"
+              sublabel="TSKI & Cooperative General Ledgers"
+              progress={80}
+              icon="account_balance_wallet"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* HOW I WORK (5-STEP ACCOUNTING & BOOKKEEPING PROCESS) */}
+      <section id="pipeline" className="py-20 px-4 sm:px-6 bg-white/85 border-y border-[#DCD2C0]/70 relative">
+        <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div className="text-center max-w-3xl mx-auto space-y-3">
+              <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold">
+                <span className="material-symbols-outlined text-sm">checklist</span>
+                <span>My 5-Step Process</span>
+              </div>
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
+                How I Keep Your Books <em className="italic font-normal text-[#7D735C]">Accurate & Balanced</em>
+              </h2>
+              <p className="text-sm sm:text-base text-[#736B5E]">
+                Click on any step below to see what I do, what you receive, and how I protect your business records.
+              </p>
+            </div>
+          </Reveal>
+
+          {/* Pipeline Interactive Tabs */}
+          <div className="flex flex-wrap items-center justify-center gap-2.5">
+            {[
+              { id: "coa" as PipelineStage, step: "01", label: "Accounts Setup", icon: "account_tree" },
+              { id: "vouchers" as PipelineStage, step: "02", label: "Receipts & Vouchers", icon: "receipt_long" },
+              { id: "recon" as PipelineStage, step: "03", label: "Bank Reconciliation", icon: "sync_alt" },
+              { id: "close" as PipelineStage, step: "04", label: "Monthly Reports", icon: "query_stats" },
+              { id: "compliance" as PipelineStage, step: "05", label: "Government Filings", icon: "verified" },
+            ].map((p) => {
+              const isActive = activePipelineStage === p.id;
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => setActivePipelineStage(p.id)}
+                  className={`flex items-center gap-2.5 px-5 py-3 rounded-full text-xs sm:text-sm font-bold transition-all ${isActive
+                    ? "bg-[#7D735C] text-white shadow-md shadow-[#7D735C]/20 scale-105 border border-[#685F49]"
+                    : "bg-white text-[#736B5E] border border-[#DCD2C0] hover:bg-[#EFE9DC] hover:text-[#1C1A15]"
+                    }`}
+                >
+                  <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${isActive ? "bg-white text-[#7D735C]" : "bg-[#EFE9DC] text-[#7D735C]"
+                    }`}>
+                    {p.step}
+                  </span>
+                  <span className="material-symbols-outlined text-base">{p.icon}</span>
+                  <span>{p.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Dynamic Pipeline Content Display */}
+          <Reveal key={activePipelineStage} direction="scale">
+            <div className="luminous-pearl-card rounded-[2.5rem] p-6 sm:p-10 bg-white border border-[#DCD2C0] shadow-xl">
+              {activePipelineStage === "coa" && (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                  <div className="lg:col-span-7 space-y-4">
+                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
+                      <span>Step 01: Setup & Chart of Accounts</span>
+                    </div>
+                    <h3 className="font-serif text-2xl sm:text-3xl text-[#1C1A15]">
+                      Organizing Accounts & Accounting Software Setup
+                    </h3>
+                    <p className="text-[#4A4437] text-sm leading-relaxed">
+                      I set up your Chart of Accounts properly in QuickBooks, Xero, or Excel following standard accounting principles. This eliminates duplicate accounts and ensures every income and expense category is clear.
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">check_circle</span>
+                          What You Get
+                        </div>
+                        <div className="text-xs text-[#736B5E] mt-1">Clean, organized Chart of Accounts & software setup</div>
+                      </div>
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">schedule</span>
+                          Turnaround
+                        </div>
+                        <div className="text-xs text-[#736B5E] mt-1">1 to 3 days for complete initial setup</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#EFE9DC] text-[#1C1A15] border border-[#BAA77E]/60 shadow-md space-y-3">
+                    <div className="font-serif text-xs font-bold text-[#7D735C] uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-[#7D735C]">shield</span>
+                      <span>Quality Guarantee</span>
+                    </div>
+                    <ul className="space-y-2.5 text-xs text-[#4A4437]">
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">No duplicate or misclassified accounts</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Standardized names for easy searching and reporting</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Proper opening balances and account mapping</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+
+              {activePipelineStage === "vouchers" && (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                  <div className="lg:col-span-7 space-y-4">
+                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
+                      <span>Step 02: Transactions & Receipts</span>
+                    </div>
+                    <h3 className="font-serif text-2xl sm:text-3xl text-[#1C1A15]">
+                      Recording Invoices, Expense Vouchers & Receipts
+                    </h3>
+                    <p className="text-[#4A4437] text-sm leading-relaxed">
+                      With over 12 years of experience managing disbursement vouchers at SSS and cooperative cash registers, I make sure every business expense has complete receipts, official invoices, and proper approvals.
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">check_circle</span>
+                          What You Get
+                        </div>
+                        <div className="text-xs text-[#736B5E] mt-1">Audit-ready voucher records and organized digital receipts</div>
+                      </div>
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">schedule</span>
+                          Turnaround
+                        </div>
+                        <div className="text-xs text-[#736B5E] mt-1">Daily / 24-hour transaction recording</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#EFE9DC] text-[#1C1A15] border border-[#BAA77E]/60 shadow-md space-y-3">
+                    <div className="font-serif text-xs font-bold text-[#7D735C] uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-[#7D735C]">shield</span>
+                      <span>Quality Guarantee</span>
+                    </div>
+                    <ul className="space-y-2.5 text-xs text-[#4A4437]">
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">No missing receipts or unrecorded payments</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Proper withholding tax documentation (BIR Form 2307)</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Clear tracking of office supplies and inventory purchases</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+
+              {activePipelineStage === "recon" && (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                  <div className="lg:col-span-7 space-y-4">
+                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
+                      <span>Step 03: Cash & Bank Matching</span>
+                    </div>
+                    <h3 className="font-serif text-2xl sm:text-3xl text-[#1C1A15]">
+                      Daily & Monthly Bank Reconciliation
+                    </h3>
+                    <p className="text-[#4A4437] text-sm leading-relaxed">
+                      I match your bank statements line-by-line with your accounting records. Any bank charges, uncredited deposits, or check differences are spotted and resolved immediately so you always know your exact cash balance.
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">check_circle</span>
+                          What You Get
+                        </div>
+                        <div className="text-xs text-[#736B5E] mt-1">Monthly Bank Reconciliation Statements with 0 variance</div>
+                      </div>
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">schedule</span>
+                          Turnaround
+                        </div>
+                        <div className="text-xs text-[#736B5E] mt-1">Weekly check-ins and prompt month-end reconciliations</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#EFE9DC] text-[#1C1A15] border border-[#BAA77E]/60 shadow-md space-y-3">
+                    <div className="font-serif text-xs font-bold text-[#7D735C] uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-[#7D735C]">shield</span>
+                      <span>Quality Guarantee</span>
+                    </div>
+                    <ul className="space-y-2.5 text-xs text-[#4A4437]">
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">100% mathematical tie-out between bank and ledger</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Immediate detection of bounced checks or unrecognized fees</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Accurate cash flow monitoring for peace of mind</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+
+              {activePipelineStage === "close" && (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                  <div className="lg:col-span-7 space-y-4">
+                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
+                      <span>Step 04: Month-End Financial Reports</span>
+                    </div>
+                    <h3 className="font-serif text-2xl sm:text-3xl text-[#1C1A15]">
+                      Balance Sheet, Profit & Loss (P&L) & Cash Flow
+                    </h3>
+                    <p className="text-[#4A4437] text-sm leading-relaxed">
+                      At the end of each month, I calculate asset depreciation, record necessary adjustments, and prepare your complete financial package. You get clear reports that show your revenues, expenses, and profits.
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">check_circle</span>
+                          What You Get
+                        </div>
+                        <div className="text-xs text-[#736B5E] mt-1">Monthly Financial Report Pack (Income Statement & Balance Sheet)</div>
+                      </div>
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">schedule</span>
+                          Turnaround
+                        </div>
+                        <div className="text-xs text-[#736B5E] mt-1">Delivered within 3 to 5 days after month-end</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#EFE9DC] text-[#1C1A15] border border-[#BAA77E]/60 shadow-md space-y-3">
+                    <div className="font-serif text-xs font-bold text-[#7D735C] uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-[#7D735C]">shield</span>
+                      <span>Quality Guarantee</span>
+                    </div>
+                    <ul className="space-y-2.5 text-xs text-[#4A4437]">
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">100% Balanced Trial Balance</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Accurate fixed asset depreciation and prepaid expense tracking</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Easy-to-understand executive summary of key figures</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+
+              {activePipelineStage === "compliance" && (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                  <div className="lg:col-span-7 space-y-4">
+                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
+                      <span>Step 05: Government & Tax Compliance</span>
+                    </div>
+                    <h3 className="font-serif text-2xl sm:text-3xl text-[#1C1A15]">
+                      SSS, PhilHealth, Pag-IBIG & BIR Compliance
+                    </h3>
+                    <p className="text-[#4A4437] text-sm leading-relaxed">
+                      I prepare all statutory contribution summaries, employee benefit requirements, and tax working papers on time. When year-end tax season or external audits arrive, your supporting records are 100% ready.
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">check_circle</span>
+                          What You Get
+                        </div>
+                        <div className="text-xs text-[#736B5E] mt-1">Audit-ready workpapers and government remittance reports</div>
+                      </div>
+                      <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
+                        <div className="text-xs font-bold text-[#1C1A15] flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[#7D735C] text-base">schedule</span>
+                          Turnaround
+                        </div>
+                        <div className="text-xs text-[#736B5E] mt-1">100% on-time before statutory filing deadlines</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-[#EFE9DC] text-[#1C1A15] border border-[#BAA77E]/60 shadow-md space-y-3">
+                    <div className="font-serif text-xs font-bold text-[#7D735C] uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-[#7D735C]">shield</span>
+                      <span>Quality Guarantee</span>
+                    </div>
+                    <ul className="space-y-2.5 text-xs text-[#4A4437]">
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">No late filing penalties or government notices</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Strict compliance with Data Privacy Act (R.A. 10173)</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">task_alt</span>
+                        <span className="font-medium text-[#1C1A15]">Direct oversight by a BS Accountancy graduate</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 20-YEAR WORK HISTORY & EXPERIENCE */}
+      <section id="provenance" className="py-20 px-4 sm:px-6 relative">
+        <div className="max-w-6xl mx-auto space-y-10">
+          <Reveal>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">Career Provenance &amp; Track Record</span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-1">
-                  20 Years of Government &amp; Corporate Service
+                <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold mb-2">
+                  <span className="material-symbols-outlined text-sm">history_edu</span>
+                  <span>Verified 20-Year Career History</span>
+                </div>
+                <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
+                  20 Years of Work Experience
                 </h2>
-                <p className="text-sm text-slate-400 max-w-2xl mt-1">
-                  Click any appointment to inspect responsibilities, verified accomplishments, and supervisors.
+                <p className="text-sm text-[#736B5E] mt-1">
+                  Supported by official Civil Service Commission records (Form 212) and signed Certificates of Employment.
                 </p>
               </div>
 
-              {/* Segmented Filter */}
-              <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-slate-900 border border-slate-800 self-start sm:self-auto">
-                <button
-                  onClick={() => setSelectedCareerCategory("all")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedCareerCategory === "all"
-                      ? "bg-amber-400 text-slate-950 shadow-md"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  All (5)
-                </button>
-                <button
-                  onClick={() => setSelectedCareerCategory("gov")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedCareerCategory === "gov"
-                      ? "bg-amber-400 text-slate-950 shadow-md"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  SSS Government (2)
-                </button>
-                <button
-                  onClick={() => setSelectedCareerCategory("private")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedCareerCategory === "private"
-                      ? "bg-amber-400 text-slate-950 shadow-md"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  Bookkeeping &amp; Coops (3)
-                </button>
+              {/* Filter Tabs */}
+              <div className="flex items-center gap-2 p-1.5 rounded-full bg-white border border-[#DCD2C0] shadow-xs">
+                {[
+                  { id: "all" as CareerCategory, label: "All Positions (5)" },
+                  { id: "gov" as CareerCategory, label: "Government (SSS)" },
+                  { id: "private" as CareerCategory, label: "Bookkeeping & Coops" },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setSelectedCareerCategory(tab.id)}
+                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${selectedCareerCategory === tab.id
+                      ? "bg-[#7D735C] text-white shadow-xs font-bold"
+                      : "text-[#736B5E] hover:text-[#1C1A15] hover:bg-[#EFE9DC]"
+                      }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
               </div>
             </div>
           </Reveal>
 
-          {/* Interactive Master-Detail Accordion Cards */}
+          {/* Interactive Career Accordions */}
           <div className="space-y-4">
             {filteredCareerRoles.map((role, idx) => {
               const isExpanded = expandedRoleId === role.id;
               return (
-                <Reveal key={role.id} delay={idx * 50}>
+                <Reveal key={role.id} delay={idx * 60}>
                   <div
-                    onClick={() => setExpandedRoleId(isExpanded ? "" : role.id)}
-                    className={`bento-card rounded-3xl p-6 sm:p-7 cursor-pointer transition-all duration-300 ${
-                      isExpanded ? "border-amber-400/40 bg-slate-900/90 shadow-2xl" : "hover:border-slate-700"
-                    }`}
+                    className={`rounded-[2rem] border transition-all duration-300 bg-white ${isExpanded
+                      ? "border-[#BAA77E] shadow-md ring-2 ring-[#BAA77E]/25"
+                      : "border-[#DCD2C0]/80 hover:border-[#BAA77E] shadow-xs"
+                      }`}
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                      <div className="space-y-1">
+                    {/* Header Row */}
+                    <button
+                      onClick={() => setExpandedRoleId(isExpanded ? "" : role.id)}
+                      className="w-full p-6 text-left flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                    >
+                      <div className="space-y-1.5">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${role.badgeColor}`}>
+                          <span
+                            className="px-3 py-0.5 rounded-full text-[11px] font-extrabold border bg-[#EFE9DC] text-[#7D735C] border-[#BAA77E]/60"
+                          >
                             {role.badge}
                           </span>
-                          <span className="text-xs text-slate-400">{role.period}</span>
+                          <span className="text-xs text-[#736B5E] font-semibold">{role.period}</span>
                         </div>
-                        <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-amber-300 transition-colors">
-                          {role.role}
-                        </h3>
-                        <p className="text-xs text-amber-300/90 font-medium">
-                          {role.organization} • <span className="text-slate-400">{role.location}</span>
-                        </p>
-                      </div>
-
-                      <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
-                        <span className="text-xs text-slate-400 hidden sm:inline">
-                          {isExpanded ? "Collapse Details" : "View Breakdown"}
-                        </span>
-                        <div className="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-300">
-                          <span className={`material-symbols-outlined text-lg transition-transform duration-300 ${isExpanded ? "rotate-180 text-amber-300" : ""}`}>
-                            expand_more
+                        <h3 className="font-serif text-lg sm:text-xl font-bold text-[#1C1A15]">{role.role}</h3>
+                        <div className="text-xs text-[#7D735C] font-bold flex items-center gap-1">
+                          <span className="material-symbols-outlined text-sm">location_on</span>
+                          <span>
+                            {role.organization} • {role.location}
                           </span>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Expandable Detail Panel */}
+                      <div className="flex items-center gap-3 shrink-0">
+                        <span className="text-xs font-bold text-[#736B5E] hidden sm:inline">
+                          {isExpanded ? "Hide Details" : "View Details"}
+                        </span>
+                        <div
+                          className={`h-9 w-9 rounded-full flex items-center justify-center border transition-all ${isExpanded
+                            ? "bg-[#7D735C] text-white border-[#7D735C] rotate-180"
+                            : "bg-[#EFE9DC] text-[#7D735C] border-[#DCD2C0]"
+                            }`}
+                        >
+                          <span className="material-symbols-outlined text-lg">expand_more</span>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* Expandable Body */}
                     {isExpanded && (
-                      <div className="mt-5 pt-5 border-t border-slate-800 space-y-4 animate-in fade-in duration-300">
-                        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                      <div className="px-6 pb-6 pt-2 border-t border-[#EFE9DC] space-y-4 text-sm text-[#4A4437] animate-fadeIn">
+                        <p className="leading-relaxed bg-[#F7F4EE] p-4 rounded-2xl border border-[#DCD2C0]/60 text-[#1C1A15]">
                           {role.summary}
                         </p>
 
                         <div className="space-y-2">
-                          <span className="text-xs font-bold text-white block">Key Responsibilities &amp; Accomplishments:</span>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-                            {role.highlights.map((item, hIdx) => (
-                              <div key={hIdx} className="p-3 rounded-2xl bg-slate-950/70 border border-slate-800/80 text-xs text-slate-300 flex items-start gap-2">
-                                <span className="text-amber-400 font-bold mt-0.5">✓</span>
-                                <span className="leading-relaxed">{item}</span>
-                              </div>
-                            ))}
+                          <div className="font-serif text-xs font-bold uppercase tracking-wider text-[#1C1A15] flex items-center gap-1.5">
+                            <span className="material-symbols-outlined text-[#7D735C] text-sm">task_alt</span>
+                            <span>Key Duties & Achievements</span>
                           </div>
+                          <ul className="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs">
+                            {role.highlights.map((h, i) => (
+                              <li
+                                key={i}
+                                className="flex items-start gap-2 p-3 rounded-xl bg-[#F7F4EE] border border-[#DCD2C0]/50"
+                              >
+                                <span className="h-1.5 w-1.5 rounded-full bg-[#BAA77E] mt-1.5 shrink-0"></span>
+                                <span className="text-[#4A4437]">{h}</span>
+                              </li>
+                            ))}
+                          </ul>
                         </div>
 
-                        {role.supervisors && (
-                          <div className="flex items-center gap-2 text-xs text-slate-400 pt-2">
-                            <span className="material-symbols-outlined text-sm text-amber-400">supervisor_account</span>
-                            <span>Direct Supervisor(s): <strong className="text-slate-200">{role.supervisors}</strong></span>
-                          </div>
-                        )}
+                        {/* Supervisory Verification & Tags */}
+                        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#DCD2C0]/50">
+                          {role.supervisors && (
+                            <div className="text-xs text-[#736B5E]">
+                              <span className="font-bold text-[#1C1A15]">Supervisors / Signatories:</span>{" "}
+                              {role.supervisors}
+                            </div>
+                          )}
 
-                        <div className="flex flex-wrap gap-1.5 pt-2">
-                          {role.tags.map((tag, tIdx) => (
-                            <span key={tIdx} className="px-2.5 py-1 rounded-xl bg-slate-800 text-[11px] text-slate-300">
-                              {tag}
-                            </span>
-                          ))}
+                          <div className="flex flex-wrap items-center gap-1.5 ml-auto">
+                            {role.tags.map((t, idx) => (
+                              <span
+                                key={idx}
+                                className="px-3 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] font-semibold text-[11px] border border-[#BAA77E]/50"
+                              >
+                                {t}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     )}
@@ -1012,648 +1645,1135 @@ export default function Home() {
               );
             })}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* SECTION 3: INTERACTIVE DOCUMENT HUB (OFFICIAL DOSSIER) */}
-        <section className="relative w-full max-w-6xl mx-auto px-4 sm:px-6" id="dossier">
+      {/* DEDICATED WORK SAMPLE SECTION: FINANCIAL STATEMENTS & BIR TAX MODEL */}
+      <section id="worksamples" className="py-20 px-4 sm:px-6 bg-white/90 border-y border-[#DCD2C0]/70 relative">
+        <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">Statutory Authenticity</span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-1">
-                  Official Dossier &amp; Certified PDFs
+                <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold mb-2">
+                  <span className="material-symbols-outlined text-sm">table_chart</span>
+                  <span>Real Accounting Work Sample</span>
+                </div>
+                <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
+                  Annual Financial Statements & BIR Tax Schedules
                 </h2>
-                <p className="text-sm text-slate-400 max-w-2xl mt-1">
-                  Direct access to extracted digital highlights and official signed PDF documents.
+                <p className="text-sm text-[#736B5E] mt-1">
+                  Interactive statutory workpapers (FY 2019) with 100% mathematical tie-out and zero variance.
                 </p>
               </div>
 
-              {/* Filter Tabs */}
-              <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-slate-900 border border-slate-800 self-start sm:self-auto">
-                <button
-                  onClick={() => setSelectedDocCategory("all")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedDocCategory === "all" ? "bg-amber-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                  }`}
+              {/* Action Buttons */}
+              <div className="flex items-center gap-2.5 shrink-0">
+                <a
+                  href="/fs-bir/fs-2019 final.ods"
+                  download="fs-2019 final.ods"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-xs font-bold shadow-md border border-[#BAA77E] transition-all hover:scale-105"
                 >
-                  All ({officialDocs.length})
-                </button>
-                <button
-                  onClick={() => setSelectedDocCategory("pds")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedDocCategory === "pds" ? "bg-amber-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  CSC Form 212
-                </button>
-                <button
-                  onClick={() => setSelectedDocCategory("coe")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedDocCategory === "coe" ? "bg-amber-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  COEs (2)
-                </button>
-                <button
-                  onClick={() => setSelectedDocCategory("wes")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedDocCategory === "wes" ? "bg-amber-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  Work Sheets (3)
-                </button>
+                  <span className="material-symbols-outlined text-base text-[#E8DECA]">download</span>
+                  <span>Download .ODS Spreadsheet (45.6 KB)</span>
+                </a>
               </div>
             </div>
           </Reveal>
 
-          {/* Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {/* Interactive Financial Statement Tabs */}
+          <div className="luminous-pearl-card rounded-[2.5rem] p-6 sm:p-8 bg-white border border-[#DCD2C0] shadow-xl space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#DCD2C0]/60 pb-4">
+              <div className="flex flex-wrap items-center gap-2">
+                {[
+                  { id: "bs" as WorkSampleTab, label: "Balance Sheet (Position)", icon: "account_balance" },
+                  { id: "pnl" as WorkSampleTab, label: "Income Statement (P&L)", icon: "trending_up" },
+                  { id: "tax" as WorkSampleTab, label: "BIR Tax & Form 2307", icon: "receipt_long" },
+                  { id: "depr" as WorkSampleTab, label: "Depreciation Schedules", icon: "calculate" },
+                ].map((tab) => {
+                  const isActive = activeWorkSampleTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveWorkSampleTab(tab.id)}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all ${isActive
+                        ? "bg-[#7D735C] text-white shadow-sm border border-[#685F49]"
+                        : "bg-[#F7F4EE] text-[#736B5E] border border-[#DCD2C0] hover:bg-[#EFE9DC] hover:text-[#1C1A15]"
+                        }`}
+                    >
+                      <span className="material-symbols-outlined text-sm">{tab.icon}</span>
+                      <span>{tab.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#7D735C] animate-pulse"></span>
+                <span>OpenDocument (.ODS) • Excel & Sheets Compatible</span>
+              </div>
+            </div>
+
+            {/* Tab 1: Balance Sheet */}
+            {activeWorkSampleTab === "bs" && (
+              <div className="space-y-6 animate-fadeIn">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Current Assets</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 1,485,250.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Cash in Bank, Receivables, Inventory</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Non-Current Assets</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 842,500.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Property, Plant & Equipment (Net)</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Total Liabilities</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 612,400.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Accounts Payable & Tax Accruals</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#EFE9DC] border border-[#BAA77E] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#7D735C]">Owner&apos;s Equity</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 1,715,350.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-bold">Total Assets = Liab + Equity ✓</div>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs text-[#4A4437] space-y-2">
+                  <div className="font-bold text-[#1C1A15] flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[#7D735C] text-sm">verified</span>
+                    <span>Zero-Variance Ledger Tie-Out</span>
+                  </div>
+                  <p>
+                    Every asset line is verified against physical bank statements and fixed asset registries. Liabilities include accrued statutory dues (SSS, PhilHealth, Pag-IBIG) and BIR withholding taxes for full audit compliance.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Tab 2: Profit & Loss */}
+            {activeWorkSampleTab === "pnl" && (
+              <div className="space-y-6 animate-fadeIn">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Gross Sales / Revenue</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 3,940,800.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Full FY 2019 Operating Receipts</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Cost of Goods Sold</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 1,920,400.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Direct Inventory & Labor Costs</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Operating Expenses</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 1,180,650.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Rent, Utilities, Depreciation, Admin</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#EFE9DC] border border-[#BAA77E] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#7D735C]">Net Taxable Income</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 839,750.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-bold">21.31% Net Operating Margin</div>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs text-[#4A4437] space-y-2">
+                  <div className="font-bold text-[#1C1A15] flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[#7D735C] text-sm">receipt</span>
+                    <span>Expense Itemization & Proofs</span>
+                  </div>
+                  <p>
+                    All operating expense lines tie out with attached official disbursement vouchers, BIR registered invoices, and monthly bank clearance schedules.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Tab 3: BIR Tax & 2307 */}
+            {activeWorkSampleTab === "tax" && (
+              <div className="space-y-6 animate-fadeIn">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Taxable Net Income</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 839,750.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Statutory BIR Base</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Gross Income Tax Due</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 251,925.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Applicable Statutory Rate</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Creditable Tax (2307)</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ (148,600.00)</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">Withholding Certificates Credited</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#EFE9DC] border border-[#BAA77E] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#7D735C]">Net Tax Payable</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 103,325.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-bold">Zero BIR Penalties Filed On-Time</div>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs text-[#4A4437] space-y-2">
+                  <div className="font-bold text-[#1C1A15] flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[#7D735C] text-sm">shield</span>
+                    <span>BIR Form 2307 Certificate Verification</span>
+                  </div>
+                  <p>
+                    Every tax credit claimed has a corresponding BIR Form 2307 signed by authorized withholding agents, preventing tax audit disallowances and penalties.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Tab 4: Depreciation */}
+            {activeWorkSampleTab === "depr" && (
+              <div className="space-y-6 animate-fadeIn">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Office Equipment</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 340,000.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">5-Year Straight Line (20%/yr)</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Furniture & Fixtures</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 215,000.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">5-Year Straight Line (20%/yr)</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#736B5E]">Leasehold Improvements</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 450,000.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-semibold">10-Year Amortization Schedule</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-[#EFE9DC] border border-[#BAA77E] space-y-1">
+                    <div className="text-[11px] font-bold uppercase text-[#7D735C]">FY 2019 Total Depr</div>
+                    <div className="font-serif text-xl font-bold text-[#1C1A15]">₱ 156,000.00</div>
+                    <div className="text-[11px] text-[#7D735C] font-bold">Standard GAAP Straight Line</div>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs text-[#4A4437] space-y-2">
+                  <div className="font-bold text-[#1C1A15] flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[#7D735C] text-sm">view_timeline</span>
+                    <span>Systematic Asset Tracking</span>
+                  </div>
+                  <p>
+                    Fixed asset register includes acquisition date, salvage value, monthly straight-line depreciation charge, and accumulated depreciation balance.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* STATUTORY ARCHIVE & SIGNED OFFICIAL RECORDS */}
+      <section id="dossier" className="py-20 px-4 sm:px-6 bg-white/85 border-b border-[#DCD2C0]/60 relative">
+        <div className="max-w-6xl mx-auto space-y-10">
+          <Reveal>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div>
+                <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold mb-2">
+                  <span className="material-symbols-outlined text-sm">folder_shared</span>
+                  <span>Official Verification Records</span>
+                </div>
+                <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
+                  Official Documents & Signed Records
+                </h2>
+                <p className="text-sm text-[#736B5E] mt-1">
+                  View and inspect all 7 official documents including Financial Statements, CSC Form 212, COEs, and Work Experience Sheets.
+                </p>
+              </div>
+
+              {/* Category Filter */}
+              <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-full bg-white border border-[#DCD2C0] shadow-xs">
+                {[
+                  { id: "all" as DocCategory, label: "All Records (7)" },
+                  { id: "work-sample" as DocCategory, label: "Work Samples (FS)" },
+                  { id: "pds" as DocCategory, label: "CSC Form 212" },
+                  { id: "coe" as DocCategory, label: "Employment Certs" },
+                  { id: "wes" as DocCategory, label: "Experience Sheets" },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setSelectedDocCategory(tab.id)}
+                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${selectedDocCategory === tab.id
+                      ? "bg-[#7D735C] text-white shadow-xs font-bold"
+                      : "text-[#736B5E] hover:text-[#1C1A15] hover:bg-[#EFE9DC]"
+                      }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Dossier Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredDocs.map((doc, idx) => (
-              <Reveal key={doc.id} delay={idx * 75}>
-                <div
-                  onClick={() => openDocViewer(doc)}
-                  className="bento-card rounded-3xl p-6 flex flex-col justify-between h-full cursor-pointer group space-y-4"
-                >
-                  <div className="space-y-3">
+              <Reveal key={doc.id} delay={idx * 60}>
+                <div className="luminous-pearl-card rounded-[2rem] p-6 bg-white flex flex-col justify-between space-y-5 h-full group">
+                  <div className="space-y-3.5">
+                    {/* Card Top Icon & Badge */}
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-amber-300 uppercase tracking-wider">{doc.categoryLabel}</span>
-                      <span className="px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-[10px] text-slate-300">
+                      <span
+                        className="h-11 w-11 rounded-2xl flex items-center justify-center border bg-[#EFE9DC] text-[#7D735C] border-[#BAA77E]/60"
+                      >
+                        <span className="material-symbols-outlined text-xl">{doc.icon}</span>
+                      </span>
+                      <span className="px-3 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-[11px] font-extrabold border border-[#BAA77E]/50">
                         {doc.badge}
                       </span>
                     </div>
 
-                    <div className="flex items-start gap-3">
-                      <div className="h-10 w-10 shrink-0 rounded-2xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400 group-hover:bg-amber-400 group-hover:text-slate-950 transition-colors">
-                        <span className="material-symbols-outlined text-xl">{doc.icon}</span>
+                    <div>
+                      <div className="text-[11px] font-extrabold uppercase tracking-widest text-[#7D735C]">
+                        {doc.categoryLabel}
                       </div>
-                      <div>
-                        <h3 className="text-base font-bold text-white group-hover:text-amber-300 transition-colors leading-snug">
-                          {doc.title}
-                        </h3>
-                        <p className="text-[11px] text-slate-400 mt-0.5">{doc.issuer}</p>
-                      </div>
+                      <h3 className="font-serif text-base sm:text-lg font-bold text-[#1C1A15] group-hover:text-[#7D735C] transition-colors mt-0.5">
+                        {doc.title}
+                      </h3>
+                      <div className="text-xs text-[#1C1A15] font-semibold mt-1">{doc.issuer}</div>
+                      <div className="text-[11px] text-[#736B5E] font-medium">{doc.dateOrDuration}</div>
                     </div>
 
-                    <p className="text-xs text-slate-300 leading-relaxed line-clamp-3">
+                    <p className="text-xs text-[#4A4437] line-clamp-3 leading-relaxed">
                       {doc.summary}
                     </p>
-
-                    <div className="pt-2 space-y-1 border-t border-slate-800">
-                      {doc.keyPoints.slice(0, 2).map((pt, pIdx) => (
-                        <div key={pIdx} className="flex items-start gap-1.5 text-[11px] text-slate-300">
-                          <span className="text-amber-400 font-bold">✓</span>
-                          <span className="line-clamp-1">{pt}</span>
-                        </div>
-                      ))}
-                    </div>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                    <span className="text-amber-300 font-semibold flex items-center gap-1">
+                  {/* Actions */}
+                  <div className="pt-4 border-t border-[#EFE9DC] flex items-center gap-2">
+                    <button
+                      onClick={() => openDocViewer(doc)}
+                      className="flex-1 py-2.5 px-3 rounded-full bg-[#EFE9DC] hover:bg-[#7D735C] text-[#7D735C] hover:text-white text-xs font-bold border border-[#BAA77E]/60 flex items-center justify-center gap-1.5 transition-all"
+                    >
                       <span className="material-symbols-outlined text-sm">visibility</span>
-                      Inspect Details
-                    </span>
-                    <span className="text-slate-400 text-[11px]">PDF Attached</span>
+                      <span>Inspect Record</span>
+                    </button>
+
+                    <a
+                      href={doc.pdfPath}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2.5 rounded-full bg-white hover:bg-[#EFE9DC] text-[#7D735C] border border-[#DCD2C0] flex items-center justify-center transition-colors"
+                      title="Open Signed PDF in New Tab"
+                    >
+                      <span className="material-symbols-outlined text-sm">open_in_new</span>
+                    </a>
                   </div>
                 </div>
               </Reveal>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* SECTION 4: SYSTEMS & STANDARDS STACK */}
-        <section className="relative w-full max-w-6xl mx-auto px-4 sm:px-6" id="stack">
+      {/* ACCOUNTING SOFTWARE & GOVERNMENT TOOLS */}
+      <section id="stack" className="py-20 px-4 sm:px-6 relative">
+        <div className="max-w-6xl mx-auto space-y-12">
           <Reveal>
-            <div className="text-center max-w-2xl mx-auto mb-8 space-y-2">
-              <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">Accounting Systems &amp; Standards</span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                Software Stack &amp; Statutory Governance
+            <div className="text-center max-w-2xl mx-auto space-y-3">
+              <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold">
+                <span className="material-symbols-outlined text-sm">terminal</span>
+                <span>Software & Portals</span>
+              </div>
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
+                Accounting Software & Government Portals
               </h2>
-              <p className="text-sm text-slate-400">
-                End-to-end proficiency across cloud general ledgers, government portals, spreadsheet modeling, and statutory data security.
+              <p className="text-sm text-[#736B5E]">
+                Hands-on fluency across cloud accounting systems, spreadsheets, and Philippine government online portals.
               </p>
             </div>
           </Reveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                title: "QuickBooks Desktop & Online",
-                category: "Accounting & ERP",
+                title: "QuickBooks Online & Desktop",
+                badge: "Certified Training",
+                category: "Accounting Software",
                 icon: "diamond",
-                desc: "Chart of accounts design, multi-bank feed automation, vendor/customer ledgers, and month-end closes.",
+                desc: "Full-cycle general ledger management, setup of chart of accounts, bank feed automations, customer invoices, and vendor bills.",
+                metrics: "100% Balanced Ledgers",
               },
               {
                 title: "Xero Cloud Accounting",
-                category: "Cloud Systems",
+                badge: "Certified Specialist",
+                category: "Cloud Accounting",
                 icon: "sync_alt",
-                desc: "Cloud reconciliation workflows, automated rule configurations, invoicing, and customized P&L templates.",
+                desc: "Bank feed setup and reconciliations, invoice and bill tracking, financial dashboards, and monthly reporting.",
+                metrics: "Real-Time Bank Feeds",
               },
               {
-                title: "Advanced MS Excel",
-                category: "Financial Modeling",
+                title: "Excel Spreadsheets & Models",
+                badge: "Advanced Level",
+                category: "Spreadsheet Analysis",
                 icon: "table_chart",
-                desc: "PivotTables, VLOOKUP/XLOOKUP, multi-year asset depreciation schedules, and 13-week cash projections.",
+                desc: "Financial statement schedules, cash flow tracking, asset depreciation tables, and trial balance calculations with zero formula errors.",
+                metrics: "Zero Formula Errors",
               },
               {
-                title: "SSS Member & Claims Portal",
-                category: "Public Sector Portal",
+                title: "SSS Online Systems & Portals",
+                badge: "12+ Years SSS Experience",
+                category: "Government Portal",
                 icon: "account_balance",
-                desc: "Claims verification, sickness/maternity/disability screening, member loan processing, and ACOP certifications.",
+                desc: "Processing member benefit claims (sickness, maternity, disability, retirement), salary loans, and annual confirmation of pensioners (ACOP).",
+                metrics: "2023 Customer Service Award",
               },
               {
-                title: "PIMS Procurement & Asset Reg.",
-                category: "Government Operations",
-                icon: "inventory",
-                desc: "Official government supplies requisitioning, procurement compliance, and property inventory asset registers.",
+                title: "PIMS Inventory & Purchasing",
+                badge: "Government System",
+                category: "Property & Inventory",
+                icon: "inventory_2",
+                desc: "Property and Inventory Management System (PIMS) operations, supplies procurement, asset tagging, and complete disbursement vouchers.",
+                metrics: "Clean Audit Records",
               },
               {
-                title: "R.A. 10173 Data Privacy Act",
-                category: "Statutory Compliance",
-                icon: "security",
-                desc: "Strict compliance with Philippine Data Privacy standards, safeguarding confidential accounting and identity data.",
+                title: "Data Privacy (R.A. 10173)",
+                badge: "Statutory Standard",
+                category: "Compliance & Security",
+                icon: "lock",
+                desc: "Strict adherence to the Philippine Data Privacy Act of 2012, protecting all sensitive financial records, member data, and client confidentiality.",
+                metrics: "100% Confidentiality",
               },
-            ].map((tool, idx) => (
+            ].map((item, idx) => (
               <Reveal key={idx} delay={idx * 60}>
-                <div className="bento-card rounded-3xl p-5 flex flex-col justify-between h-full group space-y-3">
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider">{tool.category}</span>
-                      <span className="material-symbols-outlined text-lg text-slate-400 group-hover:text-amber-400 transition-colors">{tool.icon}</span>
-                    </div>
-                    <h3 className="text-base font-bold text-white group-hover:text-amber-300 transition-colors">
-                      {tool.title}
-                    </h3>
-                    <p className="text-xs text-slate-300 leading-relaxed mt-1">
-                      {tool.desc}
-                    </p>
+                <div className="luminous-pearl-card rounded-[2rem] p-6 bg-white space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span
+                      className="h-11 w-11 rounded-2xl flex items-center justify-center border bg-[#EFE9DC] text-[#7D735C] border-[#BAA77E]/60"
+                    >
+                      <span className="material-symbols-outlined text-xl">{item.icon}</span>
+                    </span>
+                    <span className="px-3 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-[11px] font-bold border border-[#BAA77E]/50">
+                      {item.badge}
+                    </span>
                   </div>
-                  <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
-                    <span>Proficiency: High</span>
-                    <span className="text-amber-400 font-semibold">Verified</span>
+
+                  <div>
+                    <div className="text-[11px] font-extrabold uppercase tracking-widest text-[#7D735C]">
+                      {item.category}
+                    </div>
+                    <h3 className="font-serif text-base sm:text-lg font-bold text-[#1C1A15] mt-0.5">{item.title}</h3>
+                  </div>
+
+                  <p className="text-xs text-[#4A4437] leading-relaxed">{item.desc}</p>
+
+                  <div className="pt-3 border-t border-[#EFE9DC] flex items-center justify-between text-xs">
+                    <span className="text-[#736B5E] font-medium">Standard:</span>
+                    <span className="font-bold text-[#1C1A15] flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#BAA77E]"></span>
+                      {item.metrics}
+                    </span>
                   </div>
                 </div>
               </Reveal>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* SECTION 5: CERTIFICATES & ACCREDITATIONS (CAROUSEL / GRID UX) */}
-        <section className="relative w-full max-w-6xl mx-auto px-4 sm:px-6" id="credentials">
+      {/* VERIFIED TRAINING & CERTIFICATIONS GALLERY (11 PROOFS) */}
+      <section id="credentials" className="py-20 px-4 sm:px-6 bg-white/85 border-y border-[#DCD2C0]/60 relative">
+        <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">Verified Accreditations</span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-1">
-                  Professional Certifications ({certificateData.length})
+                <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold mb-2">
+                  <span className="material-symbols-outlined text-sm">workspace_premium</span>
+                  <span>11 Verified Certificates</span>
+                </div>
+                <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
+                  Verified Training & Certificates
                 </h2>
-                <p className="text-sm text-slate-400 max-w-2xl mt-1">
-                  Click any certificate to inspect full high-resolution imagery and download official PDFs.
+                <p className="text-sm text-[#736B5E] mt-1">
+                  Click any certificate image to view high-resolution proof, skills learned, and official certificate IDs.
                 </p>
               </div>
 
-              {/* Filters */}
-              <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-slate-900 border border-slate-800 self-start sm:self-auto">
-                <button
-                  onClick={() => setSelectedCertCategory("all")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedCertCategory === "all" ? "bg-amber-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  All ({certificateData.length})
-                </button>
-                <button
-                  onClick={() => setSelectedCertCategory("accounting")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedCertCategory === "accounting" ? "bg-amber-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  Accounting &amp; ERP (4)
-                </button>
-                <button
-                  onClick={() => setSelectedCertCategory("finance")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedCertCategory === "finance" ? "bg-amber-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  Finance (3)
-                </button>
-                <button
-                  onClick={() => setSelectedCertCategory("ops")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    selectedCertCategory === "ops" ? "bg-amber-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  Operations (4)
-                </button>
+              {/* Filter Tabs */}
+              <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-full bg-white border border-[#DCD2C0] shadow-xs">
+                {[
+                  { id: "all" as CredentialCategory, label: "All 11 Certificates" },
+                  { id: "accounting" as CredentialCategory, label: "Accounting & Software (4)" },
+                  { id: "finance" as CredentialCategory, label: "Finance & Management (3)" },
+                  { id: "ops" as CredentialCategory, label: "Admin & Operations (4)" },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setSelectedCertCategory(tab.id)}
+                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${selectedCertCategory === tab.id
+                      ? "bg-[#7D735C] text-white shadow-xs font-bold"
+                      : "text-[#736B5E] hover:text-[#1C1A15] hover:bg-[#EFE9DC]"
+                      }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
               </div>
             </div>
           </Reveal>
 
           {/* Certificate Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCertificates.map((cert, idx) => (
-              <Reveal key={cert.id} delay={idx * 60}>
+              <Reveal key={cert.id} delay={idx * 50}>
                 <div
                   onClick={() => openCertificateLightbox(idx)}
-                  className="bento-card rounded-3xl overflow-hidden flex flex-col justify-between h-full cursor-pointer group"
+                  className="luminous-pearl-card rounded-[2rem] p-5 bg-white cursor-pointer group flex flex-col justify-between space-y-4 hover:shadow-2xl transition-all"
                 >
-                  <div>
-                    {/* Visual Frame */}
-                    <div className="relative aspect-[16/11] w-full overflow-hidden bg-slate-950 border-b border-white/10">
-                      <img
-                        alt={cert.title}
-                        src={cert.imageSrc}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
-
-                      <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-                        <span className="px-2 py-0.5 rounded-full bg-slate-900/90 backdrop-blur-md border border-white/10 text-[10px] font-bold text-amber-300">
-                          {cert.categoryLabel}
-                        </span>
-                        <span className="px-2 py-0.5 rounded-full bg-amber-400/20 backdrop-blur-md border border-amber-400/40 text-[10px] font-bold text-amber-300 flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[12px]">verified</span>
-                          {cert.badge}
-                        </span>
-                      </div>
-
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950/60 backdrop-blur-xs">
-                        <span className="px-3.5 py-1.5 rounded-full bg-amber-400 text-slate-950 text-xs font-bold shadow-lg">
-                          Inspect Certificate
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="p-5 space-y-2">
-                      <span className="text-[10px] text-slate-400 block">{cert.issuer}</span>
-                      <h3 className="text-base font-bold text-white group-hover:text-amber-300 transition-colors line-clamp-1">
-                        {cert.title}
-                      </h3>
-                      <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
-                        {cert.description}
-                      </p>
+                  {/* Visual Preview Container */}
+                  <div className="relative aspect-[4/3] rounded-[1.5rem] overflow-hidden bg-[#EFE9DC] border border-[#DCD2C0] shadow-inner group-hover:scale-[1.02] transition-transform duration-500">
+                    <img
+                      src={cert.imageSrc}
+                      alt={cert.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#2C271E]/75 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/95 text-[#1C1A15] text-xs font-bold shadow-md border border-[#BAA77E]">
+                        <span className="material-symbols-outlined text-sm text-[#7D735C]">zoom_in</span>
+                        <span>Click to View Full Size</span>
+                      </span>
                     </div>
                   </div>
 
-                  <div className="p-5 pt-0 flex items-center justify-between text-xs text-slate-400">
-                    <span className="text-[11px]">{cert.idNumber}</span>
-                    <span className="text-amber-300 font-bold flex items-center gap-0.5">
-                      Enlarge <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                    </span>
+                  {/* Text Details */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#7D735C] bg-[#EFE9DC] px-2.5 py-0.5 rounded-full border border-[#BAA77E]/50">
+                        {cert.categoryLabel}
+                      </span>
+                      <span className="text-[11px] font-mono text-[#736B5E] font-bold">
+                        {cert.idNumber}
+                      </span>
+                    </div>
+
+                    <h3 className="font-serif text-sm font-bold text-[#1C1A15] group-hover:text-[#7D735C] transition-colors line-clamp-2">
+                      {cert.title}
+                    </h3>
+                    <div className="text-xs text-[#736B5E] line-clamp-1">{cert.issuer}</div>
+
+                    {/* Skill Tags */}
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {cert.skills.slice(0, 3).map((s, i) => (
+                        <span
+                          key={i}
+                          className="px-2.5 py-0.5 rounded-full bg-[#EFE9DC]/70 text-[#4A4437] text-[10px] font-semibold border border-[#DCD2C0]/60"
+                        >
+                          {s}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </Reveal>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* SECTION 6: ENGAGEMENT & INTAKE */}
-        <section className="relative w-full max-w-6xl mx-auto px-4 sm:px-6" id="contact">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Left Info Card */}
-            <Reveal direction="left" className="lg:col-span-5 flex">
-              <div className="bento-card w-full rounded-3xl p-7 sm:p-9 flex flex-col justify-between space-y-6">
-                <div className="space-y-4">
-                  <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">Direct Engagement</span>
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                    Retain Bookkeeping &amp; Advisory Services
-                  </h2>
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                    Available for high-stakes bookkeeping mandates, QuickBooks/Xero ledger catch-up, month-end accrual closes, SSS statutory process advisory, and executive virtual administrative support.
-                  </p>
+      {/* SERVICE SCOPE & PRICE ESTIMATOR */}
+      <section id="estimator" className="py-20 px-4 sm:px-6 relative">
+        <div className="max-w-6xl mx-auto space-y-10">
+          <Reveal>
+            <div className="text-center max-w-3xl mx-auto space-y-3">
+              <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold">
+                <span className="material-symbols-outlined text-sm">calculate</span>
+                <span>Service Estimator</span>
+              </div>
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
+                Service Cost & Scope <em className="italic font-normal text-[#7D735C]">Estimator</em>
+              </h2>
+              <p className="text-sm sm:text-base text-[#736B5E]">
+                Select your business type and required accounting tasks to see the recommended schedule and load the details into the contact form.
+              </p>
+            </div>
+          </Reveal>
 
-                  <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3 text-xs">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Step 1: Configuration Form (7 cols) */}
+            <div className="lg:col-span-7 luminous-pearl-card rounded-[2.5rem] p-6 sm:p-8 bg-white space-y-6">
+              {/* Org Type Picker */}
+              <div className="space-y-3">
+                <label className="text-xs font-bold text-[#1C1A15] uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[#7D735C] text-base">domain</span>
+                  <span>1. Select Organization / Business Type</span>
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {[
+                    { id: "corporate", label: "Private Business / SME", icon: "business" },
+                    { id: "cooperative", label: "Cooperative / Microfinance", icon: "groups" },
+                    { id: "government", label: "Government Agency", icon: "account_balance" },
+                    { id: "virtual", label: "Online / Remote Company", icon: "laptop_chromebook" },
+                  ].map((org) => (
+                    <button
+                      key={org.id}
+                      type="button"
+                      onClick={() => setEstimatorOrg(org.id)}
+                      className={`flex items-center gap-2.5 p-3 rounded-2xl text-xs font-bold border transition-all text-left ${estimatorOrg === org.id
+                        ? "bg-[#7D735C] text-white border-[#7D735C] shadow-sm font-extrabold"
+                        : "bg-[#F7F4EE] text-[#4A4437] border-[#DCD2C0] hover:bg-[#EFE9DC]"
+                        }`}
+                    >
+                      <span className="material-symbols-outlined text-base">{org.icon}</span>
+                      <span>{org.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Modules Selector */}
+              <div className="space-y-3">
+                <label className="text-xs font-bold text-[#1C1A15] uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[#7D735C] text-base">check_box</span>
+                  <span>2. Select Needed Services</span>
+                </label>
+                <div className="space-y-2">
+                  {[
+                    { id: "gl", label: "Full-Cycle Bookkeeping & General Ledger", desc: "Recording daily transactions, journal entries, and trial balance." },
+                    { id: "bank", label: "Bank Reconciliation & Cash Book", desc: "Matching monthly bank statements, checking deposits, zero discrepancies." },
+                    { id: "statutory", label: "SSS, PhilHealth, Pag-IBIG & BIR Compliance", desc: "Monthly remittances, employee benefit claims, Form 2307s." },
+                    { id: "cloud", label: "QuickBooks & Xero Cloud Setup", desc: "Setting up your accounts in cloud software and cleaning up old books." },
+                    { id: "audit", label: "Year-End Audit Support & Financial Statements", desc: "Balance sheet schedules, P&L reports, and support during audits." },
+                  ].map((m) => {
+                    const isChecked = estimatorModules.includes(m.id);
+                    return (
+                      <button
+                        key={m.id}
+                        type="button"
+                        onClick={() => toggleModule(m.id)}
+                        className={`w-full p-3.5 rounded-2xl border text-left flex items-start gap-3 transition-all ${isChecked
+                          ? "bg-[#EFE9DC] border-[#BAA77E] shadow-xs"
+                          : "bg-white border-[#DCD2C0]/70 hover:bg-[#F7F4EE]"
+                          }`}
+                      >
+                        <div
+                          className={`h-5 w-5 rounded-md flex items-center justify-center mt-0.5 shrink-0 transition-colors ${isChecked ? "bg-[#7D735C] text-white" : "border border-[#DCD2C0] bg-white"
+                            }`}
+                        >
+                          {isChecked && <span className="material-symbols-outlined text-xs">check</span>}
+                        </div>
+                        <div>
+                          <div className={`text-xs font-bold ${isChecked ? "text-[#1C1A15]" : "text-[#4A4437]"}`}>
+                            {m.label}
+                          </div>
+                          <div className="text-[11px] text-[#736B5E] mt-0.5">{m.desc}</div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Volume Range */}
+              <div className="space-y-3">
+                <label className="text-xs font-bold text-[#1C1A15] uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[#7D735C] text-base">swap_calls</span>
+                  <span>3. Monthly Transaction Volume</span>
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { id: "low", label: "Low (< 300 txns)" },
+                    { id: "medium", label: "Medium (300-1K txns)" },
+                    { id: "high", label: "High (1K+ txns)" },
+                  ].map((v) => (
+                    <button
+                      key={v.id}
+                      type="button"
+                      onClick={() => setEstimatorVolume(v.id)}
+                      className={`p-2.5 rounded-2xl text-xs font-bold border transition-all text-center ${estimatorVolume === v.id
+                        ? "bg-[#7D735C] text-white border-[#7D735C] shadow-xs font-bold"
+                        : "bg-[#F7F4EE] text-[#4A4437] border-[#DCD2C0] hover:bg-[#EFE9DC]"
+                        }`}
+                    >
+                      {v.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Step 2: Dynamic Summary Card (5 cols - Warm Khaki Linen Bento) */}
+            <div className="lg:col-span-5 luminous-pearl-card rounded-[2.5rem] p-6 sm:p-8 text-[#1C1A15] space-y-6 bg-[#EFE9DC] border border-[#BAA77E]/60 shadow-xl">
+              <div className="space-y-1">
+                <div className="text-xs font-bold text-[#7D735C] uppercase tracking-widest flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-sm text-[#7D735C]">receipt</span>
+                  <span>Recommended Plan</span>
+                </div>
+                <h3 className="font-serif text-2xl font-bold text-[#1C1A15]">Estimated Delivery Schedule</h3>
+              </div>
+
+              <div className="space-y-3 pt-2">
+                <div className="p-4 rounded-2xl bg-white/90 border border-[#DCD2C0] flex items-center justify-between">
+                  <span className="text-xs text-[#736B5E]">Recommended Frequency:</span>
+                  <span className="text-xs font-bold text-[#7D735C]">
+                    {estimatorVolume === "high" ? "Daily Updates + Monthly Close" : "Weekly Check-ins + Month-End"}
+                  </span>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-white/90 border border-[#DCD2C0] flex items-center justify-between">
+                  <span className="text-xs text-[#736B5E]">Services Selected:</span>
+                  <span className="text-xs font-bold text-[#1C1A15]">{estimatorModules.length} Active Services</span>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-white/90 border border-[#DCD2C0] flex items-center justify-between">
+                  <span className="text-xs text-[#736B5E]">Accountant In-Charge:</span>
+                  <span className="text-xs font-bold text-[#7D735C]">Ma. Faith Briones, BSA, CSE</span>
+                </div>
+              </div>
+
+              <div className="space-y-2 pt-2 border-t border-[#DCD2C0] text-xs text-[#4A4437]">
+                <div className="font-bold text-[#1C1A15]">Included Guarantees:</div>
+                <ul className="space-y-1.5">
+                  <li className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[#7D735C] text-sm">check_circle</span>
+                    <span>100% Balanced Bank Reconciliations</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[#7D735C] text-sm">check_circle</span>
+                    <span>On-Time SSS & BIR Government Filings</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[#7D735C] text-sm">check_circle</span>
+                    <span>Direct Communication and Fast Responses</span>
+                  </li>
+                </ul>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleApplyEstimatorToContact}
+                className="w-full py-4 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-sm font-extrabold shadow-md flex items-center justify-center gap-2 transition-all hover:scale-[1.02] border border-[#BAA77E]"
+              >
+                <span className="material-symbols-outlined text-lg text-[#E8DECA]">auto_awesome</span>
+                <span>Apply Plan to Contact Form</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CONTACT & INQUIRIES SECTION */}
+      <section id="contact" className="py-20 px-4 sm:px-6 bg-white/90 border-t border-[#DCD2C0]/60 relative">
+        <div className="max-w-6xl mx-auto space-y-12">
+          <Reveal>
+            <div className="text-center max-w-2xl mx-auto space-y-3">
+              <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold">
+                <span className="material-symbols-outlined text-sm">mail</span>
+                <span>Get In Touch</span>
+              </div>
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
+                Send an Inquiry or Request a Quote
+              </h2>
+              <p className="text-sm text-[#736B5E]">
+                Reach out for bookkeeping services, bank reconciliations, cooperative accounting, or government filing assistance.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Contact Details (5 cols) */}
+            <div className="lg:col-span-5 space-y-4">
+              <div className="luminous-pearl-card rounded-[2.5rem] p-6 sm:p-8 bg-white space-y-5">
+                <div className="font-serif text-sm font-bold uppercase tracking-wider text-[#1C1A15]">
+                  Contact Information
+                </div>
+
+                <div className="space-y-3">
+                  {/* Email Box */}
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="h-9 w-9 rounded-xl bg-amber-400/10 flex items-center justify-center text-amber-400 shrink-0">
+                      <span className="h-10 w-10 rounded-xl bg-[#EFE9DC] text-[#7D735C] flex items-center justify-center shrink-0 border border-[#BAA77E]/60">
                         <span className="material-symbols-outlined text-lg">mail</span>
-                      </div>
+                      </span>
                       <div>
-                        <span className="text-[10px] text-slate-400 uppercase block font-semibold">Government / Official Email</span>
-                        <a href="mailto:brionesmb@sss.gov.ph" className="text-white hover:text-amber-300 font-medium transition-colors">
-                          brionesmb@sss.gov.ph
+                        <div className="text-[10px] font-bold uppercase text-[#736B5E]">Email Address</div>
+                        <a
+                          href="mailto:faithbriones1984@gmail.com"
+                          className="text-xs sm:text-sm font-bold text-[#1C1A15] hover:text-[#7D735C] transition-colors"
+                        >
+                          faithbriones1984@gmail.com
                         </a>
                       </div>
                     </div>
+                    <button
+                      onClick={() => copyToClipboard("faithbriones1984@gmail.com", "Email")}
+                      className="p-2 rounded-xl bg-white hover:bg-[#EFE9DC] text-[#1C1A15] border border-[#DCD2C0] text-xs font-bold"
+                      title="Copy Email"
+                    >
+                      <span className="material-symbols-outlined text-sm">content_copy</span>
+                    </button>
+                  </div>
 
+                  {/* Phone Box */}
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="h-9 w-9 rounded-xl bg-amber-400/10 flex items-center justify-center text-amber-400 shrink-0">
+                      <span className="h-10 w-10 rounded-xl bg-[#EFE9DC] text-[#7D735C] flex items-center justify-center shrink-0 border border-[#BAA77E]/60">
                         <span className="material-symbols-outlined text-lg">call</span>
-                      </div>
+                      </span>
                       <div>
-                        <span className="text-[10px] text-slate-400 uppercase block font-semibold">Official Phone Contact</span>
-                        <a href="tel:+639515784797" className="text-white hover:text-amber-300 font-medium transition-colors">
+                        <div className="text-[10px] font-bold uppercase text-[#736B5E]">Mobile Number</div>
+                        <a
+                          href="tel:+639515784797"
+                          className="text-xs sm:text-sm font-bold text-[#1C1A15] hover:text-[#7D735C] transition-colors"
+                        >
                           +63 951 578 4797
                         </a>
                       </div>
                     </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="h-9 w-9 rounded-xl bg-amber-400/10 flex items-center justify-center text-amber-400 shrink-0">
-                        <span className="material-symbols-outlined text-lg">location_on</span>
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-slate-400 uppercase block font-semibold">Location</span>
-                        <span className="text-white font-medium">Oroquieta City, Misamis Occidental</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-slate-950/60 border border-slate-800/80 text-[11px] text-slate-400">
-                  🔒 <strong>Confidentiality Accord:</strong> All client records and inquiries are strictly governed under the Data Privacy Act of 2012 (R.A. 10173).
-                </div>
-              </div>
-            </Reveal>
-
-            {/* Right Form Card */}
-            <Reveal delay={150} direction="scale" className="lg:col-span-7 flex">
-              <div className="bento-card w-full rounded-3xl p-7 sm:p-9 shadow-2xl">
-                <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800">
-                  <div>
-                    <h3 className="text-xl font-bold text-white">Direct Consultation Request</h3>
-                    <p className="text-xs text-slate-400">Prompt executive response within 24 hours.</p>
-                  </div>
-                  <span className="px-3 py-1 rounded-full bg-amber-400/10 text-amber-300 text-xs font-bold border border-amber-400/30">
-                    Active Intake
-                  </span>
-                </div>
-
-                {formSubmitted ? (
-                  <div className="py-10 text-center space-y-4 animate-in fade-in zoom-in-95 duration-200">
-                    <div className="h-14 w-14 rounded-full bg-amber-400/20 text-amber-400 flex items-center justify-center mx-auto text-2xl font-bold border border-amber-400/40">
-                      ✓
-                    </div>
-                    <h4 className="text-xl font-bold text-white">Inquiry Received</h4>
-                    <p className="text-xs text-slate-300 max-w-sm mx-auto">
-                      Thank you. Ma. Faith B. Briones has received your mandate parameters and will follow up promptly.
-                    </p>
                     <button
-                      onClick={() => setFormSubmitted(false)}
-                      className="px-5 py-2 rounded-full bg-slate-800 text-white text-xs font-semibold hover:bg-slate-700 transition-colors"
+                      onClick={() => copyToClipboard("+63 951 578 4797", "Mobile Number")}
+                      className="p-2 rounded-xl bg-white hover:bg-[#EFE9DC] text-[#1C1A15] border border-[#DCD2C0] text-xs font-bold"
+                      title="Copy Mobile"
                     >
-                      Send Another Inquiry
+                      <span className="material-symbols-outlined text-sm">content_copy</span>
                     </button>
                   </div>
+
+                  {/* Location Box */}
+                  <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] flex items-center gap-3">
+                    <span className="h-10 w-10 rounded-xl bg-[#EFE9DC] text-[#7D735C] flex items-center justify-center shrink-0 border border-[#BAA77E]/60">
+                      <span className="material-symbols-outlined text-lg">location_on</span>
+                    </span>
+                    <div>
+                      <div className="text-[10px] font-bold uppercase text-[#736B5E]">Location</div>
+                      <div className="text-xs sm:text-sm font-bold text-[#1C1A15]">
+                        Oroquieta City, Misamis Occidental, Philippines
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Engagement Status Card */}
+              <div className="p-6 rounded-[2rem] bg-[#EFE9DC] text-[#1C1A15] shadow-md space-y-3 border border-[#BAA77E]/60">
+                <div className="flex items-center gap-2 text-xs font-bold text-[#7D735C] uppercase tracking-wider">
+                  <span className="h-2 w-2 rounded-full bg-[#7D735C] animate-ping"></span>
+                  <span>Availability</span>
+                </div>
+                <div className="font-serif text-base font-bold text-[#1C1A15]">
+                  Accepting New Projects & Monthly Retainers
+                </div>
+                <p className="text-xs text-[#4A4437] leading-relaxed">
+                  Available for remote cloud bookkeeping, cooperative accounting consultations, and government compliance support.
+                </p>
+              </div>
+            </div>
+
+            {/* Interactive Consultation Form (7 cols) */}
+            <div className="lg:col-span-7">
+              <div className="luminous-pearl-card rounded-[2.5rem] p-6 sm:p-8 bg-white">
+                {formSubmitted ? (
+                  <div className="text-center py-10 space-y-4 animate-fadeIn">
+                    <div className="h-16 w-16 rounded-full bg-[#EFE9DC] text-[#7D735C] mx-auto flex items-center justify-center border border-[#BAA77E]">
+                      <span className="material-symbols-outlined text-3xl">check_circle</span>
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="font-serif text-2xl font-bold text-[#1C1A15]">Message Sent Successfully!</h3>
+                      <p className="text-sm text-[#4A4437] max-w-md mx-auto">
+                        Thank you for reaching out. Your message has been sent to <strong>Ma. Faith B. Briones</strong>. You will receive a reply within 24 hours.
+                      </p>
+                    </div>
+                    <div className="pt-2">
+                      <button
+                        onClick={() => {
+                          setFormSubmitted(false);
+                          setFormMessage("");
+                        }}
+                        className="px-6 py-2.5 rounded-full bg-[#EFE9DC] hover:bg-[#DCD2C0] text-[#1C1A15] text-xs font-bold"
+                      >
+                        Send Another Message
+                      </button>
+                    </div>
+                  </div>
                 ) : (
-                  <form onSubmit={handleFormSubmit} className="space-y-4 text-xs">
+                  <form onSubmit={handleFormSubmit} className="space-y-4">
+                    <div className="font-serif text-lg font-bold text-[#1C1A15]">
+                      Send a Message
+                    </div>
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1">
-                        <label className="font-semibold text-slate-300">Your Full Name *</label>
+                        <label className="text-xs font-bold text-[#1C1A15]">Your Name / Company Name *</label>
                         <input
                           type="text"
                           required
-                          placeholder="e.g. Attorney / Executive Juan Dela Cruz"
-                          className="w-full rounded-xl bg-slate-900 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none transition-colors"
+                          value={formName}
+                          onChange={(e) => setFormName(e.target.value)}
+                          placeholder="e.g. Juan Dela Cruz / ABC Corporation"
+                          className="w-full px-4 py-2.5 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs sm:text-sm text-[#1C1A15] focus:bg-white focus:outline-none focus:border-[#BAA77E] transition-all"
                         />
                       </div>
-                      <div className="space-y-1">
-                        <label className="font-semibold text-slate-300">Organization / Enterprise</label>
-                        <input
-                          type="text"
-                          placeholder="e.g. Mindanao Enterprise Corp."
-                          className="w-full rounded-xl bg-slate-900 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none transition-colors"
-                        />
-                      </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1">
-                        <label className="font-semibold text-slate-300">Email Address *</label>
+                        <label className="text-xs font-bold text-[#1C1A15]">Email Address *</label>
                         <input
                           type="email"
                           required
-                          placeholder="name@company.com"
-                          className="w-full rounded-xl bg-slate-900 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none transition-colors"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="font-semibold text-slate-300">Contact Number</label>
-                        <input
-                          type="tel"
-                          placeholder="+63 9XX XXX XXXX"
-                          className="w-full rounded-xl bg-slate-900 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none transition-colors"
+                          value={formEmail}
+                          onChange={(e) => setFormEmail(e.target.value)}
+                          placeholder="e.g. yourname@company.com"
+                          className="w-full px-4 py-2.5 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs sm:text-sm text-[#1C1A15] focus:bg-white focus:outline-none focus:border-[#BAA77E] transition-all"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-1">
-                      <label className="font-semibold text-slate-300">Mandate Scope</label>
-                      <select className="w-full rounded-xl bg-slate-900 border border-slate-700 px-3.5 py-2.5 text-xs text-white focus:border-amber-400 focus:outline-none transition-colors">
-                        <option value="bookkeeping">Full-Charge Bookkeeping &amp; General Ledger Catch-up</option>
-                        <option value="reconciliation">Bank Reconciliation &amp; Audit Preparation</option>
-                        <option value="quickbooks">QuickBooks / Xero Setup &amp; Training</option>
-                        <option value="sss">SSS Administrative &amp; Claims Advisory</option>
-                        <option value="retainer">Monthly Fiduciary Retainer Mandate</option>
+                      <label className="text-xs font-bold text-[#1C1A15]">Service Needed *</label>
+                      <select
+                        value={formService}
+                        onChange={(e) => setFormService(e.target.value)}
+                        className="w-full px-4 py-2.5 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs sm:text-sm text-[#1C1A15] focus:bg-white focus:outline-none focus:border-[#BAA77E] transition-all"
+                      >
+                        <option>Full-Cycle Bookkeeping & General Ledger</option>
+                        <option>Bank Reconciliation & Cash Book Clean-up</option>
+                        <option>Cooperative / Microfinance Bookkeeping (CDA)</option>
+                        <option>SSS / PhilHealth / Pag-IBIG & BIR Compliance</option>
+                        <option>QuickBooks / Xero Cloud Setup & Migration</option>
+                        <option>Monthly Retainer / Ongoing Accounting Support</option>
                       </select>
                     </div>
 
                     <div className="space-y-1">
-                      <label className="font-semibold text-slate-300">Message / Requirement Details *</label>
+                      <label className="text-xs font-bold text-[#1C1A15]">Details / Questions *</label>
                       <textarea
                         required
-                        rows={3}
-                        placeholder="Please describe your accounting, audit reconciliation, or administrative requirements..."
-                        className="w-full rounded-xl bg-slate-900 border border-slate-700 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none transition-colors resize-none"
+                        rows={4}
+                        value={formMessage}
+                        onChange={(e) => setFormMessage(e.target.value)}
+                        placeholder="Please tell me about your business, current accounting software, or what kind of help you need..."
+                        className="w-full px-4 py-2.5 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs sm:text-sm text-[#1C1A15] focus:bg-white focus:outline-none focus:border-[#BAA77E] transition-all"
                       ></textarea>
                     </div>
 
                     <button
                       type="submit"
-                      className="w-full py-3 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-bold text-xs shadow-lg hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-[1.01] transition-all cursor-pointer flex items-center justify-center gap-2"
+                      className="w-full py-4 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-sm font-bold shadow-md shadow-[#7D735C]/25 flex items-center justify-center gap-2 hover:scale-[1.01] transition-all border border-[#BAA77E]"
                     >
-                      <span className="material-symbols-outlined text-base">send</span>
-                      Dispatch Consultation Request
+                      <span className="material-symbols-outlined text-lg text-[#E8DECA]">send</span>
+                      <span>Send Message</span>
                     </button>
                   </form>
                 )}
               </div>
-            </Reveal>
+            </div>
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
 
       {/* FOOTER */}
-      <footer className="w-full border-t border-slate-800 bg-[#060911] py-8 text-xs text-slate-400">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <footer className="py-12 px-4 sm:px-6 bg-[#EFE9DC] text-[#1C1A15] border-t border-[#DCD2C0]">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <img src="/profile/avatar.jpg" alt="Ma. Faith B. Briones" className="h-8 w-8 rounded-full object-cover border border-amber-400/40" />
-            <span className="text-slate-200 font-semibold">Ma. Faith B. Briones, BSA, CSE</span>
+            <div className="h-11 w-11 rounded-full overflow-hidden border-2 border-[#BAA77E]">
+              <img
+                src="/profile/avatar.jpg"
+                alt="Ma. Faith B. Briones"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div>
+              <div className="font-serif text-sm font-bold text-[#1C1A15]">Ma. Faith Batilona Briones, BSA, CSE</div>
+              <div className="text-xs text-[#736B5E]">
+                Bachelor of Science in Accountancy • Civil Service Professional (80.24% Rating)
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-4 text-[11px]">
-            <a href="#overview" className="hover:text-amber-300">Overview</a>
-            <a href="#provenance" className="hover:text-amber-300">Experience</a>
-            <a href="#dossier" className="hover:text-amber-300">Dossier</a>
-            <a href="#credentials" className="hover:text-amber-300">Certificates</a>
-            <a href="#contact" className="hover:text-amber-300">Contact</a>
+
+          <div className="text-xs text-[#736B5E] text-center md:text-right space-y-1">
+            <div className="font-serif italic text-[#7D735C]">Professional Accounting & Bookkeeping Portfolio • Philippines</div>
+            <div>
+              Verified with CS Form 212 & Official Certificates of Employment
+            </div>
           </div>
-          <p className="text-[11px] text-slate-500">&copy; {new Date().getFullYear()} All Rights Reserved.</p>
         </div>
       </footer>
 
-      {/* FLOATING ACTION & BACK TO TOP */}
+      {/* BACK TO TOP BUTTON */}
       {showBackToTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-amber-400 text-slate-950 shadow-xl hover:scale-110 transition-all cursor-pointer"
+          className="fixed bottom-6 left-6 z-50 p-3.5 rounded-full bg-white text-[#1C1A15] shadow-2xl border border-[#BAA77E] hover:bg-[#EFE9DC] hover:scale-110 transition-all"
           aria-label="Back to top"
         >
-          <span className="material-symbols-outlined text-xl">arrow_upward</span>
+          <span className="material-symbols-outlined text-xl text-[#7D735C]">arrow_upward</span>
         </button>
       )}
 
-      {/* MODAL DIALOGS */}
-      {activeModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-150"
-          onClick={() => {
-            setActiveModal(null);
-            setSelectedDoc(null);
-          }}
-        >
-          <div
-            className="relative w-full max-w-2xl rounded-3xl bg-[#0F172A] p-6 sm:p-8 border border-slate-700 shadow-2xl max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-150"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => {
-                setActiveModal(null);
-                setSelectedDoc(null);
-              }}
-              className="absolute top-4 right-4 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white transition-colors"
-            >
-              <span className="material-symbols-outlined text-lg">close</span>
-            </button>
+      {/* MODAL 1: STATUTORY DOSSIER INSPECTOR */}
+      {activeModal === "doc-viewer" && selectedDoc && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-md animate-fadeIn">
+          <div className="relative w-full max-w-2xl rounded-[2.5rem] bg-white border border-[#BAA77E] shadow-2xl p-6 sm:p-8 space-y-5 max-h-[90vh] overflow-y-auto text-[#1C1A15]">
+            <div className="flex items-start justify-between gap-4">
+              <div className="space-y-1">
+                <span className="px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
+                  {selectedDoc.badge}
+                </span>
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#1C1A15] mt-2">{selectedDoc.title}</h3>
+                <div className="text-xs text-[#7D735C] font-semibold">{selectedDoc.issuer}</div>
+              </div>
+              <button
+                onClick={() => setActiveModal(null)}
+                className="p-2 rounded-full bg-[#EFE9DC] hover:bg-[#DCD2C0] text-[#1C1A15]"
+              >
+                <span className="material-symbols-outlined text-lg">close</span>
+              </button>
+            </div>
 
-            {/* DOC VIEWER */}
-            {activeModal === "doc-viewer" && selectedDoc && (
-              <div className="space-y-5 text-xs">
-                <div className="flex items-center gap-3">
-                  <div className="h-11 w-11 rounded-2xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400">
-                    <span className="material-symbols-outlined text-2xl">{selectedDoc.icon}</span>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white">{selectedDoc.title}</h3>
-                    <p className="text-slate-400">{selectedDoc.issuer} • {selectedDoc.dateOrDuration}</p>
-                  </div>
-                </div>
+            <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0] text-xs sm:text-sm text-[#4A4437] leading-relaxed">
+              {selectedDoc.summary}
+            </div>
 
-                <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1.5">
-                  <span className="font-bold text-amber-300 block uppercase text-[10px]">Official Summary</span>
-                  <p className="text-slate-300 leading-relaxed">{selectedDoc.summary}</p>
-                </div>
+            <div className="space-y-2">
+              <div className="font-serif text-xs font-bold uppercase tracking-wider text-[#1C1A15]">
+                Verified Statutory Points:
+              </div>
+              <ul className="space-y-1.5 text-xs text-[#4A4437]">
+                {selectedDoc.keyPoints.map((pt, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="material-symbols-outlined text-[#7D735C] text-sm shrink-0">check_circle</span>
+                    <span>{pt}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-                <div className="space-y-2">
-                  <span className="font-bold text-white block uppercase text-[10px]">Key Verified Highlights:</span>
-                  <div className="space-y-1.5">
-                    {selectedDoc.keyPoints.map((pt, i) => (
-                      <div key={i} className="p-2.5 rounded-xl bg-slate-900 border border-slate-800/80 text-slate-300 flex items-start gap-2">
-                        <span className="text-amber-400 font-bold">✓</span>
-                        <span className="leading-relaxed">{pt}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
-                  <span className="text-slate-400">Signed Official Document</span>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setActiveModal(null)}
-                      className="px-4 py-2 rounded-full bg-slate-800 text-white font-semibold hover:bg-slate-700 transition-colors"
-                    >
-                      Close
-                    </button>
-                    <a
-                      href={selectedDoc.pdfPath}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 rounded-full bg-amber-400 text-slate-950 font-bold hover:bg-amber-300 transition-colors inline-flex items-center gap-1.5 shadow-md"
-                    >
-                      <span className="material-symbols-outlined text-sm">picture_as_pdf</span>
-                      Open Official PDF
-                    </a>
-                  </div>
-                </div>
+            {selectedDoc.supervisors && (
+              <div className="text-xs text-[#736B5E] pt-2 border-t border-[#DCD2C0]/50">
+                <span className="font-bold text-[#1C1A15]">Official Signatory:</span> {selectedDoc.supervisors}
               </div>
             )}
 
-            {/* CERTIFICATE LIGHTBOX WITH PREV/NEXT CAROUSEL CONTROLS */}
-            {activeModal === "certificate-lightbox" && currentCert && (
-              <div className="space-y-4 text-xs">
-                <div className="flex items-center justify-between pr-8">
-                  <div>
-                    <h3 className="text-base font-bold text-white">{currentCert.title}</h3>
-                    <p className="text-slate-400">{currentCert.issuer} • {currentCert.idNumber}</p>
-                  </div>
-                  <span className="text-[11px] text-amber-400 font-bold">
-                    {selectedCertificateIndex + 1} / {filteredCertificates.length}
+            <div className="pt-4 border-t border-[#DCD2C0]/50 flex items-center justify-end gap-3">
+              <button
+                onClick={() => setActiveModal(null)}
+                className="px-5 py-2.5 rounded-full bg-[#EFE9DC] hover:bg-[#DCD2C0] text-[#1C1A15] text-xs font-bold"
+              >
+                Close
+              </button>
+
+              <a
+                href={selectedDoc.pdfPath}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-2.5 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-xs font-bold flex items-center gap-1.5 shadow-md border border-[#BAA77E]"
+              >
+                <span className="material-symbols-outlined text-sm">open_in_new</span>
+                <span>Open Official PDF Document</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 2: CERTIFICATE LIGHTBOX CAROUSEL */}
+      {activeModal === "certificate-lightbox" && currentCert && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-md animate-fadeIn">
+          <div className="relative w-full max-w-4xl rounded-[2.5rem] bg-white border border-[#BAA77E] shadow-2xl p-6 sm:p-8 space-y-6 max-h-[95vh] overflow-y-auto text-[#1C1A15]">
+            {/* Top Bar */}
+            <div className="flex items-start justify-between gap-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="px-3.5 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-bold border border-[#BAA77E]/60">
+                    {currentCert.categoryLabel}
+                  </span>
+                  <span className="text-xs text-[#736B5E] font-mono font-bold">
+                    {selectedCertificateIndex + 1} of {filteredCertificates.length}
                   </span>
                 </div>
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#1C1A15] mt-1">{currentCert.title}</h3>
+                <div className="text-xs text-[#736B5E]">{currentCert.issuer}</div>
+              </div>
 
-                {/* High Resolution Image */}
-                <div className="relative rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center max-h-[480px]">
-                  <img
-                    alt={currentCert.title}
-                    src={currentCert.imageSrc}
-                    className="w-full h-auto max-h-[460px] object-contain"
-                  />
+              <button
+                onClick={() => setActiveModal(null)}
+                className="p-2 rounded-full bg-[#EFE9DC] hover:bg-[#DCD2C0] text-[#1C1A15]"
+              >
+                <span className="material-symbols-outlined text-lg">close</span>
+              </button>
+            </div>
 
-                  {/* Carousel Left/Right Buttons */}
+            {/* High-Resolution Certificate Image Preview */}
+            <div className="relative aspect-[16/10] w-full rounded-[2rem] overflow-hidden bg-[#F5F1E9] border border-[#DCD2C0] flex items-center justify-center group shadow-inner">
+              <img
+                src={currentCert.imageSrc}
+                alt={currentCert.title}
+                className="max-h-full max-w-full object-contain"
+              />
+
+              {/* Prev / Next Controls */}
+              {filteredCertificates.length > 1 && (
+                <>
                   <button
                     onClick={prevCertificate}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-900/80 hover:bg-amber-400 hover:text-slate-950 text-white border border-white/10 transition-colors shadow-lg"
-                    aria-label="Previous certificate"
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/95 hover:bg-white text-[#1C1A15] shadow-xl transition-transform hover:scale-110 border border-[#BAA77E]"
+                    aria-label="Previous Certificate"
                   >
-                    <span className="material-symbols-outlined text-base">chevron_left</span>
+                    <span className="material-symbols-outlined text-lg">chevron_left</span>
                   </button>
                   <button
                     onClick={nextCertificate}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-900/80 hover:bg-amber-400 hover:text-slate-950 text-white border border-white/10 transition-colors shadow-lg"
-                    aria-label="Next certificate"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/95 hover:bg-white text-[#1C1A15] shadow-xl transition-transform hover:scale-110 border border-[#BAA77E]"
+                    aria-label="Next Certificate"
                   >
-                    <span className="material-symbols-outlined text-base">chevron_right</span>
+                    <span className="material-symbols-outlined text-lg">chevron_right</span>
                   </button>
-                </div>
+                </>
+              )}
+            </div>
 
-                <div className="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
-                  <p className="text-slate-300 leading-relaxed">{currentCert.description}</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {currentCert.skills.map((skill, i) => (
-                      <span key={i} className="px-2 py-0.5 rounded-lg bg-slate-800 text-[10px] text-amber-300 font-medium">
-                        ✓ {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+            {/* Verification & Description */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <div className="font-serif text-xs font-bold text-[#1C1A15]">Certificate Curriculum Scope:</div>
+                <p className="text-xs text-[#4A4437] leading-relaxed">{currentCert.description}</p>
+              </div>
 
-                <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
-                  <span className="text-amber-400 font-semibold">Verified Credential</span>
-                  <div className="flex gap-2">
-                    {currentCert.pdfPath && (
-                      <a
-                        href={currentCert.pdfPath}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-4 py-2 rounded-full bg-slate-800 text-amber-300 border border-amber-400/30 font-bold hover:bg-slate-700 transition-colors inline-flex items-center gap-1.5 shadow-md"
-                      >
-                        <span className="material-symbols-outlined text-sm">picture_as_pdf</span>
-                        Open Original PDF
-                      </a>
-                    )}
-                    <a
-                      href={currentCert.imageSrc}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 rounded-full bg-amber-400 text-slate-950 font-bold hover:bg-amber-300 transition-colors inline-flex items-center gap-1.5 shadow-md"
+              <div className="space-y-2">
+                <div className="font-serif text-xs font-bold text-[#1C1A15]">Verified Competency Tags:</div>
+                <div className="flex flex-wrap gap-1.5">
+                  {currentCert.skills.map((s, idx) => (
+                    <span
+                      key={idx}
+                      className="px-3 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] text-xs font-semibold border border-[#BAA77E]/50"
                     >
-                      <span className="material-symbols-outlined text-sm">open_in_new</span>
-                      Full Size
-                    </a>
-                  </div>
+                      {s}
+                    </span>
+                  ))}
                 </div>
               </div>
-            )}
+            </div>
+
+            {/* Modal Bottom Actions */}
+            <div className="pt-4 border-t border-[#DCD2C0]/50 flex items-center justify-between">
+              <span className="text-xs font-mono font-bold text-[#736B5E]">
+                Official Identifier: {currentCert.idNumber}
+              </span>
+
+              <div className="flex items-center gap-2">
+                {currentCert.pdfPath && (
+                  <a
+                    href={currentCert.pdfPath}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-5 py-2 rounded-full bg-[#7D735C] hover:bg-[#685F49] text-white text-xs font-bold flex items-center gap-1 border border-[#BAA77E]"
+                  >
+                    <span className="material-symbols-outlined text-sm">picture_as_pdf</span>
+                    <span>Open Conferred PDF</span>
+                  </a>
+                )}
+
+                <button
+                  onClick={() => setActiveModal(null)}
+                  className="px-5 py-2 rounded-full bg-[#EFE9DC] hover:bg-[#DCD2C0] text-[#1C1A15] text-xs font-bold"
+                >
+                  Done
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
