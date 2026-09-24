@@ -718,7 +718,32 @@ export default function Home() {
   const currentCert = filteredCertificates[selectedCertificateIndex] || filteredCertificates[0];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#0B1118] text-[#F1F5F9] relative selection:bg-[#C5A880] selection:text-[#0B1118] bg-dark-luxury-canvas dark-subtle-pattern">
+    <div className="flex flex-col min-h-screen bg-[#0B1118] text-[#F1F5F9] relative selection:bg-[#C5A880] selection:text-[#0B1118] bg-dark-luxury-canvas dark-subtle-pattern overflow-x-hidden">
+      {/* ANIMATED LUXURY BACKGROUND ENGINE */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        {/* Floating Aurora Orb 1 (Top Center Champagne Gold) */}
+        <div className="absolute -top-[15%] left-[20%] w-[650px] h-[650px] rounded-full bg-gradient-to-br from-[#C5A880]/20 via-[#E5C590]/15 to-transparent blur-[140px] animate-orb-1"></div>
+
+        {/* Floating Aurora Orb 2 (Mid Right Deep Slate Navy) */}
+        <div className="absolute top-[35%] -right-[10%] w-[750px] h-[750px] rounded-full bg-gradient-to-tl from-[#34495E]/40 via-[#1A2634]/30 to-transparent blur-[160px] animate-orb-2"></div>
+
+        {/* Floating Aurora Orb 3 (Mid Left Warm Amber Gilt) */}
+        <div className="absolute top-[60%] -left-[10%] w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-[#9A7B56]/20 via-[#C5A880]/15 to-transparent blur-[140px] animate-orb-3"></div>
+
+        {/* Floating Aurora Orb 4 (Bottom Center Sapphire Emerald) */}
+        <div className="absolute -bottom-[10%] left-[30%] w-[700px] h-[700px] rounded-full bg-gradient-to-t from-[#2C3E50]/35 via-[#1E3A5F]/20 to-transparent blur-[150px] animate-orb-1"></div>
+
+        {/* Constellation Starlight Dust Particles */}
+        <div className="absolute top-[12%] left-[15%] h-1.5 w-1.5 rounded-full bg-[#E5C590] shadow-[0_0_10px_#E5C590] animate-particle" style={{ animationDelay: "0s" }}></div>
+        <div className="absolute top-[22%] right-[18%] h-2 w-2 rounded-full bg-[#C5A880] shadow-[0_0_12px_#C5A880] animate-particle" style={{ animationDelay: "1.5s" }}></div>
+        <div className="absolute top-[45%] left-[8%] h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_8px_white] animate-particle" style={{ animationDelay: "3s" }}></div>
+        <div className="absolute top-[58%] right-[12%] h-2 w-2 rounded-full bg-[#E5C590] shadow-[0_0_14px_#E5C590] animate-particle" style={{ animationDelay: "0.8s" }}></div>
+        <div className="absolute top-[75%] left-[22%] h-1 w-1 rounded-full bg-[#C5A880] shadow-[0_0_8px_#C5A880] animate-particle" style={{ animationDelay: "2.2s" }}></div>
+        <div className="absolute top-[88%] right-[25%] h-1.5 w-1.5 rounded-full bg-[#E5C590] shadow-[0_0_10px_#E5C590] animate-particle" style={{ animationDelay: "4s" }}></div>
+        <div className="absolute top-[30%] left-[60%] h-1 w-1 rounded-full bg-white shadow-[0_0_6px_white] animate-particle" style={{ animationDelay: "2.7s" }}></div>
+        <div className="absolute top-[70%] left-[50%] h-1.5 w-1.5 rounded-full bg-[#C5A880] shadow-[0_0_10px_#C5A880] animate-particle" style={{ animationDelay: "1.2s" }}></div>
+      </div>
+
       {/* Toast Notification Alert */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-[100] px-5 py-3.5 rounded-2xl bg-[#16222F] text-white font-medium text-xs sm:text-sm shadow-2xl border border-[#C5A880] flex items-center gap-3 animate-float-luxury">
