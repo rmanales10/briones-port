@@ -360,17 +360,19 @@ interface CareerRole {
   highlights: string[];
   supervisors?: string;
   tags: string[];
+  pdfPath: string;
 }
 
 const careerRoles: CareerRole[] = [
   {
-    id: "sss-admin",
+    id: "wes-admin",
     category: "gov",
     role: "Junior Administrative Assistant (Administration & Procurement)",
     organization: "Social Security System (SSS)",
     location: "Oroquieta Branch, Misamis Occidental",
     period: "Jan 2023 – Present & Aug 2015 – Dec 2018",
     badge: "Public Administration",
+    pdfPath: "/work-experience/Work Experience Sheet - ADMIN.pdf",
     summary:
       "Responsible for core branch administrative operations, financial disbursement vouchers with complete statutory audit attachments, annual administrative budget prioritizations, PIMS supplies procurement, property asset registers, and UMID card releases.",
     highlights: [
@@ -383,15 +385,36 @@ const careerRoles: CareerRole[] = [
     tags: ["Disbursement Vouchers", "PIMS Procurement", "Asset Management", "QMS Compliance"],
   },
   {
-    id: "sss-msr",
+    id: "wes-bookkeeper",
+    category: "private",
+    role: "Master Bookkeeper (General Ledger, Microfinance & Cooperatives)",
+    organization: "BASCOFAMCO, Taytay Sa Kauswagan, Inc. (TSKI) & Paglaum MPC",
+    location: "Misamis Occidental & Zamboanga del Norte",
+    period: "June 13, 2004 – October 10, 2013 (9+ Years)",
+    badge: "Master Bookkeeper",
+    pdfPath: "/work-experience/Work Experience Sheet - BOOKKEEPER.pdf",
+    summary:
+      "Full-charge bookkeeper maintaining double-entry General Ledgers, daily cash books, bank reconciliations, multi-million peso microfinance loan portfolios, member share capital accounts, and month-end financial reporting under ISO 9001 quality systems.",
+    highlights: [
+      "Maintained General Journal, General Ledger, Cash Receipts, and Cash Disbursements registers with 100% mathematical accuracy.",
+      "Executed daily cash counts, bank deposit verifications, and monthly bank reconciliation schedules with zero variances.",
+      "Calculated loan releases, principal amortizations, interest yields, and penalty schedules for microfinance borrowers.",
+      "Prepared monthly Trial Balances, P&L statements, Balance Sheet schedules, and statutory tax schedules for annual audit readiness.",
+    ],
+    supervisors: "Beverly Joy M. Navigar (HR Manager) / Maria Theresa A. Salabas (HR/Admin Officer)",
+    tags: ["General Ledger", "Bank Reconciliation", "Loan Accounting", "Microfinance Audit", "CDA Compliance"],
+  },
+  {
+    id: "wes-msr",
     category: "gov",
     role: "Member Service Representative (Claims, Loans & Frontline)",
     organization: "Social Security System (SSS)",
     location: "Oroquieta Branch, Misamis Occidental",
     period: "Jan 2019 – Dec 2022 & Reliever (2023 – Present)",
     badge: "2023 Division Awardee",
+    pdfPath: "/work-experience/Work Experience Sheet - Member Service Representative.pdf",
     summary:
-      "Frontline leadership in screening, evaluating, and processing complex member benefit claims (sickness, maternity, disability, retirement, funeral), loan applications, and annual confirmation of pensioners (ACOP). Awarded 2023 Best Customer Service Employee at the Division Level.",
+      "Frontline leadership in screening, evaluating, and processing member benefit claims (sickness, maternity, disability, retirement, funeral), loan applications, and annual confirmation of pensioners (ACOP). Awarded 2023 Best Customer Service Employee at the Division Level.",
     highlights: [
       "Conferred 2023 Best Customer Service Employee (Division Level Winner - Mindanao North Division & DBO Level Winner).",
       "Processed benefit claim applications monthly with zero backlogs and 100% regulatory compliance.",
@@ -400,57 +423,6 @@ const careerRoles: CareerRole[] = [
     ],
     supervisors: "Juliet C. Abuton (Branch Head) / Linda C. Vilar (CEO-II)",
     tags: ["Benefit Claims", "ACOP Verifications", "Loan Administration", "Frontline Excellence"],
-  },
-  {
-    id: "tski-bookkeeper",
-    category: "private",
-    role: "Lead Bookkeeper (General Ledger & Microfinance Portfolios)",
-    organization: "Taytay Sa Kauswagan, Incorporated (TSKI)",
-    location: "Liloy Branch, Zamboanga del Norte",
-    period: "Jan 23, 2006 – Aug 8, 2012 (6.5+ Years)",
-    badge: "Lead Bookkeeper",
-    summary:
-      "Full-charge branch bookkeeper managing multi-million peso microfinance loan portfolios, double-entry general ledgers, cash book balances, daily bank deposits, and month-end financial closures under ISO 9001 quality systems.",
-    highlights: [
-      "Maintained General Journal, General Ledger, Cash Receipts, and Cash Disbursements registers with 100% mathematical accuracy.",
-      "Executed daily cash counts, bank deposit verifications, and monthly bank reconciliation schedules with zero variances.",
-      "Calculated loan releases, principal amortizations, interest yields, and penalty schedules for extensive microfinance borrower accounts.",
-      "Prepared monthly Trial Balances, P&L statements, and Balance Sheet schedules for executive regional reviews.",
-    ],
-    supervisors: "Beverly Joy M. Navigar (HR Manager)",
-    tags: ["General Ledger", "Bank Reconciliation", "Loan Accounting", "Microfinance Audit"],
-  },
-  {
-    id: "paglaum-bookkeeper",
-    category: "private",
-    role: "Cooperative Bookkeeper (PLASECO)",
-    organization: "Paglaum Multi-Purpose Cooperative",
-    location: "Plaridel, Misamis Occidental",
-    period: "Dec 10, 2012 – Oct 10, 2013",
-    badge: "Cooperative Accounting",
-    summary:
-      "Maintained statutory cooperative ledgers, member share capital accounts, loan ledgers, and financial statements in strict conformity with Cooperative Development Authority (CDA) regulatory frameworks.",
-    highlights: [
-      "Managed subsidiary ledgers for member savings, time deposits, and share capital equity.",
-      "Prepared trial balances and statutory financial schedules for annual cooperative audits.",
-    ],
-    supervisors: "Maria Theresa A. Salabas (HR/Admin Officer)",
-    tags: ["Cooperative Ledgers", "CDA Compliance", "Share Capital", "Trial Balance"],
-  },
-  {
-    id: "bascofamco-bookkeeper",
-    category: "private",
-    role: "Cooperative Bookkeeper",
-    organization: "BASCOFAMCO",
-    location: "Misamis Occidental",
-    period: "June 13, 2004 – Aug 31, 2005",
-    badge: "Early Career Foundation",
-    summary:
-      "Early career accounting foundation following graduation from Andres Bonifacio College: managed daily cash receipts, disbursement journals, and cooperative bookkeeping registers.",
-    highlights: [
-      "Applied foundational BS Accountancy principles to full-cycle double-entry bookkeeping.",
-    ],
-    tags: ["Double-Entry Accounting", "Cash Journals", "Voucher Registers"],
   },
 ];
 
@@ -598,7 +570,7 @@ export default function Home() {
   const [selectedDocCategory, setSelectedDocCategory] = useState<DocCategory>("all");
   const [selectedCertCategory, setSelectedCertCategory] = useState<CredentialCategory>("all");
   const [selectedCareerCategory, setSelectedCareerCategory] = useState<CareerCategory>("all");
-  const [expandedRoleId, setExpandedRoleId] = useState<string>("sss-admin");
+  const [expandedRoleId, setExpandedRoleId] = useState<string>("wes-admin");
 
   // Interactive Work Sample State
   const [activeWorkSampleTab, setActiveWorkSampleTab] = useState<WorkSampleTab>("bs");
@@ -1524,9 +1496,9 @@ export default function Home() {
               {/* Filter Tabs */}
               <div className="flex items-center gap-2 p-1.5 rounded-full bg-white border border-[#DCD2C0] shadow-xs">
                 {[
-                  { id: "all" as CareerCategory, label: "All Positions (5)" },
-                  { id: "gov" as CareerCategory, label: "Government (SSS)" },
-                  { id: "private" as CareerCategory, label: "Bookkeeping & Coops" },
+                  { id: "all" as CareerCategory, label: "All Experience (3)" },
+                  { id: "gov" as CareerCategory, label: "Government Service" },
+                  { id: "private" as CareerCategory, label: "Master Bookkeeper" },
                 ].map((tab) => (
                   <button
                     key={tab.id}
@@ -1618,7 +1590,7 @@ export default function Home() {
                           </ul>
                         </div>
 
-                        {/* Supervisory Verification & Tags */}
+                        {/* Supervisory Verification, Official PDF & Tags */}
                         <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#DCD2C0]/50">
                           {role.supervisors && (
                             <div className="text-xs text-[#736B5E]">
@@ -1627,7 +1599,17 @@ export default function Home() {
                             </div>
                           )}
 
-                          <div className="flex flex-wrap items-center gap-1.5 ml-auto">
+                          <div className="flex flex-wrap items-center gap-2 ml-auto">
+                            <a
+                              href={role.pdfPath}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#EFE9DC] hover:bg-[#7D735C] text-[#7D735C] hover:text-white text-xs font-bold border border-[#BAA77E]/60 transition-colors"
+                            >
+                              <span className="material-symbols-outlined text-sm">picture_as_pdf</span>
+                              <span>View Work Experience Sheet (PDF)</span>
+                            </a>
+
                             {role.tags.map((t, idx) => (
                               <span
                                 key={idx}
