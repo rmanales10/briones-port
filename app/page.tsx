@@ -394,7 +394,7 @@ const careerRoles: CareerRole[] = [
       "Frontline leadership in screening, evaluating, and processing complex member benefit claims (sickness, maternity, disability, retirement, funeral), loan applications, and annual confirmation of pensioners (ACOP). Awarded 2023 Best Customer Service Employee at the Division Level.",
     highlights: [
       "Conferred 2023 Best Customer Service Employee (Division Level Winner - Mindanao North Division & DBO Level Winner).",
-      "Processed hundreds of benefit claim applications monthly with zero backlogs and 100% regulatory compliance.",
+      "Processed benefit claim applications monthly with zero backlogs and 100% regulatory compliance.",
       "Screened member salary, educational, and pension loan applications ensuring document authenticity.",
       "Conducted on-site field verifications for complex disability, death, and pensioner status claims.",
     ],
@@ -967,7 +967,7 @@ export default function Home() {
             {[
               { id: "overview", label: "About Ma. Faith Briones" },
               { id: "pipeline", label: "How I Work (5-Step Process)" },
-              { id: "provenance", label: "20-Year Work Experience" },
+              { id: "provenance", label: "Work History & Experience" },
               { id: "worksamples", label: "Work Samples & Spreadsheets" },
               { id: "dossier", label: "Official Documents & Signed Records" },
               { id: "stack", label: "Software & Government Portals" },
@@ -1019,14 +1019,14 @@ export default function Home() {
                     Senior Bookkeeper • Accountancy Graduate • Government Administrator
                   </div>
                   <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl text-[#1C1A15] tracking-tight leading-[1.12]">
-                    Accurate <em className="italic font-normal text-[#7D735C]">Bookkeeping</em>, Clear Reports & Peace of Mind.
+                    Accurate <em className="italic font-normal text-[#7D735C]">Bookkeeping</em> & Reports
                   </h1>
                 </div>
               </Reveal>
 
               <Reveal delay={100}>
                 <p className="text-base sm:text-lg text-[#4A4437] font-normal leading-relaxed">
-                  <strong>Ma. Faith Batilona Briones, BSA, CSE</strong> has over <strong>20 years of hands-on bookkeeping experience</strong> and <strong>12+ years of government service with the Social Security System (SSS)</strong>. She delivers error-free bank reconciliations, accurate financial statements, and complete government compliance.
+                  <strong>Ma. Faith Batilona Briones, BSA, CSE</strong> has <strong>hands-on bookkeeping experience</strong> and <strong>12+ years of government service</strong>. She delivers error-free bank reconciliations, accurate financial statements, and complete government compliance.
                 </p>
               </Reveal>
 
@@ -1130,7 +1130,7 @@ export default function Home() {
                     {/* Floating Luxury Seal (Top-Right) */}
                     <div className="absolute -top-3.5 -right-3.5 px-4 py-2 rounded-2xl bg-white text-[#1C1A15] border border-[#BAA77E] shadow-xl flex items-center gap-2 animate-float-luxury">
                       <span className="h-2 w-2 rounded-full bg-[#7D735C]"></span>
-                      <span className="font-serif text-xs font-bold text-[#1C1A15]">20+ Years Bookkeeping</span>
+                      <span className="font-serif text-xs font-bold text-[#1C1A15]">Verified Bookkeeper</span>
                     </div>
 
                     {/* Floating Luxury Seal (Bottom-Left) */}
@@ -1297,7 +1297,7 @@ export default function Home() {
                       Recording Invoices, Expense Vouchers & Receipts
                     </h3>
                     <p className="text-[#4A4437] text-sm leading-relaxed">
-                      With over 12 years of experience managing disbursement vouchers at SSS and cooperative cash registers, I make sure every business expense has complete receipts, official invoices, and proper approvals.
+                      With over 12 years of experience managing disbursement vouchers and cooperative, I make sure every business expense has complete receipts, official invoices, and proper approvals.
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                       <div className="p-4 rounded-2xl bg-[#F7F4EE] border border-[#DCD2C0]">
@@ -1503,7 +1503,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 20-YEAR WORK HISTORY & EXPERIENCE */}
+      {/* WORK HISTORY & EXPERIENCE */}
       <section id="provenance" className="py-20 px-4 sm:px-6 relative">
         <div className="max-w-6xl mx-auto space-y-10">
           <Reveal>
@@ -1511,10 +1511,10 @@ export default function Home() {
               <div>
                 <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EFE9DC] text-[#7D735C] border border-[#BAA77E]/60 text-xs font-bold mb-2">
                   <span className="material-symbols-outlined text-sm">history_edu</span>
-                  <span>Verified 20-Year Career History</span>
+                  <span>Verified Career History</span>
                 </div>
                 <h2 className="font-serif text-3xl sm:text-4xl text-[#1C1A15] tracking-tight">
-                  20 Years of Work Experience
+                  Work History & Experience
                 </h2>
                 <p className="text-sm text-[#736B5E] mt-1">
                   Supported by official Civil Service Commission records (Form 212) and signed Certificates of Employment.
@@ -2015,14 +2015,14 @@ export default function Home() {
                 desc: "Financial statement schedules, cash flow tracking, asset depreciation tables, and trial balance calculations with zero formula errors.",
                 metrics: "Zero Formula Errors",
               },
-              {
-                title: "SSS Online Systems & Portals",
-                badge: "12+ Years SSS Experience",
-                category: "Government Portal",
-                icon: "account_balance",
-                desc: "Processing member benefit claims (sickness, maternity, disability, retirement), salary loans, and annual confirmation of pensioners (ACOP).",
-                metrics: "2023 Customer Service Award",
-              },
+              // {
+              //   title: "SSS Online Systems & Portals",
+              //   badge: "12+ Years SSS Experience",
+              //   category: "Government Portal",
+              //   icon: "account_balance",
+              //   desc: "Processing member benefit claims (sickness, maternity, disability, retirement), salary loans, and annual confirmation of pensioners (ACOP).",
+              //   metrics: "2023 Customer Service Award",
+              // },
               {
                 title: "PIMS Inventory & Purchasing",
                 badge: "Government System",
